@@ -1,0 +1,6 @@
+; HELLO WORLD pour Apple-1 (Woz Monitor) - affiche "HELLO WORLD!" puis revient au moniteur
+; Sur l'Apple-1 : collez ces lignes après le prompt '\', ou chargez samples/hello.wav
+; via l'ACI : C100R  puis  300.31ER  puis RETURN, lancez la cassette, puis 300R
+0300: A2 00 BD 10 03 F0 06 20 EF FF E8 D0 F5 4C 1F FF
+0310: 8D C8 C5 CC CC CF A0 D7 CF D2 CC C4 A1 8D 00
+300R

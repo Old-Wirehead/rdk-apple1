@@ -1,0 +1,15 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  photo [label=<<b>Фото</b><br/><font point-size="9" color="#5f6a73">jpg, png или<br/>текст .txt</font>>];
+  ascii [label=<<b>Фото → ASCII</b><br/><font point-size="9" color="#5f6a73">кадр, контраст,<br/>дизеринг, 40 × 24</font>>];
+  code [label=<<b>Программа</b><br/><font point-size="9" color="#5f6a73">BASIC (PRINT)<br/>или 6502 (ca65)</font>>];
+  edit [label=<<b>Редактор</b><br/><font point-size="9" color="#5f6a73">Вставить в редактор,<br/>Запустить для проверки</font>>];
+  wav [label=<<b>Экспорт WAV</b><br/><font point-size="9" color="#5f6a73">.wav или .aiff</font>>];
+  real [label=<<b>Настоящий Apple-1</b><br/><font point-size="9" color="#5f6a73">C100R, диапазон,<br/>затем R или RUN</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+  lib [label=<<b>Библиотека</b><br/><font point-size="9" color="#5f6a73">Сохранить<br/>в библиотеку</font>>, style="rounded,dashed,filled"];
+  photo -> ascii -> code -> edit -> wav -> real;
+  ascii -> lib [style=dashed];
+}

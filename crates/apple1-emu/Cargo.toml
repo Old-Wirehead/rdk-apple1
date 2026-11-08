@@ -1,0 +1,18 @@
+[package]
+name = "apple1-emu"
+description = "Retro Dev Kit Apple 1 : emulateur Apple-1 en terminal (crossterm) avec import/export WAV ACI."
+version.workspace = true
+rust-version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "apple1-emu"
+path = "src/main.rs"
+
+[dependencies]
+apple1-core = { path = "../apple1-core" }
+crossterm = "0.28"
+clap = { version = "4", features = ["derive"] }
+image = { version = "0.25", default-features = false, features = ["jpeg", "png"] }

@@ -1,0 +1,14 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  gh [label=<<b>Проект GitHub</b><br/><font point-size="9" color="#5f6a73">+ Проект GitHub,<br/>владелец/репозиторий</font>>];
+  test [label=<<b>Проверить последнюю сборку</b><br/><font point-size="9" color="#5f6a73">скачивает последнюю<br/>версию ветки</font>>];
+  build [label=<<b>Сборка</b><br/><font point-size="9" color="#5f6a73">родной ассемблер<br/>(ca65 или xa)</font>>];
+  run [label=<<b>Запуск</b><br/><font point-size="9" color="#5f6a73">загрузка в память,<br/>затем адрес R</font>>];
+  maj [label=<<b>Обновить</b><br/><font point-size="9" color="#5f6a73">новый коммит?<br/>заново</font>>, style="rounded,dashed,filled"];
+  gh -> test -> build -> run;
+  run -> maj [style=dashed]; maj -> test [style=dashed];
+  {rank=same; run; maj}
+}

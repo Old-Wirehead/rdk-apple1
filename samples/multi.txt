@@ -1,0 +1,10 @@
+; Démonstration multi-plages (même disposition que Star Trek : page zéro + $0300)
+; $004A-$005C : message ; $0300-$030E : affiche le message de la page zéro
+; Lecture ACI : C100R  puis  4A.005CR 300.30ER   (le 00 devant la fin est obligatoire !)
+; Lancement   : 300R
+004A: CD D5 CC D4 C9 AD D0 CC
+0052: C1 C7 C5 D3 A0 CF CB A0
+005A: A1 8D 00
+0300: A2 00 B5 4A F0 06 20 EF
+0308: FF E8 D0 F6 4C 1F FF
+300R

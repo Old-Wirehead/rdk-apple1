@@ -1,0 +1,18 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.3", ranksep="0.38", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#2f6690", penwidth=1.4,
+         fontname="Inter", fontsize=10.5, fontcolor="#1c2228", margin="0.14,0.07", height=0.58];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  subgraph cluster_w { label=<<b>Écriture (W)</b>>; fontsize=10; color="#d9d4ca"; style="rounded";
+    cpu1 [label=<<b>6502</b><br/><font point-size="9" color="#5f6a73">lit $C0xx :<br/>bascule de sortie</font>>];
+    ff   [label=<<b>Bascule</b><br/><font point-size="9" color="#5f6a73">1 kHz / 2 kHz<br/>(0 ou 1)</font>>];
+    out  [label=<<b>Sortie</b><br/><font point-size="9" color="#5f6a73">fichier .wav / .aiff<br/>ou haut-parleur</font>>];
+    cpu1 -> ff -> out;
+  }
+  subgraph cluster_r { label=<<b>Lecture (R)</b>>; fontsize=10; color="#d9d4ca"; style="rounded";
+    inp  [label=<<b>Entrée audio</b><br/><font point-size="9" color="#5f6a73">cassette, WAV,<br/>smartphone</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+    cmp  [label=<<b>Comparateur</b><br/><font point-size="9" color="#5f6a73">modèle d’entrée :<br/>seuil, hystérésis</font>>];
+    cpu2 [label=<<b>6502 (PROM ACI)</b><br/><font point-size="9" color="#5f6a73">mesure les demi-<br/>périodes : bits</font>>];
+    inp -> cmp -> cpu2;
+  }
+}

@@ -1,0 +1,12 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  tape [label=<<b>Real tape</b><br/><font point-size="9" color="#5f6a73">tape deck,<br/>headphone output</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+  phone [label=<<b>Smartphone</b><br/><font point-size="9" color="#5f6a73">voice recorder,<br/>WAV or M4A → WAV</font>>];
+  imp [label=<<b>Load</b><br/><font point-size="9" color="#5f6a73">signal decoding,<br/>range check</font>>];
+  reco [label=<<b>Recognition</b><br/><font point-size="9" color="#5f6a73">BASIC or 6502,<br/>addresses, run command</font>>];
+  lib [label=<<b>Library</b><br/><font point-size="9" color="#5f6a73">filed with its<br/>⚙ parameters</font>>];
+  tape -> phone -> imp -> reco -> lib;
+}

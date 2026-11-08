@@ -1,0 +1,24 @@
+[workspace]
+resolver = "2"
+members = ["crates/apple1-core", "crates/apple1-emu", "crates/apple1-gui", "crates/apple1-mcp"]
+
+[workspace.package]
+rust-version = "1.95"
+version = "1.0.0"
+edition = "2021"
+license = "GPL-3.0-only"
+authors = ["Wirehead"]
+repository = "https://github.com/Old-Wirehead/rdk-apple1"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+
+# The tape tests emulate tens of millions of 6502 cycles: optimise them.
+[profile.test]
+opt-level = 3
+
+# egui-file-dialog 0.15 with one local change: a visible, labelled « new folder » button
+[patch.crates-io]
+egui-file-dialog = { path = "third_party/egui-file-dialog" }

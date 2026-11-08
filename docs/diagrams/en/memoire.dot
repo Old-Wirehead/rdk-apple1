@@ -1,0 +1,19 @@
+digraph G {
+  graph [bgcolor="transparent", pad="0.1", fontname="Inter"];
+  node [shape=plaintext, fontname="Inter", fontsize=9.5];
+  m [label=<
+<table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#5f6a73">
+<tr><td bgcolor="#1c2228" width="70"><font color="#ffffff"><b>Addresses</b></font></td><td bgcolor="#1c2228" width="230"><font color="#ffffff"><b>Contents</b></font></td><td bgcolor="#1c2228" width="150"><font color="#ffffff"><b>Notes</b></font></td></tr>
+<tr><td bgcolor="#fbf3e2"><font face="JetBrains Mono">FF00–FFFF</font></td><td bgcolor="#fbf3e2"><b>Woz Monitor</b> (256-byte PROM)</td><td bgcolor="#fbf3e2">NMI, RESET, IRQ vectors</td></tr>
+<tr><td bgcolor="#f8f5ef"><font face="JetBrains Mono">E000–EFFF</font></td><td bgcolor="#f8f5ef"><b>Integer BASIC</b> (4 KB of RAM)</td><td bgcolor="#f8f5ef">loaded from tape</td></tr>
+<tr><td bgcolor="#eef3f7"><font face="JetBrains Mono">D010–D013</font></td><td bgcolor="#eef3f7"><b>PIA 6821</b>: keyboard, display</td><td bgcolor="#eef3f7">KBD, KBDCR, DSP, DSPCR</td></tr>
+<tr><td bgcolor="#eef3f7"><font face="JetBrains Mono">C250–C257</font></td><td bgcolor="#eef3f7"><b>GEN2 card</b>: soft switches</td><td bgcolor="#eef3f7">optional, read access</td></tr>
+<tr><td bgcolor="#eef3f7"><font face="JetBrains Mono">C100–C1FF</font></td><td bgcolor="#eef3f7"><b>ACI PROM</b> (C100R)</td><td bgcolor="#eef3f7">C000–C0FF: flip-flop</td></tr>
+<tr><td bgcolor="#ffffff"><font face="JetBrains Mono">1000–BFFF</font></td><td bgcolor="#ffffff">expansion RAM (up to 48 KB)</td><td bgcolor="#ffffff">HIRES 2000–5FFF (GEN2)</td></tr>
+<tr><td bgcolor="#edf6ef"><font face="JetBrains Mono">0800–0FFF</font></td><td bgcolor="#edf6ef">BASIC programs (LOMEM–HIMEM)</td><td bgcolor="#edf6ef">text/LORES 2: 0800</td></tr>
+<tr><td bgcolor="#edf6ef"><font face="JetBrains Mono">0300–07FF</font></td><td bgcolor="#edf6ef">your machine-language programs</td><td bgcolor="#edf6ef">text/LORES 1: 0400</td></tr>
+<tr><td bgcolor="#f7e9df"><font face="JetBrains Mono">0200–027F</font></td><td bgcolor="#f7e9df">monitor input buffer</td><td bgcolor="#f7e9df">keep clear</td></tr>
+<tr><td bgcolor="#f7e9df"><font face="JetBrains Mono">0100–01FF</font></td><td bgcolor="#f7e9df">6502 stack</td><td bgcolor="#f7e9df"></td></tr>
+<tr><td bgcolor="#f7e9df"><font face="JetBrains Mono">0000–00FF</font></td><td bgcolor="#f7e9df">zero page</td><td bgcolor="#f7e9df">monitor 24–2B, BASIC 4A–FF</td></tr>
+</table>>];
+}

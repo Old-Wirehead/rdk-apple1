@@ -1,0 +1,359 @@
+--- begin of beta test howto file of 29. September 2026 -----------------------
+
+  Four test programs are available for this release of the A-1 Color Graphics
+  Card beta test suite. They are provided as .APL files (if a suitable keyboard
+  emulator supporting auto typing of Wozmon commands from a file is used) and
+  also as .AIFF files to be loaded via the Apple Cassette Interface (ACI).
+
+  Although this test suite is meant for the real hardware, it also can be used
+  with the POM1 emulator, version 1.9.7 and above. But the HGR graphics must be
+  turned on, and all conflicting emulated cards must be turned off.
+
+  -----------------------------------------------------------------------------
+
+  TEST1
+
+  This is a small test program for the DRAM memory of the graphics card, based
+  on the same algorithm as the DRAM test in the 'diagnostics page' of the A1,A2
+  PROMs which came with my Apple-1 IC kits, so this algorithm is battle proven.
+
+  But there is a difference: unlike the DRAM test of the 'diagnostics page',
+  this version does need a known good first 1 kByte RAM of the motherboard, so
+  it can't help when your Apple-1 motherboard still is wonky / faulty. But if
+  so, you probably could not load and run TEST1 anyways, as the Wozmon and the
+  ACI also need functional motherboard RAM in the necessary places. If your
+  Apple-1 build still has a faulty on-motherboard DRAM, trying to use the
+  graphics card is a bit premature, isn't it ? So try to fix the on-motherboard
+  DRAM first, using the 'diagnostics page' or any other DRAM test program which
+  does not need fully functional on-motherboard DRAM. Sounds tricky ? It is.
+  This is why I wrote the 'diagnostics page' and provided it in my IC kits.
+
+  If you can't make the on-motherboard DRAM work, here is a foul trick: you can
+  disable it completely and reconfigure the graphics card to substitute it. But
+  this needs a different MEMG PLD which replaces the standard MEMG. Contact me
+  for details. 
+  
+  Loading instructions
+
+  When using the TEST1.APL file with a keyboard emulator, load and start is
+  automatic.
+
+  When using the TEST1.AIFF file with the GEN1 or GEN2 improved ACI having
+  Uncle Bernie's 'extended format' PROMs, load it with these commands:
+
+  C500R <return>
+  RX RX <return>
+
+  When using the TEST1.AIFF file with the standard ACI, load and start it with
+  these commands:
+
+  C100R      <return>
+  0243.02FFR <return>
+  2F8.2FF    <return>, then check the output to be:
+
+  02F8: 20 DC FF A9 00 4C 59 02
+
+  only when output matches, issue the start command:
+
+  24BR       <return>
+
+  What to expect
+
+  The graphics card should switch to HIRES graphics mode, which initially may
+  show a checkerboard style black/white pattern, depending on the wake-up state
+  of the graphic card's DRAMs, which will be manufacturer and history specific.
+
+  The TEST1 program then commences to draw a pattern of characters on the
+  Apple-1 video output, while on the color graphics card video, a vertical 
+  stripe pattern will occur which has two forms: either magenta / green stripes
+  separated by thin white lines, or orange / blue stripes with no separation.
+  At least this is what would be normal if the graphics card DRAM works.
+
+  If any DRAM error is found, the character output stream stops (to preserve
+  the error messages) and a 'syndrome' error message is shown on the Apple-1
+  video output. These have the form:
+
+  SS@AAAA     where: SS is the syndrome and AAAA is the address (all in hex)
+
+  And the interpretation is explained below ("in case of memory error"). Then,
+  the memory test continues. The alternating vertical stripe pattern on the
+  graphics card video should never stop alternating: if it does, the TEST1 
+  program has crashed, and this means something is wrong with the Apple-1
+  motherboard itself. The Apple-1 video output however will cease until the
+  next memory error comes up, as the character output stream has been turned
+  off after the first error encountered.
+
+  This test program can be run for hours or days, and if there are any DRAM
+  errors, they will be shown on the Apple-1 video output.
+
+  In case of memory error
+
+  If the faulty memory address is below $1000, or in the range $E000-$EFFF,
+  then the most likely culprit is a faulty DRAM chip on the Apple-1 mother-
+  board. The address gives a hint: below $1000 it's in the 'X' bank, in row
+  B, and above $E000 it's in the 'W' bank, in row A. The syndrome byte has
+  a '1' for each faulty bit, and this points directly to which DRAM IC it is:
+  just write the syndrome out in binary, and replace the DRAM ICs being marked
+  with a '1' bit. For instance, 0100000 would point to X6 ot W6, depending on
+  the address as explained above.
+
+  If the faulty memory address is in the range $1000-$BFFF, then the most
+  likely culprit is a faulty DRAM chip on the graphics card. Write the syndrome
+  as binary and see to which group its '1' bits belong:
+
+  00011110 -> replace DRAM1 @ U12
+  11100001 -> replace DRAM2 @ U13
+
+  Note from thee bit groups that the data bus bits on the graphics card are
+  permuted, which was necessary to make the densest possible PCB layout for the
+  chosen PCB design rules.
+
+  Be aware that there is another possible causation for memory errors !
+
+  Due to the poor power, ground and signal quality on the Apple-1 motherboard,
+  which varies for each build due to differences in the IC set and the bypass
+  capacitors, some of the signal(s) needed by the graphics card may be compro-
+  mized. The most sensitive signal is the PH0 signal, which in most Apple-1
+  having been measured show dangerously intense positive glitch pulses during
+  the period the signal should be 'low'. These could confuse the MEMG state
+  machine on the graphics card. As a remedy, a clean-up circuit was designed in
+  which suppresses this type of glitch (unless it gets really bad), but it also
+  delays the PH0 signal rise time. Depending on the varying timing conditions
+  in the individual specimen of Apple-1, this could still lead to setup or hold
+  time violations for the MEMG state machine. So it may be necessary to fine
+  tune the clean-up circuit. More can be found in APPENDIX FIXME (to be written)
+
+  Also, due to the poor power, ground and signal quality on the Apple-1 mother-
+  board, the DOT CLOCK the graphic card provides to it via the 'T' signal of
+  the bus connector may also be compromized - the reason for this is that the
+  'ground' near the 74175 on the motherboard and the 'ground' seen by the MEMG
+  PLD on the graphics card are not the same, and they bounce around in an
+  unpredictable manner, which also depends on which program is running.
+
+  There is a remedy for this, too, which can be found in APPENDIX FIXME of ...
+
+  How to spot these 'sync slips'
+
+  This raises the question how to spot these ill events - called a 'sync slip' -
+  without an oscilloscope or a logic analyzer (even with those instruments it
+  would not be straightforward to prove if there are 'sync slips').
+
+  The human eye can spot it observing the graphics card video output when the
+  TEST1 program is running. If a sync slip occurs, there will be a pronounced
+  disturbance in the picture (unless it happens during the vertical blank
+  period, but the odds are in favor of the event occuring while the electron
+  beam writes the visible part of the picture). If you spot such a disturbance
+  and then a memory error message is output after the event, that was such a
+  'sync slip' and the remedial actions found in APPENDIX FIXME of ... should
+  be taken.
+
+  Note that it may take several minutes between 'sync slips' ... it's usually
+  a rare event. This makes it so hard to nail down the culprit. But after the
+  remedy has been found and installed, the Apple-1 is expected to run TEST1
+  for weeks 24/7 whith no memory faults ever.
+
+  ----------------------------------------------------------------------------
+
+  TEST2
+
+  This is a small test program for the LORES graphics mode with and without a
+  MIXED screen split.
+
+  Loading instructions
+
+  When using the TEST2.AIFF file with the GEN1 or GEN2 improved ACI having
+  Uncle Bernie's 'extended format' PROMs, load it with these commands:
+
+  C500R <return>
+  RX RX <return>
+
+  When using the TEST2.AIFF file with the standard ACI, load and start it with
+  these commands:
+
+  C100R      <return>
+  0278.03FER <return>
+  3F8.3FE    <return>, then check the output to be:
+
+  03F8: D0 10 FB AD 10 D0 60
+
+  only when output matches, issue the start command:
+
+  280R       <return>
+
+  What to expect
+
+  Once started (280R) it generates a list of the begin addresses of LORES and
+  TEXT lines on the Apple-1 display. For LORES it also generates a diagonal
+  colorful line on the graphics card display, which at y-coordinate 40 begins
+  again at x-position 0. The first color block ay (0,0) is aquamarine, followed
+  by white, black, red and so forth, cycling through all the 16 LORES colors.
+
+  The list has the form: y-coordinate, address, color (in hex). This was used
+  to verify the algorithms. You are invited to check again, if anything does 
+  not match, something is broken. 
+
+  The last line should read: 2F 07D0 DD and the last pixel in the last graphics
+  card line should be yellow (color code $DD). Don't worry the colors are a bit
+  off, this normally should be ajustable by the trim capacitor on the color
+  graphics card.
+
+  After that, it generates 24 lines of TEXT line begin addresses in the form
+  y-coordinate, address (in hex). These addresses should be the same as the
+  TEXT mode address map in the Y1979 APPLE II REFERENCE MANUAL, Fig. 2, pg. 18
+
+  Once this list is complete, the graphic card switches to MIXED mode, and the
+  last four lines on the graphics card display change to TEXT, which looks
+  weird, as these are the leftovers from the previous LORES output.
+
+  Once a key is hit, the text window is cleared, and a blinking cursor appears.
+
+  It is then possible to type a text on the last line of the TEXT window. This
+  "TV typewriter" feature is very primitive to keep the code size as small as
+  possible, but it has a backspace function (use the <- key on the keyboard).
+  The ESC key returns to the Wozmon.
+
+  NOTE that the cursor will not be visible when the CURSOR FLASHER circuit has
+  ==== not been installed on the graphics card yet. This is because the cursor
+       is a blinking SPACE character, and without the CURSOR FLASHER, it stays
+       a SPACE which is invisible.
+
+  ---------------------------
+
+  TEST3
+
+  This test program tests the full text screen and the character generator ROM.
+  It also is meant as an early beta test for the graphics card driver software
+  for the on-screen editor which at this early stage of development still may
+  have bugs.
+
+  Loading instructions
+
+  When using the TEST3.AIFF file with the GEN1 or GEN2 improved ACI having
+  Uncle Bernie's 'extended format' PROMs, load it with these commands:
+
+  C500R <return>
+  RX RX <return>
+
+  When using the TEST3.AIFF file with the standard ACI, load and start it with
+  these commands:
+
+  C100R      <return>
+  0BF8.1269R <return>
+  1260.1269  <return>, then check the output to be:
+
+  1260: D0 29 7F C9 5F D0 02 A9
+  1268: 7F 60
+
+  only when output matches, issue the start command:
+
+  C00R       <return>
+
+  What to expect
+
+  Once started (C00R) a full text screen is shown on the graphics card, which
+  displays all the available character codes from $00-$FF (screen buffer codes,
+  not ASCII). The first 64 characters must be inverted (black on white), the
+  next 64 characters must flash (if the CURSOR FLASHER is installed and works)
+  and the remaining 128 characters don't flash and are non-inverted (white on
+  black background) and must contain lower case characters. A screenshot of
+  the expected characters is shown in the second picture in post #15 of this
+  thread:
+
+    www.applefritter.com/content/uncle-bernies-gen2-color-graphics-card-apple
+
+  The screen editor can be tried out by moving the cursor anywhere on the screen
+  using the cursor keys on the keyboard (or CTRL-H, CTRL-J, CTRL-K, CTRL-L).
+  CTRL-X should delete the character under the cursor, and CTRL-Z should insert
+  a blank character there. Lines should be pushed up and down as needed to make
+  space. The 'Backspace' key deletes the character just typed in, and clears the
+  rest of the line to the right of the cursor. NOTE: due to the different key-
+  boards used in the Apple-1 world, some not having a dedicted 'Backspace' key,
+  the current TEST3 program uses the underscore '_' character, ASCII $5F, as the
+  backspace code, same as the Apple-1 Wozmon does (few users know that Wozmon
+  has a backspace function to correct wrong command line entries and only use
+  ESC to purge the whole mistyped command line and then re-type everything).
+  The problem with this is that some keyboards (such as Apple II keyboards) do
+  not have a way to enter the underscore character ... what a mess ! So the 
+  topic how to provide a backspace function with any keyboard out there still
+  needs to be resolved. TEST3 can be modified manually to accept any keyboard
+  code as backspace. Just do not start it (use only one RX to load from ACI to
+  suppress the autostart block read) and then use the Wozmon to modify the code
+  for backspace, it's on location $1264. For instance, the Apple II keyboard
+  encoder produces code $95 for the right arrow key, which the TEST3 converts
+  to ASCII $15 by clearing the MSB. If you enter $15 at address $1264 and then 
+  start TEST3, the right arrow key ( -> ) will act as backspace key, which is
+  awkward, but it works ! (The left arrow key produces the same code as CTRL-H,
+  which moves the cursor to the left, without the backspace effect, so this key
+  can't be reassigned that easily, this will be taken care of later in the code
+  development).
+
+  C500R   <return>   ... start extended formatting page (if ACI so equipped)
+  RX      <return>   ... read from audio file
+  1264:15 <return>   ... set backspace code
+  C00R    <return>   ... start TEST3 program
+
+  When your ACI has no extended formatting page, follow the loading instructions
+  at the begin of this section and type the 1264:15 <return> before the C00R.
+
+  Note that there are empty lines which have no characters in them (on screen
+  they appear to be totally blank). Insert and delete commands have no effect
+  in empty lines or past the end of a line. If insert or delete commands are 
+  tried in such places, a '?' will be displayed on the Apple-1 terminal section
+  output to signal that the delete or insert command was rejected.
+
+  Beta testers should try to 'break' the on-screen editor by issuing commands to
+  it which make it crash or hang or output a "BUG IN $xxxx" message on the
+  Apple-1 terminal section output. The 'XXXX' hexadecimal address should be
+  noted down and sent to me. It also would be helpful to get a report exactly
+  how this bug can be provoked. The 'insert' command is the most complicated and
+  it has a debugging mode in which it sends information about its inner workings
+  to the Apple-1 terminal section output. If a crash / hang / "BUG IN..." is
+  encountered, please take a photo of this information and send it to me:
+
+  appleonedoc@gmail.com
+
+  TEST4
+
+  This test program tests the functionality of the HST0 flag in the graphics
+  card, which is an essential feature to fully replace the 'vaporlock' trick 
+  used in most Apple II graphics games to achieve smooth animation.
+
+  Loading instructions
+
+  When using the TEST4.AIFF file with the GEN1 or GEN2 improved ACI having
+  Uncle Bernie's 'extended format' PROMs, load it with these commands:
+
+  C500R <return>
+  RX RX <return>
+
+  When using the TEST4.AIFF file with the standard ACI, load and start it with
+  these commands:
+
+  C100R      <return>
+  0278.03C4R <return>
+  03C0.03C4  <return>, then check the output to be:
+
+  03C0: E6 2C 4C 1B 03
+
+  only when output matches, issue the start command:
+
+  280R       <return>
+
+  What to expect
+
+  A colorful screen in LORES graphics appears, and a four text lines long text
+  window will fine scroll through it. It may look weird but is a nice effect
+  demonstrating how dynamic vertical screen splits can be achieved when using
+  the HST0 flag of the graphics card.
+
+  This is an improved version of the 'vsplit' demo I provided for use with the
+  POM1 emulator. 'vsplit' hangs when no graphics card is present or when HST0
+  does not work as expected. TEST4 detects a missing HST0 status flag and will
+  not hang, but return to Wozmon after giving the error message "HST0 ?" on the
+  Apple-1 terminal section.
+
+  In case of HST0 failure, the four digit hexadecimal number output before the
+  error message should be 0000. If everything works, it gives a measurement
+  value of the length of the VBLANK impulse. 
+
+--- end of beta test howto file of 29. September 2026 ------------------------

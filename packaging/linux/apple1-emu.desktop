@@ -1,0 +1,22 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Retro Dev Kit Apple 1
+Name[en]=Retro Dev Kit Apple 1
+GenericName=Émulateur Apple-1
+GenericName[en]=Apple-1 emulator
+Comment=Le péché originel — émulateur et atelier de développement Apple-1 (1976) : cassette ACI, BASIC, assembleur, débogueur
+Comment[en]=The Original Sin — Apple-1 (1976) emulator and development kit: ACI cassette, BASIC, assembler, debugger
+Exec=./run.sh %f
+Icon=apple1-emu
+Terminal=false
+Categories=Game;Emulator;
+Keywords=apple;apple1;6502;emulateur;woz;retro;devkit;
+MimeType=audio/x-wav;audio/x-aiff;
+StartupWMClass=apple1-emu
+StartupNotify=true
+Actions=terminal;
+
+[Desktop Action terminal]
+Name=Version terminal
+Exec=./run.sh --terminal

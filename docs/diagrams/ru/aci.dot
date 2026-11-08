@@ -1,0 +1,18 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.3", ranksep="0.38", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#2f6690", penwidth=1.4,
+         fontname="Inter", fontsize=10.5, fontcolor="#1c2228", margin="0.14,0.07", height=0.58];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  subgraph cluster_w { label=<<b>Запись (W)</b>>; fontsize=10; color="#d9d4ca"; style="rounded";
+    cpu1 [label=<<b>6502</b><br/><font point-size="9" color="#5f6a73">любое обращение к $C0xx<br/>переключает выход</font>>];
+    ff   [label=<<b>Триггер</b><br/><font point-size="9" color="#5f6a73">1 kHz / 2 kHz<br/>(0 или 1)</font>>];
+    out  [label=<<b>Выход</b><br/><font point-size="9" color="#5f6a73">файл .wav / .aiff<br/>или динамик</font>>];
+    cpu1 -> ff -> out;
+  }
+  subgraph cluster_r { label=<<b>Чтение (R)</b>>; fontsize=10; color="#d9d4ca"; style="rounded";
+    inp  [label=<<b>Аудиовход</b><br/><font point-size="9" color="#5f6a73">кассета, WAV,<br/>смартфон</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+    cmp  [label=<<b>Компаратор</b><br/><font point-size="9" color="#5f6a73">модель входа:<br/>порог, гистерезис</font>>];
+    cpu2 [label=<<b>6502 (ППЗУ ACI)</b><br/><font point-size="9" color="#5f6a73">измеряет полупериоды:<br/>биты</font>>];
+    inp -> cmp -> cpu2;
+  }
+}

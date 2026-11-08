@@ -1,0 +1,51 @@
+Retro Dev Kit Apple 1
+=====================
+
+Copyright (C) 2026 Wirehead (Old-Wirehead) and contributors.
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, version 3 of the License. It is distributed WITHOUT ANY WARRANTY;
+see the file LICENSE for the full text.
+
+Third-party parts that keep their own (MIT) license
+---------------------------------------------------
+
+1. RDK G2 Basic (crates/apple1-core/assets/rdk-g2basic.bin and its source,
+   repository Old-Wirehead/rdk-gen2basic-apple1): a clean-room Integer BASIC
+   clone, MIT license, Copyright (c) 2026 Wirehead. It stays MIT in its own
+   repository; this kit only bundles the assembled binary.
+
+2. The GEN2 colour card test programs TEST1-TEST4 (samples/gen2-test*.apl,
+   gen2-barres.txt) and the GEN2 character glyph data used by the GEN2 screen
+   emulation, written by Uncle Bernie (Applefritter), who released them under
+   the MIT license:
+
+     Permission is hereby granted, free of charge, to any person obtaining a
+     copy of this software and associated documentation files (the
+     "Software"), to deal in the Software without restriction, including
+     without limitation the rights to use, copy, modify, merge, publish,
+     distribute, sublicense, and/or sell copies of the Software, and to permit
+     persons to whom the Software is furnished to do so, subject to the
+     following conditions: The above copyright notice and this permission
+     notice shall be included in all copies or substantial portions of the
+     Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+     NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+     DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+     OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+     USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+3. third_party/egui-file-dialog: MIT / Apache-2.0, Copyright 2024-2026
+   Jannis Teipel (see third_party/egui-file-dialog/LICENSE). The other Rust
+   dependencies (egui, eframe, egui_dock, ...) are MIT and/or Apache-2.0
+   (see `cargo tree` and each crate); all are compatible with the GPL-3.0.
+
+Not covered by the GPL
+----------------------
+
+The Woz Monitor and ACI ROMs (256 bytes each, (c) Apple 1976) are included
+for emulation only, as in other Apple-1 emulators. The games written for this
+kit (docs/exemples/...) are distributed with it under the same GPL-3.0
+license, as contributions by Claude IA.

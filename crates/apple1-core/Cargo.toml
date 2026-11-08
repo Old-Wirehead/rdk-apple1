@@ -1,0 +1,10 @@
+[package]
+name = "apple1-core"
+description = "Noyau d'emulation Apple-1 : CPU 6502 NMOS, PIA 6821, Woz Monitor, ACI (cassette) et codec WAV."
+version.workspace = true
+rust-version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]

@@ -1,0 +1,17 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+
+  edit  [label=<<b>Écrire</b><br/><font point-size="9" color="#5f6a73">l’éditeur intégré<br/>couleurs, erreurs</font>>];
+  run   [label=<<b>Lancer</b><br/><font point-size="9" color="#5f6a73">bouton Lancer<br/>E2B3R puis RUN</font>>];
+  dbg   [label=<<b>Déboguer</b><br/><font point-size="9" color="#5f6a73">points d’arrêt,<br/>variables, pas à pas</font>>];
+  wav   [label=<<b>Exporter</b><br/><font point-size="9" color="#5f6a73">bouton Exporter WAV<br/>.wav ou .aiff</font>>];
+  real  [label=<<b>Vrai Apple-1</b><br/><font point-size="9" color="#5f6a73">C100R, plages,<br/>E2B3R, RUN</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+
+  edit -> run -> wav -> real;
+  {rank=same; run; dbg}
+  run -> dbg [style=dashed, label="bogue ?"];
+  dbg -> edit [style=dashed, label="corriger"];
+}

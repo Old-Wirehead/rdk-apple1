@@ -1,0 +1,9 @@
+target/
+# Binaires compilés : à publier en Release GitHub, pas dans le dépôt
+dist/
+*.tar.gz
+*.zip
+
+# Enregistrements réels (droits d'auteur) pour les tests locaux, jamais publiés
+/test-fixtures/
+docs/build/

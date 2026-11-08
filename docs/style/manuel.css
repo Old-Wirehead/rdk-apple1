@@ -1,0 +1,236 @@
+/* apple1-emu manuals — WeasyPrint stylesheet.
+   Fonts (SIL OFL): Literata (text), Inter (titles), JetBrains Mono (code). */
+:root {
+  --ink: #1c2228; --muted: #5f6a73; --rule: #d9d4ca;
+  --accent: #c2531b; --accent-dark: #8f3b12; --accent-soft: #f7e9df;
+  --paper: #f8f5ef; --phosphor: #2f9d58; --amber: #b9780f; --red: #b0392c; --blue: #2f6690;
+  --screen: #0c120e;
+}
+@page {
+  size: A4; margin: 23mm 21mm 24mm 23mm;
+  @top-left { content: string(doctitle); font: 500 7.5pt Inter; color: var(--muted);
+              letter-spacing: .08em; text-transform: uppercase; vertical-align: bottom; padding-bottom: 3mm; }
+  @top-right { content: string(chapter, first-except); font: 500 7.5pt Inter; color: var(--muted);
+               vertical-align: bottom; padding-bottom: 3mm; }
+  @bottom-right { content: counter(page); font: 700 8.5pt Inter; color: var(--accent); }
+  @bottom-left { content: "Retro Dev Kit Apple 1"; font: 400 7pt "JetBrains Mono"; color: #a9a397; }
+}
+@page :first { @top-left { content: none } @top-right { content: none } @bottom-right { content: none } @bottom-left { content: none } }
+@page cover { margin: 0; background: #15191e;
+  @top-left { content: none } @top-right { content: none } @bottom-right { content: none } @bottom-left { content: none } }
+@page toc { @top-right { content: "Sommaire" } }
+@page chapter-start { @top-right { content: none } @top-left { content: none } }
+
+html { font-family: Literata, serif; font-size: 9.8pt; line-height: 1.5; color: var(--ink);
+       hyphens: auto; text-align: justify; font-variant-numeric: oldstyle-nums; }
+body { string-set: doctitle attr(data-header); counter-reset: chapter appendix figure; }
+main { counter-reset: chapter; }
+p { margin: 0 0 .62em; orphans: 3; widows: 3; }
+a { color: inherit; text-decoration: none; }
+strong { font-weight: 650; }
+em { font-style: italic; }
+
+/* ---------- Cover ---------- */
+.cover { page: cover; height: 297mm; position: relative; color: #e9e4da; text-align: left; hyphens: manual; }
+.cover-band { position: absolute; top: 0; left: 0; width: 210mm; height: 9mm;
+  background: linear-gradient(to bottom, #c2531b 0 33%, #d98a1e 33% 66%, #6b3a1e 66% 100%); }
+.cover-kicker { position: absolute; top: 30mm; left: 24mm; font: 500 9pt "JetBrains Mono"; color: #d98a1e;
+  letter-spacing: .25em; text-transform: uppercase; }
+.cover-title { position: absolute; top: 38mm; left: 23mm; right: 20mm; margin: 0; font: 800 40pt/1.05 Inter;
+  color: #fbf8f2; letter-spacing: -.02em; string-set: none; }
+.cover-title::before { content: none !important; }
+.cover-sub { position: absolute; top: 75mm; left: 24mm; width: 150mm; font: italic 300 13pt/1.45 Literata; color: #b9b3a8; }
+.cover-screen { position: absolute; top: 112mm; left: 24mm; width: 162mm; padding: 6mm;
+  background: #22272d; border-radius: 6mm; border: 1.2mm solid #2e343b; }
+.cover-screen img { width: 100%; display: block; border-radius: 3mm; }
+.cover-foot { position: absolute; bottom: 18mm; left: 24mm; right: 24mm; font: 500 8pt Inter; color: #8d877d;
+  letter-spacing: .12em; text-transform: uppercase; display: flex; justify-content: space-between;
+  border-top: .4pt solid #3a4047; padding-top: 4mm; }
+
+/* ---------- Table of contents ---------- */
+.toc { page: toc; break-before: page; }
+.toc h1 { font: 800 26pt Inter; margin: 4mm 0 9mm; color: var(--ink); string-set: chapter "Sommaire"; }
+.toc h1::before { content: none; }
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc li a { display: block; font-family: Inter; }
+.toc li a::after { content: leader(" ") target-counter(attr(href), page); color: var(--accent); font-weight: 700; }
+.toc1 { margin-top: 3.2mm; font: 650 10.5pt Inter; border-top: .4pt solid var(--rule); padding-top: 2.2mm; }
+.toc1 .toc-num { display: inline-block; width: 11mm; color: var(--accent); font-weight: 800; }
+.toc2 { font: 400 9pt Inter; margin: .6mm 0 0 11mm; color: #39424a; }
+.toc2 .toc-num { display: inline-block; width: 10mm; color: var(--muted); font-variant-numeric: tabular-nums; }
+.toc2 a::after { content: leader(".") target-counter(attr(href), page) !important; color: var(--muted) !important; font-weight: 400 !important; }
+
+/* ---------- Headings ---------- */
+h1, h2, h3, h4 { font-family: Inter, sans-serif; text-align: left; hyphens: manual; color: var(--ink); break-after: avoid; }
+h1 { break-before: page; counter-increment: chapter; counter-reset: section figure-in;
+     font-size: 25pt; font-weight: 800; line-height: 1.1; letter-spacing: -.015em; margin: 14mm 0 9mm;
+     padding-top: 4mm; border-top: 2.2pt solid var(--ink); string-set: chapter content(text); }
+h1::before { content: "Chapitre " counter(chapter); display: block; font: 600 8.5pt "JetBrains Mono";
+     color: var(--accent); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 3mm; }
+h1.unnumbered { counter-increment: none; }
+h1.unnumbered::before { content: none; }
+h1.appendix { counter-increment: appendix; }
+h1.appendix::before { content: "Annexe " counter(appendix, upper-alpha); }
+h2 { font-size: 14pt; font-weight: 700; margin: 7.5mm 0 3mm; counter-increment: section; letter-spacing: -.01em; }
+h2::before { content: counter(chapter) "." counter(section); color: var(--accent); font-weight: 800; margin-right: 3mm; }
+h1.unnumbered ~ h2::before, h2.unnumbered::before { content: none; }
+h1.appendix ~ h2::before { content: none; }
+h3 { font-size: 10.8pt; font-weight: 700; margin: 5.5mm 0 2mm; }
+h4 { font-size: 9.6pt; font-weight: 650; margin: 4mm 0 1.5mm; color: var(--accent-dark); }
+.lead { font-size: 11pt; line-height: 1.5; color: #39424a; font-style: italic; font-weight: 300; margin-bottom: 6mm; }
+
+/* ---------- Lists, tables ---------- */
+ul, ol { margin: 0 0 .7em; padding-left: 5.5mm; }
+li { margin-bottom: .22em; }
+li::marker { color: var(--accent); }
+ol li::marker { font: 700 8.8pt Inter; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0 5mm; font: 400 8.4pt/1.38 Inter; text-align: left; hyphens: manual; break-inside: auto; }
+thead th { background: var(--accent-soft); color: var(--accent-dark); font-weight: 650; text-transform: none; }
+th, td { padding: 1.5mm 2.2mm; border-bottom: .45pt solid var(--rule); vertical-align: top; }
+tr { break-inside: avoid; }
+table code { font-size: 7.8pt; }
+table.compact td, table.compact th { padding: 1mm 2mm; }
+
+/* ---------- Code ---------- */
+code { font-family: "JetBrains Mono", monospace; font-size: 8.4pt; font-variant-ligatures: none; hyphens: manual; }
+p code, li code, td code { background: var(--paper); padding: .2mm 1mm; border-radius: .8mm; color: #2a3138; white-space: nowrap; }
+kbd { font: 600 7.4pt Inter; padding: .3mm 1.4mm; border: .5pt solid #bdb6a8; border-bottom-width: 1.4pt;
+      border-radius: 1mm; background: #fffdf9; white-space: nowrap; }
+.code { position: relative; margin: 2.5mm 0 4.5mm; background: var(--paper); border-left: 2.2pt solid var(--accent);
+        border-radius: 0 1.6mm 1.6mm 0; padding: 2.6mm 4mm 2.6mm 4.2mm; break-inside: avoid; text-align: left; }
+.code pre { margin: 0; white-space: pre-wrap; line-height: 1.42; }
+.code pre code { font-size: 8.1pt; }
+.code[data-lang]::before { content: attr(data-lang); position: absolute; top: 1.4mm; right: 2.6mm;
+        font: 600 6.2pt Inter; letter-spacing: .12em; text-transform: uppercase; color: #a49c8c; }
+.code-title { font: 650 7.6pt Inter; color: var(--accent-dark); margin: -0.4mm 0 1.6mm; letter-spacing: .02em; }
+.code.long { break-inside: auto; }
+/* tokens (Pygments short classes) */
+.code .k, .code .kd, .code .kn, .code .kr { color: #1f5f9a; font-weight: 700; }
+.code .nb, .code .nf { color: #7a3e9d; font-weight: 600; }
+.code .ow { color: #1f5f9a; font-weight: 600; }
+.code .s, .code .s1, .code .s2, .code .sc { color: #2d7d46; }
+.code .c, .code .c1, .code .cm, .code .cs { color: #8b857a; font-style: italic; }
+.code .m, .code .mi, .code .mh, .code .mb, .code .il, .code .mf { color: #b04a14; }
+.code .nl, .code .nt { color: #8f3b12; font-weight: 700; }
+.code .nv, .code .n { color: var(--ink); }
+.code .o { color: #6a5f50; }
+.code .p { color: #6a5f50; }
+.code .cp, .code .kp, .code .nd { color: #9a6a00; font-weight: 600; }
+.code .gp { color: #8f3b12; font-weight: 700; }
+.code .gs { font-weight: 700; color: #1c2228; }
+.code .nx, .code .na { color: #1c2228; }
+.code .err { color: inherit; border: none; }
+/* Apple-1 screen / Woz Monitor sessions: dark phosphor block */
+.code.lang-mon { background: var(--screen); border-left-color: var(--phosphor); }
+.code.lang-mon pre code, .code.lang-mon .w, .code.lang-mon .x { color: #7ddf8f; }
+.code.lang-mon .gp { color: #b7f5c0; }
+.code.lang-mon .gs { color: #ffffff; font-weight: 700; }
+.code.lang-mon .c { color: #5e8e68; }
+.code.lang-mon .nl { color: #c6f7cf; font-weight: 400; }
+.code.lang-mon::before { color: #4f7f59; }
+.code.lang-sh, .code.lang-bash { background: #f1efe9; border-left-color: #6a7480; }
+
+/* ---------- Callouts ---------- */
+.admonition { margin: 3.5mm 0 4.5mm; padding: 2.8mm 4mm 1.6mm 4.2mm; border-left: 2.6pt solid var(--blue);
+              background: #eef3f7; border-radius: 0 1.6mm 1.6mm 0; break-inside: avoid; font-size: 9.2pt; }
+.admonition p { margin-bottom: .45em; }
+.admonition-title { font: 700 7.4pt Inter; letter-spacing: .14em; text-transform: uppercase; color: var(--blue); margin-bottom: 1.2mm !important; }
+.admonition.astuce { border-color: var(--phosphor); background: #edf6ef; }
+.admonition.astuce .admonition-title { color: #23794a; }
+.admonition.astuce .admonition-title::before { content: "✦  "; }
+.admonition.attention { border-color: var(--red); background: #fbeeeb; }
+.admonition.attention .admonition-title { color: var(--red); }
+.admonition.attention .admonition-title::before { content: "!  "; font-weight: 800; }
+.admonition.apple1 { border-color: var(--amber); background: #fbf3e2; }
+.admonition.apple1 .admonition-title { color: #8a5a06; }
+.admonition.apple1 .admonition-title::before { content: "▣  "; }
+.admonition.bug { border-color: #7a3e9d; background: #f4eef8; }
+.admonition.bug .admonition-title { color: #6a2f8c; }
+.admonition .code { background: rgba(255,255,255,.65); }
+
+/* ---------- Figures ---------- */
+figure { margin: 4mm 0 5.5mm; break-inside: avoid; text-align: center; counter-increment: figure; }
+figure img { max-width: 100%; border: .5pt solid #cfc8bb; border-radius: 1.2mm; }
+figure.large img { width: 100%; }
+figure.medium img { width: 78%; }
+figure.small img { width: 55%; }
+figure.tiny img { width: 40%; }
+figure.diagram img { border: none; border-radius: 0; }
+figure.diagram.large img { width: 100%; }
+figcaption { font: 400 8pt/1.4 Inter; color: var(--muted); margin-top: 2mm; text-align: center; hyphens: manual; padding: 0 6mm; }
+figcaption::before { content: "Figure " counter(figure) " — "; font-weight: 700; color: var(--accent-dark); }
+
+/* legend under annotated screenshots */
+ol.legend { list-style: none; padding: 0; columns: 2; column-gap: 7mm; font: 400 8.6pt/1.4 Inter; text-align: left; hyphens: manual; margin-top: -1mm; }
+ol.legend li { counter-increment: leg; padding-left: 7mm; position: relative; break-inside: avoid; margin-bottom: 1.6mm; }
+ol.legend li::before { content: counter(leg); position: absolute; left: 0; top: .2mm; width: 4.6mm; height: 4.6mm; border-radius: 50%;
+  background: var(--accent); color: white; font: 700 7pt/4.6mm Inter; text-align: center; }
+ol.legend { counter-reset: leg; }
+
+/* steps */
+ol.steps { list-style: none; padding-left: 0; counter-reset: step; }
+ol.steps > li { counter-increment: step; position: relative; padding-left: 9mm; margin-bottom: 2.4mm; }
+ol.steps > li::before { content: counter(step); position: absolute; left: 0; top: -.2mm; width: 5.6mm; height: 5.6mm;
+  border: 1pt solid var(--accent); border-radius: 50%; color: var(--accent); font: 700 8pt/5.6mm Inter; text-align: center; }
+
+/* key / value cards */
+.cards { margin: 3mm 0 4mm; font-size: 0; }
+.card { display: inline-block; vertical-align: top; width: 48.5%; box-sizing: border-box; margin: 0 3% 3mm 0; min-height: 21mm; border: .5pt solid var(--rule); border-top: 2pt solid var(--accent); padding: 2.5mm 3.5mm; font-size: 8.8pt; break-inside: avoid; text-align: left; }
+.card h4 { margin: 0 0 1mm; color: var(--ink); }
+
+/* ---------- Index ---------- */
+.index h1 { string-set: chapter "Index"; }
+.idx-list { list-style: none; padding: 0; columns: 2; column-gap: 9mm; font: 400 8.4pt/1.5 Inter; text-align: left; }
+.idx-list li { display: flex; break-inside: avoid; }
+.idx-list li .idx-term { font-family: "JetBrains Mono"; font-size: 7.9pt; }
+.idx-list li .idx-pages { margin-left: auto; padding-left: 2mm; color: var(--accent-dark); }
+.idx-list li.idx-letter { font: 800 11pt Inter; color: var(--accent); margin: 3mm 0 1mm; border-bottom: .5pt solid var(--rule); }
+.idx-a { }
+
+hr { border: none; border-top: .5pt solid var(--rule); margin: 6mm 0; }
+.small { font-size: 8.6pt; }
+.center { text-align: center; }
+.pagebreak { break-before: page; }
+.verified { font: 700 6.8pt Inter; letter-spacing: .08em; text-transform: uppercase; color: #23794a; border: .6pt solid #23794a; border-radius: 1mm; padding: .2mm 1.2mm; white-space: nowrap; }
+.unverified { font: 700 6.8pt Inter; letter-spacing: .08em; text-transform: uppercase; color: var(--red); border: .6pt solid var(--red); border-radius: 1mm; padding: .2mm 1.2mm; white-space: nowrap; }
+.cover h1.cover-title { border: none; padding: 0; break-before: auto; counter-increment: none; }
+.card:nth-child(2n) { margin-right: 0; }
+.code.lang-mon .typed { color: #ffffff; font-weight: 700; }
+/* The quick-start guide flows: chapters 2+ start on the same page when room allows */
+.doc-guide main h1 { break-before: auto; margin-top: 14mm; }
+.doc-guide main h1:first-of-type { break-before: page; margin-top: 0; }
+table { break-inside: avoid; }
+tr { break-inside: avoid; }
+.doc-guide main h1.newpage { break-before: page; margin-top: 0; }
+
+/* ---------- Manuel complet ---------- */
+.doc-manuel table { break-inside: auto; }
+.doc-manuel table.keep { break-inside: avoid; }
+/* part divider: a full dark page */
+h1.part { page: part; string-set: none; break-before: page; break-after: page; counter-increment: none; border: none;
+  margin: 0; padding: 92mm 0 0 0; font: 800 34pt/1.08 Inter; color: #fbf8f2; string-set: chapter "";
+  height: 297mm; box-sizing: border-box; }
+h1.part::before { content: attr(data-part); display: block; font: 600 9pt "JetBrains Mono"; color: #d98a1e;
+  letter-spacing: .3em; text-transform: uppercase; margin-bottom: 6mm; }
+h1.part .part-sub { display: block; font: italic 300 13pt/1.45 Literata; color: #b9b3a8; margin-top: 7mm; width: 140mm; letter-spacing: 0; }
+@page part { background: #15191e; margin: 0 24mm;
+  @top-left { content: none } @top-right { content: none } @bottom-right { content: none } @bottom-left { content: none } }
+.toc0 { margin-top: 6mm; font: 800 8pt Inter; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+.toc0 a::after { content: none !important; }
+.toc0 + .toc1 { border-top: 1.2pt solid var(--ink); }
+.doc-manuel .toc1 { margin-top: 2.2mm; padding-top: 1.6mm; font-size: 10pt; }
+.doc-manuel .toc2 { font-size: 8.4pt; margin-top: .3mm; }
+/* compact two-column reference lists */
+.refgrid { columns: 2; column-gap: 7mm; }
+.refgrid > * { break-inside: avoid; }
+dl.ref { margin: 2mm 0 4mm; }
+dl.ref dt { font: 700 8.6pt "JetBrains Mono"; color: var(--accent-dark); margin-top: 3mm; break-after: avoid; }
+dl.ref dd { margin: .6mm 0 0 6mm; }
+.syntax { font: 600 8.4pt "JetBrains Mono"; background: #efe9de; padding: 1mm 2mm; border-radius: 1mm; display: inline-block; margin-bottom: 1mm; }
+.charset td { font-family: "JetBrains Mono"; text-align: center; padding: 1mm; }
+.status-ok { color: #23794a; font-weight: 700; }
+.status-src { color: #9a6a00; font-weight: 700; }
+.keep-with { break-inside: avoid; }
+/* file names in headings and in the TOC: code font, heading colour and weight, no body "pill" */
+h1 code, h2 code, h3 code, h4 code, .toc code { font-size: .94em; font-weight: inherit; color: inherit;
+  background: none; padding: 0; letter-spacing: -.01em; }

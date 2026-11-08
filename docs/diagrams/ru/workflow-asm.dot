@@ -1,0 +1,15 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  src [label=<<b>Исходник .s</b><br/><font point-size="9" color="#5f6a73">редактор, ca65 или xa</font>>];
+  asm [label=<<b>Сборка</b><br/><font point-size="9" color="#5f6a73">Запустить: листинг,<br/>символы, ошибки</font>>];
+  run [label=<<b>Выполнение</b><br/><font point-size="9" color="#5f6a73">загрузка по .org,<br/>затем АДРЕСR</font>>];
+  dbg [label=<<b>Отладка</b><br/><font point-size="9" color="#5f6a73">точки останова по меткам,<br/>шаги, память</font>>];
+  wav [label=<<b>Экспорт WAV</b><br/><font point-size="9" color="#5f6a73">диапазон начало.конецR</font>>];
+  real [label=<<b>Настоящий Apple-1</b><br/><font point-size="9" color="#5f6a73">C100R, диапазон R,<br/>затем АДРЕСR</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+  src -> asm -> run -> wav -> real;
+  {rank=same; run; dbg}
+  run -> dbg [style=dashed, label="ошибка?"]; dbg -> src [style=dashed, label="исправить"];
+}

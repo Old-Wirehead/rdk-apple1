@@ -1,0 +1,19 @@
+digraph G {
+  graph [bgcolor="transparent", pad="0.1", fontname="Inter"];
+  node [shape=plaintext, fontname="Inter", fontsize=9.5];
+  m [label=<
+<table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#5f6a73">
+<tr><td bgcolor="#1c2228" width="70"><font color="#ffffff"><b>Адреса</b></font></td><td bgcolor="#1c2228" width="230"><font color="#ffffff"><b>Содержимое</b></font></td><td bgcolor="#1c2228" width="150"><font color="#ffffff"><b>Примечания</b></font></td></tr>
+<tr><td bgcolor="#fbf3e2"><font face="JetBrains Mono">FF00–FFFF</font></td><td bgcolor="#fbf3e2"><b>Woz Monitor</b> (ППЗУ 256 байт)</td><td bgcolor="#fbf3e2">векторы NMI, RESET, IRQ</td></tr>
+<tr><td bgcolor="#f8f5ef"><font face="JetBrains Mono">E000–EFFF</font></td><td bgcolor="#f8f5ef"><b>Integer BASIC</b> (4 КБ ОЗУ)</td><td bgcolor="#f8f5ef">загружается с кассеты</td></tr>
+<tr><td bgcolor="#eef3f7"><font face="JetBrains Mono">D010–D013</font></td><td bgcolor="#eef3f7"><b>PIA 6821</b>: клавиатура, экран</td><td bgcolor="#eef3f7">KBD, KBDCR, DSP, DSPCR</td></tr>
+<tr><td bgcolor="#eef3f7"><font face="JetBrains Mono">C250–C257</font></td><td bgcolor="#eef3f7"><b>Карта GEN2</b>: программные переключатели</td><td bgcolor="#eef3f7">необязательна, доступ чтением</td></tr>
+<tr><td bgcolor="#eef3f7"><font face="JetBrains Mono">C100–C1FF</font></td><td bgcolor="#eef3f7"><b>ППЗУ ACI</b> (C100R)</td><td bgcolor="#eef3f7">C000–C0FF: триггер</td></tr>
+<tr><td bgcolor="#ffffff"><font face="JetBrains Mono">1000–BFFF</font></td><td bgcolor="#ffffff">дополнительное ОЗУ (до 48 КБ)</td><td bgcolor="#ffffff">HIRES 2000–5FFF (GEN2)</td></tr>
+<tr><td bgcolor="#edf6ef"><font face="JetBrains Mono">0800–0FFF</font></td><td bgcolor="#edf6ef">программы BASIC (LOMEM–HIMEM)</td><td bgcolor="#edf6ef">текст/LORES 2: 0800</td></tr>
+<tr><td bgcolor="#edf6ef"><font face="JetBrains Mono">0300–07FF</font></td><td bgcolor="#edf6ef">ваши программы в машинных кодах</td><td bgcolor="#edf6ef">текст/LORES 1: 0400</td></tr>
+<tr><td bgcolor="#f7e9df"><font face="JetBrains Mono">0200–027F</font></td><td bgcolor="#f7e9df">буфер ввода монитора</td><td bgcolor="#f7e9df">не занимать</td></tr>
+<tr><td bgcolor="#f7e9df"><font face="JetBrains Mono">0100–01FF</font></td><td bgcolor="#f7e9df">стек 6502</td><td bgcolor="#f7e9df"></td></tr>
+<tr><td bgcolor="#f7e9df"><font face="JetBrains Mono">0000–00FF</font></td><td bgcolor="#f7e9df">нулевая страница</td><td bgcolor="#f7e9df">монитор 24–2B, BASIC 4A–FF</td></tr>
+</table>>];
+}

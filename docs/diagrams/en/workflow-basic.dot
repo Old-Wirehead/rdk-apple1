@@ -1,0 +1,17 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+
+  edit  [label=<<b>Write</b><br/><font point-size="9" color="#5f6a73">built-in editor<br/>colors, errors</font>>];
+  run   [label=<<b>Run</b><br/><font point-size="9" color="#5f6a73">Run button<br/>E2B3R then RUN</font>>];
+  dbg   [label=<<b>Debug</b><br/><font point-size="9" color="#5f6a73">breakpoints,<br/>variables, stepping</font>>];
+  wav   [label=<<b>Export</b><br/><font point-size="9" color="#5f6a73">Export WAV button<br/>.wav or .aiff</font>>];
+  real  [label=<<b>Real Apple-1</b><br/><font point-size="9" color="#5f6a73">C100R, ranges,<br/>E2B3R, RUN</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+
+  edit -> run -> wav -> real;
+  {rank=same; run; dbg}
+  run -> dbg [style=dashed, label="bug?"];
+  dbg -> edit [style=dashed, label="fix"];
+}

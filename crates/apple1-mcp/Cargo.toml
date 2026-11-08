@@ -1,0 +1,16 @@
+[package]
+name = "apple1-mcp"
+description = "Retro Dev Kit Apple 1: headless MCP server (stdio, JSON-RPC 2.0) driving one emulated Apple-1."
+version.workspace = true
+rust-version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "apple1-mcp"
+path = "src/main.rs"
+
+[dependencies]
+apple1-core = { path = "../apple1-core" }
+serde_json = "1"
