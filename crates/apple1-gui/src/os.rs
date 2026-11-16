@@ -68,6 +68,22 @@ pub fn windows_locale() -> Option<String> {
     }
 }
 
+/// A line in `gui.log` (Windows: in the cache folder, as `fatal`; elsewhere
+/// on the error output, which run.sh keeps in its own gui.log).
+pub fn log(msg: &str) {
+    #[cfg(windows)]
+    {
+        let dir = crate::config::cache_base();
+        let _ = std::fs::create_dir_all(&dir);
+        if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(dir.join("gui.log")) {
+            use std::io::Write;
+            let _ = writeln!(f, "[{}] {msg}", now_short());
+        }
+    }
+    #[cfg(not(windows))]
+    eprintln!("apple1-emu-gui : {msg}");
+}
+
 /// Reports an error that stops the program on the error output. On Windows,
 /// where there is no console, it is also written at the end of `gui.log` in
 /// the cache folder and shown in a message box (on Linux, run.sh already

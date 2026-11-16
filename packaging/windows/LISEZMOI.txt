@@ -1,6 +1,6 @@
 Retro Dev Kit Apple 1 — Le péché originel
-Version Windows (64 bits)
-==========================================
+Version Windows (64 bits) — 1.0 Beta
+===========================================
 
 Émulateur et atelier de développement Apple-1 (famille Retro Dev Kit).
 Dépôt : https://github.com/Old-Wirehead/rdk-apple1
@@ -44,6 +44,9 @@ Vous pouvez en imposer une autre dans ⚙ Préférences.
 DIFFÉRENCES AVEC LA VERSION LINUX
 ---------------------------------
 
+- Au premier lancement, la carte couleur GEN2 est branchée et son écran
+  couleur est affiché (vous pouvez la débrancher dans ⚙ Préférences ; votre
+  choix est gardé).
 - Le son de la cassette (bouton 🔊) passe par la sortie audio par défaut
   de Windows. Sans périphérique audio, il reste coupé ; l'oscilloscope de
   la cassette fonctionne dans tous les cas.
@@ -78,8 +81,14 @@ DOCUMENTATION
 - docs\Guide-demarrage-rapide.pdf et docs\Manuel-complet.pdf (français)
 - docs\Quick-Start-Guide.pdf et docs\Complete-Manual.pdf (anglais)
 - docs\Kratkoe-rukovodstvo.pdf et docs\Polnoe-rukovodstvo.pdf (russe)
+- docs\Schnellstartanleitung.pdf et docs\Vollstaendiges-Handbuch.pdf (allemand)
+- docs\Guia-de-inicio-rapido.pdf et docs\Manual-completo.pdf (espagnol)
+- docs\Guida-rapida.pdf et docs\Manuale-completo.pdf (italien)
+- docs\Guia-de-inicio-rapido-pt.pdf et docs\Manual-completo-pt.pdf (portugais)
 - docs\exemples : les programmes BASIC et assembleur des manuels
-  (docs\exemples\en pour la version anglaise)
+  (docs\exemples\en, de, es, it, pt pour les autres langues)
+- exemples : les programmes que la bibliothèque installe au premier
+  lancement (jeux, exemples BASIC et 6502, tests de la carte GEN2)
 
 Les manuels décrivent la version Linux ; tout ce qui concerne la fenêtre
 s'applique aussi à Windows, sauf les différences ci-dessus.

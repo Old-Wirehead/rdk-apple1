@@ -18,6 +18,12 @@ pub enum Zoom {
 
 pub const ZOOM_MAX: u32 = 8;
 
+/// GEN2 colour card plugged (and its colour screen shown) at the first launch:
+/// the Windows version only (Wirehead's decision, 16/11/2026); a later choice
+/// of the user is kept in gui.json. `APPLE1_FIRST_RUN_GEN2` at build time
+/// gives the same default elsewhere (to try it).
+pub const FIRST_RUN_GEN2: bool = cfg!(windows) || option_env!("APPLE1_FIRST_RUN_GEN2").is_some();
+
 /// A machine state (.a1state) saved or loaded lately, for the « État » menu.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(default)]
@@ -199,6 +205,9 @@ pub const DEFAULT_GITHUB: [&str; 1] = ["dschmenk/Apple1-Slideshow"];
 /// Kit release written into gui.json (a different saved value offers a fresh start).
 /// 1.0 is the first public release (it was 7.9.3 while the repository was private).
 pub const KIT_VERSION: &str = "1.0";
+/// The version shown (« À propos », update notice): « Beta » for the Windows
+/// version only (Wirehead, 16/11/2026); KIT_VERSION stays the one compared.
+pub const KIT_VERSION_SHOWN: &str = if cfg!(windows) { "1.0 Beta" } else { KIT_VERSION };
 
 /// The user's folder: `$HOME`, or `%USERPROFILE%` on Windows.
 pub fn home() -> PathBuf {
@@ -230,7 +239,7 @@ impl Default for GuiConfig {
             basic: None,
             basic_g2: true,
             last_dir: None,
-            carte_couleur: false,
+            carte_couleur: FIRST_RUN_GEN2,
             screen_open: true,
             welcome_hide: false,
             color_open: true,

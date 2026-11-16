@@ -4162,7 +4162,7 @@ impl App {
                 Ask::Fresh { previous } => {
                     ui.heading(t("ver_title"));
                     let old = if previous.is_empty() { t("ver_old").to_string() } else { previous.clone() };
-                    ui.label(tf("ver_text", &[&old, &crate::config::KIT_VERSION]));
+                    ui.label(tf("ver_text", &[&old, &crate::config::KIT_VERSION_SHOWN]));
                     ui.label(RichText::new(t("ver_keep_files")).small().weak());
                     ui.horizontal(|ui| {
                         if ui.button(t("ver_fresh")).clicked() {
@@ -4193,7 +4193,7 @@ impl App {
                 }
                 Ask::About => {
                     ui.heading(t("about_title"));
-                    ui.label(tf("about_version", &[&crate::config::KIT_VERSION]));
+                    ui.label(tf("about_version", &[&crate::config::KIT_VERSION_SHOWN]));
                     ui.hyperlink(env!("CARGO_PKG_REPOSITORY"));
                     ui.label(RichText::new(t("about_license")).small());
                     ui.label(t("help"));
@@ -4981,6 +4981,24 @@ impl eframe::App for App {
                 ctx.send_viewport_cmd(ViewportCommand::InnerSize(w.into()));
             } else if !ctx.input(|i| i.viewport().maximized.unwrap_or(false)) {
                 // the window manager did not take the request at creation
+                ctx.send_viewport_cmd(ViewportCommand::Maximized(true));
+            }
+        }
+        // Windows: a window marked maximized but much smaller than the monitor
+        // (#12) is restored, then maximized again, as F11 twice does
+        #[cfg(windows)]
+        if self.script.window.is_none() {
+            use std::sync::atomic::{AtomicBool, Ordering};
+            static RESTORED: AtomicBool = AtomicBool::new(false);
+            if self.frame_no == 12 {
+                let (inner, mon, max) = ctx.input(|i| (i.viewport().inner_rect, i.viewport().monitor_size, i.viewport().maximized.unwrap_or(false)));
+                if let (Some(r), Some(m), true) = (inner, mon, max) {
+                    if m.x > 100.0 && r.width() < m.x * 0.8 && r.height() < m.y * 0.8 {
+                        ctx.send_viewport_cmd(ViewportCommand::Maximized(false));
+                        RESTORED.store(true, Ordering::Relaxed);
+                    }
+                }
+            } else if self.frame_no == 16 && RESTORED.swap(false, Ordering::Relaxed) {
                 ctx.send_viewport_cmd(ViewportCommand::Maximized(true));
             }
         }
