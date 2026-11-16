@@ -28,3 +28,7 @@ Décisions de Wirehead (16/11/2026) :
    Linux et Windows ; il faudra donc ajouter « Beta » seulement dans le
    numéro affiché par la version Windows (« À propos », nom de l'archive),
    sans changer Cargo.toml. À confirmer avec Wirehead au moment du build.
+5. **Écrire le nom de l'adaptateur graphique wgpu dans `gui.log`** (version
+   Windows), pour prouver quel moteur est utilisé (carte graphique, ou
+   « Microsoft Basic Render Driver » sans pilote 3D). Proposé par la session
+   Claude de la VM.
