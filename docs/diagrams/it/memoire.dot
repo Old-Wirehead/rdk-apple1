@@ -1,0 +1,19 @@
+digraph G {
+  graph [bgcolor="transparent", pad="0.1", fontname="Inter"];
+  node [shape=plaintext, fontname="Inter", fontsize=9.5];
+  m [label=<
+<table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#5f6a73">
+<tr><td bgcolor="#1c2228" width="70"><font color="#ffffff"><b>Indirizzi</b></font></td><td bgcolor="#1c2228" width="230"><font color="#ffffff"><b>Contenuto</b></font></td><td bgcolor="#1c2228" width="150"><font color="#ffffff"><b>Note</b></font></td></tr>
+<tr><td bgcolor="#fbf3e2"><font face="JetBrains Mono">FF00–FFFF</font></td><td bgcolor="#fbf3e2"><b>Woz Monitor</b> (PROM da 256 byte)</td><td bgcolor="#fbf3e2">vettori NMI, RESET, IRQ</td></tr>
+<tr><td bgcolor="#f8f5ef"><font face="JetBrains Mono">E000–EFFF</font></td><td bgcolor="#f8f5ef"><b>Integer BASIC</b> (4 KB di RAM)</td><td bgcolor="#f8f5ef">caricato da cassetta</td></tr>
+<tr><td bgcolor="#eef3f7"><font face="JetBrains Mono">D010–D013</font></td><td bgcolor="#eef3f7"><b>PIA 6821</b>: tastiera, schermo</td><td bgcolor="#eef3f7">KBD, KBDCR, DSP, DSPCR</td></tr>
+<tr><td bgcolor="#eef3f7"><font face="JetBrains Mono">C250–C257</font></td><td bgcolor="#eef3f7"><b>Scheda GEN2</b>: interruttori</td><td bgcolor="#eef3f7">opzionale, accesso in lettura</td></tr>
+<tr><td bgcolor="#eef3f7"><font face="JetBrains Mono">C100–C1FF</font></td><td bgcolor="#eef3f7"><b>PROM dell'ACI</b> (C100R)</td><td bgcolor="#eef3f7">C000–C0FF: flip-flop</td></tr>
+<tr><td bgcolor="#ffffff"><font face="JetBrains Mono">1000–BFFF</font></td><td bgcolor="#ffffff">RAM di espansione (fino a 48 KB)</td><td bgcolor="#ffffff">HIRES 2000–5FFF (GEN2)</td></tr>
+<tr><td bgcolor="#edf6ef"><font face="JetBrains Mono">0800–0FFF</font></td><td bgcolor="#edf6ef">programmi BASIC (LOMEM–HIMEM)</td><td bgcolor="#edf6ef">testo/LORES 2: 0800</td></tr>
+<tr><td bgcolor="#edf6ef"><font face="JetBrains Mono">0300–07FF</font></td><td bgcolor="#edf6ef">i vostri programmi in linguaggio macchina</td><td bgcolor="#edf6ef">testo/LORES 1: 0400</td></tr>
+<tr><td bgcolor="#f7e9df"><font face="JetBrains Mono">0200–027F</font></td><td bgcolor="#f7e9df">buffer d'ingresso del monitor</td><td bgcolor="#f7e9df">lasciare libero</td></tr>
+<tr><td bgcolor="#f7e9df"><font face="JetBrains Mono">0100–01FF</font></td><td bgcolor="#f7e9df">stack del 6502</td><td bgcolor="#f7e9df"></td></tr>
+<tr><td bgcolor="#f7e9df"><font face="JetBrains Mono">0000–00FF</font></td><td bgcolor="#f7e9df">pagina zero</td><td bgcolor="#f7e9df">monitor 24–2B, BASIC 4A–FF</td></tr>
+</table>>];
+}

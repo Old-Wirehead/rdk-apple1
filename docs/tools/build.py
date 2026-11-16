@@ -62,6 +62,22 @@ DOCSET = {
                       title="Полное руководство", kicker="Retro Dev Kit Apple 1",
                       subtitle="Эмулятор, кассетный интерфейс ACI, цветная карта GEN2, отладчик — с полными руководствами по Integer BASIC и ассемблеру 6502",
                       cover_img="img/couverture-manuel.png", header="Полное руководство"),
+    "manual-de": dict(src="manual-de", out="Vollstaendiges-Handbuch.pdf", lang="de",
+                      title="Vollständiges Handbuch", kicker="Retro Dev Kit Apple 1",
+                      subtitle="Der Emulator, die Kassettenschnittstelle ACI, die Farbkarte GEN2, der Debugger — mit vollständigen Anleitungen zu Integer BASIC und zum 6502-Assembler",
+                      cover_img="img/couverture-manuel.png", header="Vollständiges Handbuch"),
+    "manual-es": dict(src="manual-es", out="Manual-completo.pdf", lang="es",
+                      title="Manual completo", kicker="Retro Dev Kit Apple 1",
+                      subtitle="El emulador, la interfaz de casete ACI, la tarjeta de color GEN2, el depurador — con guías completas del Integer BASIC y del ensamblador 6502",
+                      cover_img="img/couverture-manuel.png", header="Manual completo"),
+    "manual-it": dict(src="manual-it", out="Manuale-completo.pdf", lang="it",
+                      title="Manuale completo", kicker="Retro Dev Kit Apple 1",
+                      subtitle="L’emulatore, l’interfaccia a cassetta ACI, la scheda a colori GEN2, il debugger — con guide complete all’Integer BASIC e all’assembler 6502",
+                      cover_img="img/couverture-manuel.png", header="Manuale completo"),
+    "manual-pt": dict(src="manual-pt", out="Manual-completo-pt.pdf", lang="pt",
+                      title="Manual completo", kicker="Retro Dev Kit Apple 1",
+                      subtitle="O emulador, a interface de cassete ACI, a placa de cores GEN2, o depurador — com guias completos do Integer BASIC e do assembler 6502",
+                      cover_img="img/couverture-manuel.png", header="Manual completo"),
 }
 
 # words of the page furniture; French is the default
@@ -83,7 +99,7 @@ L10N = {
                version="Versión", quotes=("&laquo;", "&raquo;"),
                css='@page toc { @top-right { content: "Índice" } } '
                    'h1::before { content: "Capítulo " counter(chapter); } '
-                   'h1.appendix::before { content: "Anexo " counter(appendix, upper-alpha); } '
+                   'h1.appendix::before { content: "Apéndice " counter(appendix, upper-alpha); } '
                    'figcaption::before { content: "Figura " counter(figure) " — "; }'),
     "it": dict(machine="Il peccato originale", toc="Indice", index="Indice analitico", edition="Edizione italiana",
                version="Versione", quotes=("&laquo;", "&raquo;"),
@@ -95,7 +111,7 @@ L10N = {
                version="Versão", quotes=("&laquo;", "&raquo;"),
                css='@page toc { @top-right { content: "Índice" } } '
                    'h1::before { content: "Capítulo " counter(chapter); } '
-                   'h1.appendix::before { content: "Anexo " counter(appendix, upper-alpha); } '
+                   'h1.appendix::before { content: "Apêndice " counter(appendix, upper-alpha); } '
                    'figcaption::before { content: "Figura " counter(figure) " — "; }'),
     "ru": dict(machine="Первородный грех", toc="Содержание", index="Указатель", edition="Русское издание",
                version="Версия", quotes=("«", "»"),
@@ -370,6 +386,6 @@ if __name__ == "__main__":
     if "--png" in args:
         i = args.index("--png"); png = args[i + 1]; del args[i:i + 2]
     which = args[0] if args else "all"
-    sets = {"all": list(DOCSET), "fr": ["guide", "manuel"], "en": ["guide-en", "manual-en"], "ru": ["guide-ru", "manual-ru"], "de": ["guide-de"], "es": ["guide-es"], "it": ["guide-it"], "pt": ["guide-pt"]}
+    sets = {"all": list(DOCSET), "fr": ["guide", "manuel"], "en": ["guide-en", "manual-en"], "ru": ["guide-ru", "manual-ru"], "de": ["guide-de", "manual-de"], "es": ["guide-es", "manual-es"], "it": ["guide-it", "manual-it"], "pt": ["guide-pt", "manual-pt"]}
     for n in sets.get(which, [which]):
         build(n, png)

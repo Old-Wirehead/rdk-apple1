@@ -1,0 +1,15 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  src [label=<<b>Sorgente .s</b><br/><font point-size="9" color="#5f6a73">editor, ca65 o xa</font>>];
+  asm [label=<<b>Assemblare</b><br/><font point-size="9" color="#5f6a73">Esegui: listato,<br/>simboli, errori</font>>];
+  run [label=<<b>Eseguire</b><br/><font point-size="9" color="#5f6a73">caricato in .org,<br/>poi INDR</font>>];
+  dbg [label=<<b>Debug</b><br/><font point-size="9" color="#5f6a73">punti di arresto su etichette,<br/>passo passo, memoria</font>>];
+  wav [label=<<b>Esporta WAV</b><br/><font point-size="9" color="#5f6a73">intervallo inizio.fineR</font>>];
+  real [label=<<b>Vero Apple-1</b><br/><font point-size="9" color="#5f6a73">C100R, intervallo R,<br/>poi INDR</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+  src -> asm -> run -> wav -> real;
+  {rank=same; run; dbg}
+  run -> dbg [style=dashed, label="bug?"]; dbg -> src [style=dashed, label="correggere"];
+}

@@ -4,7 +4,7 @@
 #   Guia-de-inicio-rapido.pdf (espagnol), Guida-rapida.pdf (italien), Guia-de-inicio-rapido-pt.pdf (portugais)
 # Prérequis (une fois) : sudo apt install graphviz poppler-utils fonts-... (voir docs/LISEZMOI.md)
 #   python3 -m venv ~/.venv-docs && ~/.venv-docs/bin/pip install weasyprint markdown pygments pymdown-extensions
-# Usage : docs/build.sh [guide|manuel|guide-en|manual-en|guide-ru|manual-ru|guide-de|guide-es|guide-it|guide-pt|fr|en|ru|de|es|it|pt|all] [--png DOSSIER]
+# Usage : docs/build.sh [guide|manuel|guide-en|manual-en|guide-ru|manual-ru|guide-de|guide-es|guide-it|guide-pt|manual-de|manual-es|manual-it|manual-pt|fr|en|ru|de|es|it|pt|all] [--png DOSSIER]
 set -e
 cd "$(dirname "$(readlink -f "$0")")"
 PY=${DOCS_PYTHON:-}
