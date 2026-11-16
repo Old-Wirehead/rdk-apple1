@@ -2,7 +2,7 @@
 
 Beim ersten Start öffnet sich das Fenster maximiert, und ein Fenster **Ihr Arbeitsbereich** bietet fünf Anordnungen an: **Standard**, **Spiel**, **BASIC**, **Assembler** und **Debugging**. Jedes nummerierte Vorschaubild zeigt die Anordnung, sagt, wofür sie gedacht ist, und nennt die nötige Mindestgröße des Bildschirms: Klicken Sie auf die gewünschte. Entfernen Sie das Häkchen bei **Dieses Fenster beim Start anzeigen**, wenn Sie es nicht wieder sehen möchten; **⊞ Anordnung ▾ → Arbeitsbereich wählen…** öffnet es erneut. Die Anordnung lässt sich jederzeit über das Menü **⊞ Anordnung ▾** ändern. Die Standardanordnung zeigt alle Werkzeuge auf einen Blick. Jeder Bereich ist ein andockbares Fenster, das Sie verschieben, in Tabs gruppieren oder in ein eigenes Fenster abdocken können. Der Farbbildschirm (GEN2 / P-LAB) ist das Rechteck Nummer 7, in den Vorschaubildern, die ihn zeigen, und in der Legende; die Nummern 1 bis 6 ändern sich nicht. Dieses Fenster bleibt nicht über den anderen. Ist das Fenster schmal, lässt sich die Werkzeugleiste verschieben: Die Schaltfläche **»** holt die Gruppe Kassette.
 
-![Die Standardanordnung. Der Bildschirm zeigt bereits das kleine Programm aus dem nächsten Abschnitt.](img/en/defaut-annote.png "large")
+![Die Standardanordnung. Der Bildschirm zeigt bereits das kleine Programm aus dem nächsten Abschnitt.](img/de/defaut-annote.png "large")
 
 <ol class="legend">
 <li><strong>Laden, Sichern, Zustand</strong>: Hex-Dumps <code>.txt</code>, Binärdateien <code>.bin</code> und <code>.prg</code>; Sichern schreibt auch Kassetten <code>.wav</code>/<code>.aiff</code>; Zustand speichert und lädt den Zustand der Maschine.</li>

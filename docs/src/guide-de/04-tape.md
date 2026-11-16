@@ -15,7 +15,7 @@ Jedes Programm der Liste hat rechts vier kleine Symbole: **▶** lädt und start
 
 Klicken Sie auf **▶** neben `Hamurabi.wav`. Der Emulator lädt BASIC, falls es noch nicht im Speicher ist, dann das Programm, und tippt für Sie `E2B3R` (zurück ins BASIC, ohne das Programm zu löschen) und `RUN`. Das Laden geht sofort.
 
-![Hamurabi, gestartet mit der Schaltfläche ▶ der Bibliothek.](img/en/hamurabi-ecran.png "small")
+![Hamurabi, gestartet mit der Schaltfläche ▶ der Bibliothek.](img/de/hamurabi-ecran.png "small")
 
 Bei einem Programm in Maschinensprache macht ▶ ein RESET und tippt dann seinen Startbefehl, zum Beispiel `300R`. Ein BASIC-Listing oder einen 6502-Quelltext öffnet ▶ außerdem in einem Tab des Editors, wenn der Editor offen ist.
 
@@ -23,7 +23,7 @@ Bei einem Programm in Maschinensprache macht ▶ ein RESET und tippt dann seinen
 
 Das Laden geht sofort, es sei denn, Sie verlangen die Kassette. Klicken Sie auf das Symbol **📼** eines Programms, um ein echtes Laden nachzustellen: Der Emulator tippt `C100R`, um das Programm der ACI zu starten, dann den Adressbereich, und die Kassette läuft in Originalgeschwindigkeit. Unter dem Namen des Programms erscheint ein Fortschrittsbalken, und der Streifen **Kassette:** der Werkzeugleiste zeigt die Kassette und ihre Position.
 
-![BASIC.wav wird über die virtuelle ACI geladen, das Kassetten-Oszilloskop ist offen.](img/en/brut/cassette-basic.png "large")
+![BASIC.wav wird über die virtuelle ACI geladen, das Kassetten-Oszilloskop ist offen.](img/de/brut/cassette-basic.png "large")
 
 Die Schaltflächen 📈 und 🔊 am Ende des Streifens **Kassette:** öffnen das **Oszilloskop** und lassen Sie das Signal **hören**, wie den Lautsprecher eines Kassettenrekorders. Das Laden von BASIC dauert in Originalgeschwindigkeit etwa 36 Sekunden.
 

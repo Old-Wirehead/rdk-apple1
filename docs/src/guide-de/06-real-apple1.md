@@ -6,7 +6,7 @@ Alles, was Sie im Emulator schreiben, kann auf einen echten Apple-1, einen Nachb
 
 Klicken Sie im Editor auf **📼 WAV exportieren** und wählen Sie einen Dateinamen. Die Endung bestimmt das Format: `.wav`, oder `.aiff` für ein Telefon (das empfohlene Format, siehe unten). Unten im Editor steht dann genau, was Sie an der echten Maschine tippen müssen:
 
-![Nach dem Export zeigt der untere Rand des Editors den Ladebefehl.](img/en/editeur-export-bas.png "large")
+![Nach dem Export zeigt der untere Rand des Editors den Ladebefehl.](img/de/editeur-export-bas.png "large")
 
 Für `premier.bas` lautet der Befehl `C100R`, dann `004A.00FFR 0F5A.0FFFR`. Das BASIC-Programm belegt zwei aufeinanderfolgende Aufnahmen auf der Kassette: zuerst die Zero Page des BASIC (`$004A` bis `$00FF`, sie enthält die Zeiger des Programms), dann das Programm selbst, das am oberen Ende des Speichers liegt. Die Schaltfläche **Bereiche kopieren** legt den Befehl in die Zwischenablage.
 

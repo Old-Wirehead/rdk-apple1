@@ -29,7 +29,7 @@ Schlüsselwörter, Zahlen, Zeichenketten und Kommentare erhalten jeweils eine ei
 
 Klicken Sie auf **▶ Starten**. Das Programm kommt direkt in den Speicher (nach BASIC, falls nötig), dann tippt der Editor für Sie `E2B3R` und `RUN`:
 
-![Links der Editor, rechts das laufende Programm.](img/en/brut/editeur-premier.png "large")
+![Links der Editor, rechts das laufende Programm.](img/de/brut/editeur-premier.png "large")
 
 Das Programm fragt nach Ihrem Vornamen. Klicken Sie auf den Apple-1-Bildschirm, tippen Sie ihn ein, dann Eingabe:
 
@@ -47,11 +47,11 @@ FREUT MICH, WOZ!
 
 Der Editor prüft jede Zeile beim Tippen, nach den Regeln des echten BASIC. Eine fehlerhafte Zeile wird rot, und die Meldung erklärt das Problem, mit Zeilennummer und Spalte:
 
-![Zwei gemeldete Fehler: eine nicht abgeschlossene Zeichenkette und ein zu langer Variablenname.](img/en/editeur-erreur.png "medium")
+![Zwei gemeldete Fehler: eine nicht abgeschlossene Zeichenkette und ein zu langer Variablenname.](img/de/editeur-erreur.png "medium")
 
 Ein Programm mit Fehlern startet nicht: Beheben Sie zuerst die roten Zeilen. Laufzeitfehler erscheinen auf dem Apple-1-Bildschirm: `*** BAD BRANCH ERR` bei einem `GOTO` zu einer fehlenden Zeile, `*** >32767 ERR` bei einem Überlauf oder einer Division durch null. Der **Debugger** (vollständiges Handbuch) geht dann Zeile für Zeile vor und beobachtet dabei die Variablen.
 
-![Der Arbeitszyklus: schreiben, starten, korrigieren, dann auf die echte Maschine exportieren.](diagrams/en/workflow-basic.svg "diagram")
+![Der Arbeitszyklus: schreiben, starten, korrigieren, dann auf die echte Maschine exportieren.](diagrams/de/workflow-basic.svg "diagram")
 
 !!! astuce "Ein Programm anhalten"
     Während eines `RUN` hält ein Tastendruck das Programm mit `STOPPED AT 50` (die aktuelle Zeile) an. Hängt es fest, kehrt **Reset** (Strg+R) zum Monitor zurück, und `E2B3R` kehrt ins BASIC zurück, **ohne** das Programm **zu löschen**.
