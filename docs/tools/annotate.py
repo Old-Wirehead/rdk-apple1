@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Numbered call-outs on screenshots (docs/img/brut -> docs/img; --en / --ru: docs/img/<lang>).
+"""Numbered call-outs on screenshots (docs/img/brut -> docs/img; --en / --ru / --de: docs/img/<lang>).
 
 Each call-out: (number, (x, y) badge centre, optional (x, y) target). With a
 target, the badge sits in the top margin and a thin line goes to the target.
@@ -10,7 +10,9 @@ from PIL import Image, ImageDraw, ImageFont
 
 DOCS = Path(__file__).resolve().parent.parent
 ACCENT = (194, 83, 27)
-FONT = "/usr/share/fonts/truetype/sand-box/google/Inter/Inter-VariableFont_opsz,wght.ttf"
+FONT = next((f for f in ["/usr/share/fonts/truetype/sand-box/google/Inter/Inter-VariableFont_opsz,wght.ttf",
+                          "/usr/share/fonts/opentype/inter/Inter-Bold.otf"] if Path(f).exists()),
+            "/usr/share/fonts/truetype/sand-box/google/Inter/Inter-VariableFont_opsz,wght.ttf")
 
 SPECS = {
     "defaut": dict(top=150, callouts=[
@@ -37,7 +39,16 @@ SPECS_RU = {
         (13, (3300, 1125), None), (14, (3675, 142), None), (15, (1575, 2029), None),
     ]),
 }
-SPECS_BY = {"fr": SPECS, "en": SPECS_EN, "ru": SPECS_RU}
+# German UI (capture made with CAP_NO_GITHUB=1)
+SPECS_DE = {
+    "defaut": dict(top=150, callouts=[
+        (1, (110, 26)), (2, (378, 26)), (3, (565, 26)), (4, (1240, 26)), (5, (2030, 26)),
+        (6, (2675, 26)), (7, (3700, 26)), (8, (1755, 90), None),
+        (9, (500, 800), None), (10, (1300, 1350), None), (11, (2450, 330), None), (12, (2440, 1076), None),
+        (13, (3020, 90), None), (14, (3640, 150), None), (15, (3375, 2066), None),
+    ]),
+}
+SPECS_BY = {"fr": SPECS, "en": SPECS_EN, "ru": SPECS_RU, "de": SPECS_DE}
 
 
 def font(size, weight=700):

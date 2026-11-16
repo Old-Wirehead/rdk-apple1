@@ -56,7 +56,8 @@ def prepare():
     WORK.mkdir(parents=True, exist_ok=True)
     LIB.mkdir(exist_ok=True)
     for f in ["BASIC.wav", "Hamurabi.wav", "LunarLander.wav", "StarTrek.wav"]:
-        if not (LIB / f).exists():
+        # a missing tape only disables the shots that need it
+        if not (LIB / f).exists() and (FIX / f).exists():
             shutil.copy(FIX / f, LIB / f)
     for f in (ROOT / "samples").iterdir():
         if f.suffix in (".txt", ".apl", ".wav") and not (LIB / f.name).exists():
@@ -89,8 +90,15 @@ def run(name, cfg, args, delay, size="1920x1050", cfgdir=None, fresh=False, out=
     return out
 
 
+# CAP_NO_GITHUB=1: no demo GitHub project (a machine where GitHub cannot be
+# reached would show « Connection Failed » in the library and the status bar)
+NO_GITHUB = os.environ.get("CAP_NO_GITHUB") == "1"
+
+
 def cfg_with(layout=None, **over):
     c = template()
+    if NO_GITHUB:
+        c["github"] = []
     c.update(over)
     if layout is not None:
         c["layout"] = tree(layout)
@@ -111,7 +119,8 @@ def cfg_with(layout=None, **over):
     return c
 
 
-EX = DOCS / "exemples" / ("" if LANG == "fr" else "en")   # examples with English comments for the other UIs
+# examples in the UI language when they exist (docs/exemples/de…), otherwise with English comments
+EX = DOCS / "exemples" / ("" if LANG == "fr" else (LANG if (DOCS / "exemples" / LANG).is_dir() else "en"))
 SHOTS = {}
 
 
@@ -122,8 +131,8 @@ def shot(f):
 
 @shot
 def defaut():
-    run("defaut", None, ["--taper-a", "2:300: A9 C1 20 EF FF 4C 1F FF\\n300R\\n"], delay=6,
-        cfgdir=tempfile.mkdtemp(prefix="cap-", dir=WORK), fresh=True)
+    run("defaut", cfg_with() if NO_GITHUB else None, ["--taper-a", "2:300: A9 C1 20 EF FF 4C 1F FF\\n300R\\n"], delay=6,
+        cfgdir=tempfile.mkdtemp(prefix="cap-", dir=WORK), fresh=not NO_GITHUB)
 
 
 SCREEN_LIB = ("H", 0.70, ["Screen"], ["Library"])
@@ -156,9 +165,13 @@ def editeur_premier():
         ["--editeur", str(EX / "basic" / "premier.bas"), "--editeur-lancer", "2"], delay=16, size="1600x900")
 
 
+# German error messages are longer: a wider editor keeps them on one line each
+EDIT_SCREEN_ERR = ("H", 0.62, ["Editor"], ["Screen"]) if LANG == "de" else EDIT_SCREEN
+
+
 @shot
 def editeur_erreur():
-    run("editeur-erreur", cfg_with(EDIT_SCREEN),
+    run("editeur-erreur", cfg_with(EDIT_SCREEN_ERR),
         ["--editeur", str(EX / "basic" / "erreur.bas")], delay=3, size="1600x900")
 
 

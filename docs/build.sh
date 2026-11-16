@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Construit les manuels PDF : docs/pdf/Guide-demarrage-rapide.pdf, Manuel-complet.pdf, Quick-Start-Guide.pdf, Complete-Manual.pdf,
-#   Kratkoe-rukovodstvo.pdf, Polnoe-rukovodstvo.pdf (russe)
+#   Kratkoe-rukovodstvo.pdf, Polnoe-rukovodstvo.pdf (russe), Schnellstartanleitung.pdf (allemand)
 # Prérequis (une fois) : sudo apt install graphviz poppler-utils fonts-... (voir docs/LISEZMOI.md)
 #   python3 -m venv ~/.venv-docs && ~/.venv-docs/bin/pip install weasyprint markdown pygments pymdown-extensions
-# Usage : docs/build.sh [guide|manuel|guide-en|manual-en|guide-ru|manual-ru|fr|en|ru|all] [--png DOSSIER]
+# Usage : docs/build.sh [guide|manuel|guide-en|manual-en|guide-ru|manual-ru|guide-de|fr|en|ru|de|all] [--png DOSSIER]
 set -e
 cd "$(dirname "$(readlink -f "$0")")"
 PY=${DOCS_PYTHON:-}

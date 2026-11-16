@@ -32,3 +32,7 @@ Décisions de Wirehead (16/11/2026) :
    Windows), pour prouver quel moteur est utilisé (carte graphique, ou
    « Microsoft Basic Render Driver » sans pilote 3D). Proposé par la session
    Claude de la VM.
+6. **Interface allemande : le bouton « Schnell » passe à la ligne** dans la
+   rangée d'affichage de l'écran monochrome (disposition par défaut, fenêtre
+   de 1920 points de large). Constaté sur les captures allemandes du guide
+   (`docs/img/de/defaut-annote.png`), 16/11/2026.
