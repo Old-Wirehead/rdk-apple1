@@ -487,11 +487,14 @@ pub struct TapePlayer {
     pub(crate) idx: usize,
     pub(crate) level: bool,
     pub name: String,
+    /// Tape stopped in the middle (position, s): ▶ resumes from there, as a
+    /// real deck does, so that a load in progress can go on (#14).
+    pub paused: Option<f64>,
 }
 
 impl TapePlayer {
     pub fn new(edges: Vec<f64>, name: impl Into<String>) -> Self {
-        TapePlayer { edges, started_at: None, autostart: true, idx: 0, level: false, name: name.into() }
+        TapePlayer { edges, started_at: None, autostart: true, idx: 0, level: false, name: name.into(), paused: None }
     }
 
     pub fn from_samples(samples: &[f32], rate: u32, name: impl Into<String>) -> Self {
@@ -506,12 +509,37 @@ impl TapePlayer {
         self.started_at = Some(now);
         self.idx = 0;
         self.level = false;
+        self.paused = None;
     }
 
     pub fn rewind(&mut self) {
         self.started_at = None;
         self.idx = 0;
         self.level = false;
+        self.paused = None;
+    }
+
+    /// Stop the tape where it is (the signal holds its last level). Returns
+    /// false when the tape was not moving, or had already reached its end.
+    pub fn pause(&mut self, now: f64) -> bool {
+        if self.started_at.is_none() || self.finished(now) {
+            return false;
+        }
+        self.level_at(now);
+        self.paused = Some(self.position(now));
+        self.started_at = None;
+        true
+    }
+
+    /// Go on from where [`pause`](Self::pause) stopped. False if not paused.
+    pub fn resume(&mut self, now: f64) -> bool {
+        match self.paused.take() {
+            Some(pos) => {
+                self.started_at = Some(now - pos);
+                true
+            }
+            None => false,
+        }
     }
 
     /// Position on the tape (s) at emulated time `now`.
@@ -526,6 +554,9 @@ impl TapePlayer {
     /// Comparator output at emulated time `now`.
     pub fn level_at(&mut self, now: f64) -> bool {
         if self.started_at.is_none() {
+            if self.paused.is_some() {
+                return self.level; // a stopped tape: no new edge
+            }
             if !self.autostart {
                 return false;
             }
@@ -564,6 +595,19 @@ mod range_text_tests {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn pause_and_resume_keep_the_position() {
+        // a stop in the middle of a load, then ▶: the tape goes on (#14)
+        let mut p = TapePlayer::new(vec![1.0, 2.0, 3.0, 4.0], "t");
+        p.start(10.0);
+        assert!(p.level_at(11.5)); // one edge passed
+        assert!(p.pause(11.5));
+        assert!(p.level_at(20.0)); // stopped: same level, no edge
+        assert!(p.resume(30.0));
+        assert!((p.position(30.0) - 1.5).abs() < 1e-9);
+        assert!(!p.level_at(30.6)); // edge at 2.0 reached after 0.5 s more
+    }
 
     #[test]
     fn render_and_detect_are_inverse() {

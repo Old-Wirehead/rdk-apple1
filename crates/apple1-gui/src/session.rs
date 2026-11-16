@@ -230,7 +230,10 @@ impl Session {
         let now = self.m.board.now_secs();
         match self.m.board.player.as_mut() {
             Some(p) => {
-                p.start(now);
+                // a tape stopped in the middle goes on from there (#14)
+                if !p.resume(now) {
+                    p.start(now);
+                }
                 Ok(tf("s_playing", &[&p.name]))
             }
             None => Err(t("s_no_tape_load").into()),
@@ -239,9 +242,14 @@ impl Session {
 
     pub fn stop(&mut self) -> String {
         let mut msg = t("s_stopped").to_string();
+        let now = self.m.board.now_secs();
         if let Some(p) = self.m.board.player.as_mut() {
-            p.rewind();
-            p.autostart = true;
+            // in the middle of the tape: it stops where it is, and ▶ goes on
+            // (a load in progress is not broken, #14); otherwise rewound
+            if !p.pause(now) {
+                p.rewind();
+                p.autostart = true;
+            }
         }
         if let Some(m) = self.finish_recording() {
             msg = m;
@@ -344,6 +352,7 @@ impl Session {
         let now = self.m.board.now_secs();
         let d = p.duration().max(0.001);
         Some(match p.started_at {
+            None if p.paused.is_some() => ((p.paused.unwrap_or(0.0) / d) as f32, true, false),
             None => (0.0, false, false),
             Some(_) if p.finished(now) => (1.0, true, true),
             Some(_) => ((p.position(now) / d) as f32, true, false),
@@ -355,7 +364,9 @@ impl Session {
         let p = self.m.board.player.as_ref()?;
         let now = self.m.board.now_secs();
         let d = p.duration().max(0.001);
-        Some(if p.started_at.is_none() {
+        Some(if let Some(pos) = p.paused {
+            (tf("s_tape_pos", &[&p.name, &format!("{pos:.1}"), &format!("{d:.1}")]), (pos / d) as f32)
+        } else if p.started_at.is_none() {
             (tf("s_tape_ready", &[&p.name, &format!("{d:.1}")]), 0.0)
         } else if p.finished(now) {
             (tf("s_tape_done", &[&p.name, &format!("{d:.1}")]), 1.0)
