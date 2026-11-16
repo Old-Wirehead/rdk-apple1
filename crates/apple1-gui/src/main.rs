@@ -1,5 +1,8 @@
 //! Retro Dev Kit Apple 1 ("The Original Sin"): Apple-1 emulator, graphical interface (egui).
 
+// Windows: no console window behind the emulator window.
+#![cfg_attr(windows, windows_subsystem = "windows")]
+
 mod app;
 mod fontsz;
 mod wizard;
@@ -18,6 +21,7 @@ mod github;
 mod gen2screen;
 mod help;
 mod i18n;
+mod os;
 mod known;
 mod launch;
 mod library;

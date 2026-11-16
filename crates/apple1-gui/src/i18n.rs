@@ -261,6 +261,12 @@ fn run_cmd(cmd: &str, args: &[&str]) -> Option<String> {
 }
 
 pub fn detect() -> Detected {
+    // Windows: the language chosen in the Windows settings (« fr-FR »)
+    if let Some(loc) = crate::os::windows_locale() {
+        if let Some(lang) = Lang::from_code(&loc) {
+            return Detected { lang, source: format!("Windows : {loc}") };
+        }
+    }
     detect_with(&run_cmd, &|k| std::env::var(k).ok().filter(|v| !v.is_empty()), &|p| std::fs::read_to_string(p).ok())
 }
 

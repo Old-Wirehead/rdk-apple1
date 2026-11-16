@@ -25,3 +25,6 @@ ureq = { version = "2.12", default-features = false, features = ["tls", "json"] 
 zip = { version = "2", default-features = false, features = ["deflate"] }
 libloading = "0.8"
 arboard = { version = "3.7", default-features = false }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_Globalization", "Win32_System_SystemInformation", "Win32_Foundation"] }

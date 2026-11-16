@@ -200,8 +200,18 @@ pub const DEFAULT_GITHUB: [&str; 1] = ["dschmenk/Apple1-Slideshow"];
 /// 1.0 is the first public release (it was 7.9.3 while the repository was private).
 pub const KIT_VERSION: &str = "1.0";
 
+/// The user's folder: `$HOME`, or `%USERPROFILE%` on Windows.
 pub fn home() -> PathBuf {
-    std::env::var_os("HOME").map(PathBuf::from).unwrap_or_else(|| PathBuf::from("."))
+    let var = if cfg!(windows) { "USERPROFILE" } else { "HOME" };
+    std::env::var_os(var).filter(|v| !v.is_empty()).map(PathBuf::from).unwrap_or_else(|| PathBuf::from("."))
+}
+
+/// A Windows folder variable (`APPDATA`, `LOCALAPPDATA`); None elsewhere or when it is empty.
+fn windows_dir(var: &str) -> Option<PathBuf> {
+    if !cfg!(windows) {
+        return None;
+    }
+    std::env::var_os(var).filter(|v| !v.is_empty()).map(PathBuf::from)
 }
 
 impl Default for GuiConfig {
@@ -310,21 +320,26 @@ pub fn default_library() -> PathBuf {
     }
 }
 
-/// `~/.cache/apple1-emu`, or `<kit>/cache` in portable mode.
+/// `~/.cache/apple1-emu` (`%LOCALAPPDATA%\apple1-emu` on Windows), or `<kit>/cache` in portable mode.
 pub fn cache_base() -> PathBuf {
     match portable_root() {
         Some(d) => d.join("cache"),
-        None => match std::env::var_os("XDG_CACHE_HOME") {
-            Some(d) if !d.is_empty() => PathBuf::from(d),
+        None => match (windows_dir("LOCALAPPDATA"), std::env::var_os("XDG_CACHE_HOME")) {
+            (Some(d), _) => d,
+            (None, Some(d)) if !d.is_empty() => PathBuf::from(d),
             _ => home().join(".cache"),
         }
         .join("apple1-emu"),
     }
 }
 
+/// `~/.config/apple1-emu` (`%APPDATA%\apple1-emu` on Windows), or `<kit>/config` in portable mode.
 pub fn config_dir() -> PathBuf {
     if let Some(d) = portable_root() {
         return d.join("config");
+    }
+    if let Some(d) = windows_dir("APPDATA") {
+        return d.join("apple1-emu");
     }
     match std::env::var_os("XDG_CONFIG_HOME") {
         Some(d) if !d.is_empty() => PathBuf::from(d),
