@@ -92,12 +92,12 @@ apple1-emu asm gioco.s -I ../lib                 # controllo, percorso di inclus
 {{basic (riga di comando)|`basic`}} tokenizza un listato come fa l'interprete e scrive il blocco `$004A-$00FF`, poi il programma; `--ram 8|12|16|32` sceglie la macchina di destinazione (per impostazione predefinita, la più piccola che basta). {{asm (riga di comando)|`asm`}} assembla un sorgente ca65 (o xa); senza `-o` controlla soltanto. Entrambi mostrano la riga da digitare sul vero Apple-1.
 
 ```text title="Output di apple1-emu asm hello.s -o hello.txt"
-33 octets, $0300-$0320 ; 2 fichier(s), 13 symboles
-Cassette (après C100R) : 0300.0320R   puis 300R
+32 octets, $0300-$031F ; 2 fichier(s), 13 symboles
+Cassette (après C100R) : 0300.031FR   puis 300R
 écrit : hello.txt
 ```
 
-Cioè: «33 byte, $0300-$0320; 2 file, 13 simboli / Cassetta (dopo C100R): 0300.0320R poi 300R / scritto: hello.txt».
+Cioè: «32 byte, $0300-$031F; 2 file, 13 simboli / Cassetta (dopo C100R): 0300.031FR poi 300R / scritto: hello.txt».
 
 ## Arte ASCII
 
