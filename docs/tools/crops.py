@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Crops of the raw captures used by the manuals (docs/img/<lang>/brut -> docs/img/<lang>).
 
-    python3 docs/tools/crops.py [fr|en|ru|de]
+    python3 docs/tools/crops.py [fr|en|ru|de|es|it|pt]
 
 The boxes were measured on the captures of the one-row toolbar (same window
 sizes in every language; a box may need a few pixels more in a language with
@@ -56,8 +56,11 @@ STACKS = {
 LANG_STACKS = {
     "fr": {"editeur-erreur": ("editeur-erreur", 1474, [(112, 580), (1556, 1702)])},
     "ru": {"editeur-erreur": ("editeur-erreur", 1474, [(112, 580), (1560, 1702)])},
-    # German: wider editor in the capture (captures.py, EDIT_SCREEN_ERR)
+    # German, Spanish, Italian, Portuguese: wider editor in the capture (captures.py, EDIT_SCREEN_ERR)
     "de": {"editeur-erreur": ("editeur-erreur", 1974, [(112, 580), (1595, 1722)])},
+    "es": {"editeur-erreur": ("editeur-erreur", 1974, [(112, 580), (1595, 1722)])},
+    "it": {"editeur-erreur": ("editeur-erreur", 1974, [(112, 580), (1595, 1722)])},
+    "pt": {"editeur-erreur": ("editeur-erreur", 1974, [(112, 580), (1595, 1722)])},
 }
 
 if __name__ == "__main__":
