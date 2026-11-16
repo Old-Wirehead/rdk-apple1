@@ -45,3 +45,7 @@ Décisions de Wirehead (16/11/2026) :
    cassette, qui avance par à-coups (barre de progression). À regarder :
    régularité de l'émulation sur la VM, ou une file audio plus longue
    (QUEUE dans `audio.rs`). Constaté le 16/11/2026.
+9. **La fenêtre « Dump » change de taille quand on la ferme puis qu'on la
+   rouvre avec le bouton « Dump ».** Elle devrait revenir à sa taille
+   d'avant. Constaté par Wirehead sur la version Windows, 16/11/2026. À
+   vérifier aussi sous Linux.
