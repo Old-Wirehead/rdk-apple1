@@ -1,5 +1,6 @@
 //! What differs between Linux and Windows: opening a page or a folder with
-//! the desktop's own program, and the current date for the saved states.
+//! the desktop's own program, the current date for the saved states, the
+//! Windows language, and the report of a fatal error.
 
 use std::ffi::OsStr;
 
@@ -64,5 +65,29 @@ pub fn windows_locale() -> Option<String> {
     #[cfg(not(windows))]
     {
         None
+    }
+}
+
+/// Reports an error that stops the program on the error output. On Windows,
+/// where there is no console, it is also written at the end of `gui.log` in
+/// the cache folder and shown in a message box (on Linux, run.sh already
+/// keeps the error output in `gui.log`).
+pub fn fatal(msg: &str) {
+    eprintln!("apple1-emu-gui : {msg}");
+    #[cfg(windows)]
+    {
+        use windows_sys::Win32::UI::WindowsAndMessaging::{MessageBoxW, MB_ICONERROR, MB_OK};
+        let dir = crate::config::cache_base();
+        let log = dir.join("gui.log");
+        let _ = std::fs::create_dir_all(&dir);
+        if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(&log) {
+            use std::io::Write;
+            let _ = writeln!(f, "[{}] {msg}", now_short());
+        }
+        let wide = |s: &str| s.encode_utf16().chain(std::iter::once(0)).collect::<Vec<u16>>();
+        let text = wide(&format!("{msg}\n\n{}", log.display()));
+        let title = wide("Retro Dev Kit Apple 1");
+        // SAFETY: both strings are NUL-terminated UTF-16 that live until the call returns.
+        unsafe { MessageBoxW(std::ptr::null_mut(), text.as_ptr(), title.as_ptr(), MB_OK | MB_ICONERROR) };
     }
 }

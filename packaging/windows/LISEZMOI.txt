@@ -57,9 +57,13 @@ DIFFÉRENCES AVEC LA VERSION LINUX
 SI LA FENÊTRE NE S'OUVRE PAS
 ----------------------------
 
-L'émulateur utilise OpenGL 2 ou plus. Sur une machine virtuelle ou un PC
-sans pilote graphique, mettez à jour le pilote de la carte graphique, ou
-activez l'accélération 3D de la machine virtuelle.
+L'émulateur dessine avec Direct3D 12. Sur un PC ou une machine virtuelle
+sans pilote 3D, Windows utilise son moteur logiciel (« Microsoft Basic
+Render Driver ») : c'est plus lent, mais cela fonctionne.
+
+En cas d'erreur, un message s'affiche et l'erreur est notée dans
+%LOCALAPPDATA%\apple1-emu\gui.log (ou cache\gui.log en mode portable).
+Envoyez ce fichier avec votre signalement.
 
 
 DOCUMENTATION
