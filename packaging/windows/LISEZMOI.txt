@@ -58,8 +58,8 @@ SI LA FENÊTRE NE S'OUVRE PAS
 ----------------------------
 
 L'émulateur dessine avec Direct3D 12. Sur un PC ou une machine virtuelle
-sans pilote 3D, Windows utilise son moteur logiciel (« Microsoft Basic
-Render Driver ») : c'est plus lent, mais cela fonctionne.
+sans pilote 3D, il devrait utiliser le moteur logiciel de Windows
+(« Microsoft Basic Render Driver »), plus lent (pas encore vérifié).
 
 En cas d'erreur, un message s'affiche et l'erreur est notée dans
 %LOCALAPPDATA%\apple1-emu\gui.log (ou cache\gui.log en mode portable).
