@@ -165,8 +165,8 @@ def editeur_premier():
         ["--editeur", str(EX / "basic" / "premier.bas"), "--editeur-lancer", "2"], delay=16, size="1600x900")
 
 
-# German error messages are longer: a wider editor keeps them on one line each
-EDIT_SCREEN_ERR = ("H", 0.62, ["Editor"], ["Screen"]) if LANG == "de" else EDIT_SCREEN
+# German, Spanish, Italian and Portuguese error messages are longer: a wider editor keeps them on one line each
+EDIT_SCREEN_ERR = ("H", 0.62, ["Editor"], ["Screen"]) if LANG in ("de", "es", "it", "pt") else EDIT_SCREEN
 
 
 @shot

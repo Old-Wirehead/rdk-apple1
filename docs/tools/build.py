@@ -46,6 +46,18 @@ DOCSET = {
                      title="Schnellstartanleitung", kicker="Retro Dev Kit Apple 1",
                      subtitle="Den Emulator installieren, eine Kassette laden, ein erstes BASIC-Programm schreiben und an einen echten Apple-1 senden",
                      cover_img="img/couverture-guide.png", header="Schnellstartanleitung"),
+    "guide-es": dict(src="guide-es", out="Guia-de-inicio-rapido.pdf", lang="es",
+                     title="Guía de inicio rápido", kicker="Retro Dev Kit Apple 1",
+                     subtitle="Instalar el emulador, cargar un casete, escribir un primer programa BASIC y enviarlo a un Apple-1 real",
+                     cover_img="img/couverture-guide.png", header="Guía de inicio rápido"),
+    "guide-it": dict(src="guide-it", out="Guida-rapida.pdf", lang="it",
+                     title="Guida rapida", kicker="Retro Dev Kit Apple 1",
+                     subtitle="Installare l’emulatore, caricare una cassetta, scrivere un primo programma BASIC e inviarlo a un vero Apple-1",
+                     cover_img="img/couverture-guide.png", header="Guida rapida"),
+    "guide-pt": dict(src="guide-pt", out="Guia-de-inicio-rapido-pt.pdf", lang="pt",
+                     title="Guia de início rápido", kicker="Retro Dev Kit Apple 1",
+                     subtitle="Instalar o emulador, carregar uma cassete, escrever um primeiro programa BASIC e enviá-lo para um Apple-1 verdadeiro",
+                     cover_img="img/couverture-guide.png", header="Guia de início rápido"),
     "manual-ru": dict(src="manual-ru", out="Polnoe-rukovodstvo.pdf", lang="ru",
                       title="Полное руководство", kicker="Retro Dev Kit Apple 1",
                       subtitle="Эмулятор, кассетный интерфейс ACI, цветная карта GEN2, отладчик — с полными руководствами по Integer BASIC и ассемблеру 6502",
@@ -67,6 +79,24 @@ L10N = {
                    'h1::before { content: "Kapitel " counter(chapter); } '
                    'h1.appendix::before { content: "Anhang " counter(appendix, upper-alpha); } '
                    'figcaption::before { content: "Abbildung " counter(figure) " — "; }'),
+    "es": dict(machine="El pecado original", toc="Índice", index="Índice alfabético", edition="Edición en español",
+               version="Versión", quotes=("&laquo;", "&raquo;"),
+               css='@page toc { @top-right { content: "Índice" } } '
+                   'h1::before { content: "Capítulo " counter(chapter); } '
+                   'h1.appendix::before { content: "Anexo " counter(appendix, upper-alpha); } '
+                   'figcaption::before { content: "Figura " counter(figure) " — "; }'),
+    "it": dict(machine="Il peccato originale", toc="Indice", index="Indice analitico", edition="Edizione italiana",
+               version="Versione", quotes=("&laquo;", "&raquo;"),
+               css='@page toc { @top-right { content: "Indice" } } '
+                   'h1::before { content: "Capitolo " counter(chapter); } '
+                   'h1.appendix::before { content: "Appendice " counter(appendix, upper-alpha); } '
+                   'figcaption::before { content: "Figura " counter(figure) " — "; }'),
+    "pt": dict(machine="O pecado original", toc="Índice", index="Índice remissivo", edition="Edição em português",
+               version="Versão", quotes=("&laquo;", "&raquo;"),
+               css='@page toc { @top-right { content: "Índice" } } '
+                   'h1::before { content: "Capítulo " counter(chapter); } '
+                   'h1.appendix::before { content: "Anexo " counter(appendix, upper-alpha); } '
+                   'figcaption::before { content: "Figura " counter(figure) " — "; }'),
     "ru": dict(machine="Первородный грех", toc="Содержание", index="Указатель", edition="Русское издание",
                version="Версия", quotes=("«", "»"),
                css='@page toc { @top-right { content: "Содержание" } } '
@@ -340,6 +370,6 @@ if __name__ == "__main__":
     if "--png" in args:
         i = args.index("--png"); png = args[i + 1]; del args[i:i + 2]
     which = args[0] if args else "all"
-    sets = {"all": list(DOCSET), "fr": ["guide", "manuel"], "en": ["guide-en", "manual-en"], "ru": ["guide-ru", "manual-ru"], "de": ["guide-de"]}
+    sets = {"all": list(DOCSET), "fr": ["guide", "manuel"], "en": ["guide-en", "manual-en"], "ru": ["guide-ru", "manual-ru"], "de": ["guide-de"], "es": ["guide-es"], "it": ["guide-it"], "pt": ["guide-pt"]}
     for n in sets.get(which, [which]):
         build(n, png)

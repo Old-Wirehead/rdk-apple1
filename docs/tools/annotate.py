@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Numbered call-outs on screenshots (docs/img/brut -> docs/img; --en / --ru / --de: docs/img/<lang>).
+"""Numbered call-outs on screenshots (docs/img/brut -> docs/img; --en / --ru / --de / --es / --it / --pt: docs/img/<lang>).
 
 Each call-out: (number, (x, y) badge centre, optional (x, y) target). With a
 target, the badge sits in the top margin and a thin line goes to the target.
@@ -48,7 +48,20 @@ SPECS_DE = {
         (13, (3020, 90), None), (14, (3640, 150), None), (15, (3375, 2066), None),
     ]),
 }
-SPECS_BY = {"fr": SPECS, "en": SPECS_EN, "ru": SPECS_RU, "de": SPECS_DE}
+def _specs(win, cards, tape, dump=(3020, 90)):
+    """Same layout as German; only the toolbar groups and the dump tab move with the label widths."""
+    return {"defaut": dict(top=150, callouts=[
+        (1, (110, 26)), (2, (378, 26)), (3, (565, 26)), (4, (win, 26)), (5, (cards, 26)),
+        (6, (tape, 26)), (7, (3700, 26)), (8, (1755, 90), None),
+        (9, (500, 800), None), (10, (1300, 1350), None), (11, (2450, 330), None), (12, (2440, 1076), None),
+        (13, dump, None), (14, (3640, 150), None), (15, (3375, 2066), None),
+    ])}
+
+
+SPECS_ES = _specs(1248, 2090, 2730)
+SPECS_IT = _specs(1248, 2090, 2745, dump=(3080, 90))
+SPECS_PT = _specs(1220, 2005, 2660)
+SPECS_BY = {"fr": SPECS, "en": SPECS_EN, "ru": SPECS_RU, "de": SPECS_DE, "es": SPECS_ES, "it": SPECS_IT, "pt": SPECS_PT}
 
 
 def font(size, weight=700):
