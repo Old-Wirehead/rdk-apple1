@@ -66,7 +66,12 @@ unsafe fn play_waveout(rx: Receiver<Vec<i16>>, ok: SyncSender<bool>) {
         WAVEFORMATEX, WAVEHDR, WAVE_FORMAT_PCM, WAVE_MAPPER, WHDR_DONE,
     };
     use windows_sys::Win32::Media::MMSYSERR_NOERROR;
-    const QUEUE: usize = 6;
+    const QUEUE: usize = 10;
+    // after the device ran dry (the emulation advanced by jolts, in a slow
+    // virtual machine), about 0.1 s is gathered before playing again: one
+    // short gap instead of many (note 8)
+    const PRIME: usize = RATE as usize / 10;
+    let mut pending: Vec<i16> = Vec::new();
     let hdr_size = std::mem::size_of::<WAVEHDR>() as u32;
     let fmt = WAVEFORMATEX {
         wFormatTag: WAVE_FORMAT_PCM as u16,
@@ -92,7 +97,7 @@ unsafe fn play_waveout(rx: Receiver<Vec<i16>>, ok: SyncSender<bool>) {
         waveOutUnprepareHeader(h, hdr, hdr_size);
         drop(Box::from_raw(hdr));
     };
-    while let Ok(mut buf) = rx.recv() {
+    while let Ok(buf) = rx.recv() {
         loop {
             while queue.front().is_some_and(|&(hdr, _)| done(hdr)) {
                 let (hdr, _samples) = queue.pop_front().unwrap();
@@ -103,6 +108,15 @@ unsafe fn play_waveout(rx: Receiver<Vec<i16>>, ok: SyncSender<bool>) {
             }
             std::thread::sleep(std::time::Duration::from_millis(5));
         }
+        let mut buf = if queue.is_empty() {
+            pending.extend_from_slice(&buf);
+            if pending.len() < PRIME {
+                continue;
+            }
+            std::mem::take(&mut pending)
+        } else {
+            buf
+        };
         let mut hdr: WAVEHDR = std::mem::zeroed();
         hdr.lpData = buf.as_mut_ptr() as *mut u8;
         hdr.dwBufferLength = (buf.len() * 2) as u32;

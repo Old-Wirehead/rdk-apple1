@@ -589,7 +589,8 @@ pub const PUISSANCE4: (&str, &str) = ("puissance4-couleur.bas", include_str!("..
 /// `basic_stem`: a `.hex.txt` next to a `.bas` of the same name is a BASIC program.
 fn category(p: &Path, basic_stem: bool) -> Option<&'static str> {
     let name = p.file_name()?.to_string_lossy().to_ascii_lowercase();
-    if name.starts_with("gen2-") || name.starts_with("gen2_") || (name.ends_with(".bas") && (name.contains("-couleur") || name.contains("-color"))) {
+    // gen2.inc goes with the gen2-*.s sources that include it
+    if name.starts_with("gen2-") || name.starts_with("gen2_") || name == "gen2.inc" || (name.ends_with(".bas") && (name.contains("-couleur") || name.contains("-color"))) {
         return Some(DIR_BERNIE);
     }
     if !is_program(p) || name.starts_with("readme") || name.starts_with("licen") {
