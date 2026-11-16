@@ -1,0 +1,15 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  photo [label=<<b>Foto</b><br/><font point-size="9" color="#5f6a73">jpg, png ou<br/>texto .txt</font>>];
+  ascii [label=<<b>Foto → ASCII</b><br/><font point-size="9" color="#5f6a73">enquadramento, contraste,<br/>pontilhado, 40 × 24</font>>];
+  code [label=<<b>Programa</b><br/><font point-size="9" color="#5f6a73">BASIC (PRINT)<br/>ou 6502 (ca65)</font>>];
+  edit [label=<<b>Editor</b><br/><font point-size="9" color="#5f6a73">Inserir no editor,<br/>Executar para testar</font>>];
+  wav [label=<<b>Exportar WAV</b><br/><font point-size="9" color="#5f6a73">.wav ou .aiff</font>>];
+  real [label=<<b>Apple-1 verdadeiro</b><br/><font point-size="9" color="#5f6a73">C100R, intervalo,<br/>depois R ou RUN</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+  lib [label=<<b>Biblioteca</b><br/><font point-size="9" color="#5f6a73">Salvar na<br/>biblioteca</font>>, style="rounded,dashed,filled"];
+  photo -> ascii -> code -> edit -> wav -> real;
+  ascii -> lib [style=dashed];
+}

@@ -1,0 +1,14 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  gh [label=<<b>Proyecto GitHub</b><br/><font point-size="9" color="#5f6a73">+ Proyecto GitHub,<br/>propietario/repositorio</font>>];
+  test [label=<<b>Probar la última compilación</b><br/><font point-size="9" color="#5f6a73">descarga la última<br/>versión de la rama</font>>];
+  build [label=<<b>Ensamblado</b><br/><font point-size="9" color="#5f6a73">ensamblador integrado<br/>(ca65 o xa)</font>>];
+  run [label=<<b>Ejecutar</b><br/><font point-size="9" color="#5f6a73">cargado en memoria,<br/>luego dirección R</font>>];
+  maj [label=<<b>Actualizar</b><br/><font point-size="9" color="#5f6a73">¿nuevo commit?<br/>otra vez</font>>, style="rounded,dashed,filled"];
+  gh -> test -> build -> run;
+  run -> maj [style=dashed]; maj -> test [style=dashed];
+  {rank=same; run; maj}
+}

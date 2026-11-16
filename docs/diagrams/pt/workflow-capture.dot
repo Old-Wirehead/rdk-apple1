@@ -1,0 +1,12 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="transparent", pad="0.15", nodesep="0.35", ranksep="0.42", fontname="Inter"];
+  node  [shape=box, style="rounded,filled", fillcolor="#f8f5ef", color="#c2531b", penwidth=1.4,
+         fontname="Inter", fontsize=11, fontcolor="#1c2228", margin="0.16,0.08", height=0.62];
+  edge  [color="#5f6a73", penwidth=1.2, arrowsize=0.7, fontname="Inter", fontsize=9, fontcolor="#5f6a73"];
+  tape [label=<<b>Cassete verdadeira</b><br/><font point-size="9" color="#5f6a73">gravador,<br/>saída de auscultadores</font>>, fillcolor="#fbf3e2", color="#b9780f"];
+  phone [label=<<b>Smartphone</b><br/><font point-size="9" color="#5f6a73">gravador de voz,<br/>WAV ou M4A → WAV</font>>];
+  imp [label=<<b>Carregar</b><br/><font point-size="9" color="#5f6a73">descodificação do sinal,<br/>verificação dos intervalos</font>>];
+  reco [label=<<b>Reconhecimento</b><br/><font point-size="9" color="#5f6a73">BASIC ou 6502,<br/>endereços, comando de execução</font>>];
+  lib [label=<<b>Biblioteca</b><br/><font point-size="9" color="#5f6a73">arquivado com as suas<br/>definições ⚙</font>>];
+  tape -> phone -> imp -> reco -> lib;
+}
