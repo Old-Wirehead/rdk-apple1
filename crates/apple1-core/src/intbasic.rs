@@ -141,6 +141,8 @@ impl Listing {
 pub fn tokenize(src: &str) -> Listing {
     let mut map: BTreeMap<u16, Line> = BTreeMap::new();
     let mut errors = Vec::new();
+    // a UTF-8 byte order mark (Windows Notepad) is not part of the listing (#10)
+    let src = src.strip_prefix('\u{feff}').unwrap_or(src);
     for (i, text) in src.lines().enumerate() {
         match tokenize_line(text) {
             Ok(None) => {}
@@ -833,6 +835,16 @@ pub fn layout(prog_len: usize, ram_kb: Option<u32>) -> (u16, u16) {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn bom_is_ignored() {
+        // a listing saved by Windows Notepad as « UTF-8 with BOM » (#10)
+        let with = super::tokenize("\u{feff}10 PRINT 1\r\n20 END\r\n");
+        let without = super::tokenize("10 PRINT 1\n20 END\n");
+        assert!(with.errors.is_empty());
+        assert_eq!(with.lines.len(), 2);
+        assert_eq!(with.lines[0].bytes, without.lines[0].bytes);
+    }
+
     use super::*;
 
     fn hex(s: &str) -> Vec<u8> {

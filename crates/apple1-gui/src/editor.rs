@@ -771,7 +771,9 @@ pub fn image_of(l: &Listing, ram: Option<u32>) -> Result<Image, String> {
 
 fn read_text(p: &Path) -> Result<String, String> {
     let b = std::fs::read(p).map_err(|e| format!("{} : {e}", p.display()))?;
-    Ok(String::from_utf8_lossy(&b).replace("\r\n", "\n").replace('\r', "\n"))
+    // a UTF-8 byte order mark (Windows Notepad) is dropped, as Windows editors do (#10)
+    let b = b.strip_prefix(b"\xEF\xBB\xBF").unwrap_or(&b);
+    Ok(String::from_utf8_lossy(b).replace("\r\n", "\n").replace('\r', "\n"))
 }
 
 impl Editor {

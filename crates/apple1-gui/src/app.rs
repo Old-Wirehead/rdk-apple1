@@ -2120,7 +2120,7 @@ impl App {
         match src {
             library::Source::Basic => {
                 let text = match std::fs::read_to_string(path) {
-                    Ok(t) => t,
+                    Ok(t) => t.strip_prefix('\u{feff}').map(str::to_string).unwrap_or(t),
                     Err(e) => return self.fail(format!("{} : {e}", path.display())),
                 };
                 let basic_msg = match self.ensure_basic() {
@@ -2608,8 +2608,9 @@ impl App {
             }
         }
         let mut fullscreen = false;
+        // keys and typed characters are kept in their order of arrival: a RETURN
+        // typed just after a letter, in the same frame, must not overtake it (#13)
         let mut actions: Vec<Action> = Vec::new();
-        let mut text = String::new();
         let mut pasted = String::new();
         events.retain(|ev| match ev {
             egui::Event::Key { key, pressed: true, modifiers, .. } => {
@@ -2657,7 +2658,14 @@ impl App {
             }
             egui::Event::Key { .. } => !to_emu,
             egui::Event::Text(t) if to_emu => {
-                text.push_str(t);
+                let t = t.clone();
+                actions.push(Box::new(move |a| {
+                    for ch in t.chars() {
+                        if let Some(c) = map_key(ch) {
+                            a.latch_key(c);
+                        }
+                    }
+                }));
                 false
             }
             egui::Event::Paste(t) if to_emu => {
@@ -2672,11 +2680,6 @@ impl App {
         }
         for a in actions {
             a(self);
-        }
-        for ch in text.chars() {
-            if let Some(c) = map_key(ch) {
-                self.latch_key(c);
-            }
         }
         if !pasted.is_empty() {
             // typed at keyboard speed by the core

@@ -221,7 +221,7 @@ pub struct ListRow {
 /// that produce bytes, after their `.include` line. `main_text` is the main
 /// text when it is not the file on disk (editor).
 pub fn listing_rows(a: &Assembly, main_text: Option<&str>) -> Vec<ListRow> {
-    let lines_of = |t: &str| t.lines().map(|l| l.replace('\t', "        ")).collect::<Vec<String>>();
+    let lines_of = |t: &str| t.strip_prefix('\u{feff}').unwrap_or(t).lines().map(|l| l.replace('\t', "        ")).collect::<Vec<String>>();
     let mut texts: Vec<Vec<String>> = Vec::new();
     for (k, f) in a.files.iter().enumerate() {
         let t = match (k, main_text) {
@@ -911,7 +911,8 @@ pub fn file_loader(name: &str, dirs: &[PathBuf]) -> Option<(PathBuf, String)> {
     for d in dirs {
         let f = d.join(name);
         if let Ok(b) = std::fs::read(&f) {
-            return Some((f, String::from_utf8_lossy(&b).into_owned()));
+            let b = b.strip_prefix(b"\xEF\xBB\xBF").unwrap_or(&b);
+            return Some((f, String::from_utf8_lossy(b).into_owned()));
         }
     }
     // the standard definitions are built in: an unsaved tab, or a folder
@@ -963,7 +964,8 @@ pub fn assemble_text(text: &str, main: Option<&Path>, extra: &[PathBuf]) -> Resu
 /// (the folder of the including file is tried first).
 pub fn assemble(text: &str, main: PathBuf, dirs: &[PathBuf], load: &Loader) -> Result<Assembly, Vec<AsmError>> {
     let mut a = Asm::new(main, dirs, load);
-    a.expand_text(0, text, 0);
+    // a UTF-8 byte order mark (Windows Notepad) is not part of the source (#10)
+    a.expand_text(0, text.strip_prefix('\u{feff}').unwrap_or(text), 0);
     if let Some((name, loc)) = a.defining.take() {
         a.err(loc, 1, ErrKind::Block, format!(".macro {}", name));
     }
