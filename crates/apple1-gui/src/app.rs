@@ -417,6 +417,9 @@ pub struct App {
     wins: std::collections::BTreeMap<Pane, crate::dock::DockState>,
     /// The saved layout as last written (to see when it changes).
     layout_json: String,
+    /// The tree as it was when a pane was closed: reopened while nothing else
+    /// changed, the pane comes back at the same place and size (#8, note 7)
+    closed_trees: Vec<(Pane, egui_dock::DockState<Pane>)>,
     /// GitHub projects: network worker, cache, last download, progress.
     gh: github::Worker,
     gh_cache: PathBuf,
@@ -617,6 +620,7 @@ impl App {
             ascii: Default::default(),
             wins: Default::default(),
             layout_json: String::new(),
+            closed_trees: Vec::new(),
             dbg: Default::default(),
             s: {
                 let mut session = session;
@@ -1355,8 +1359,19 @@ impl App {
             let want = self.pane_wanted(p) && !self.pane_dock(p).detached;
             let inside = crate::layout::contains(&st, p);
             if want && !inside {
-                crate::layout::insert(&mut st, p, self.cfg.library_right);
+                // the tree of before the closing, when only this pane is missing
+                let panes = |t: &egui_dock::DockState<Pane>| Pane::ALL.iter().filter(|q| crate::layout::contains(t, **q)).copied().collect::<Vec<_>>();
+                let now = panes(&st);
+                match self.closed_trees.iter().position(|(q, _)| *q == p) {
+                    Some(i) if panes(&self.closed_trees[i].1).into_iter().filter(|q| *q != p).collect::<Vec<_>>() == now => {
+                        st = self.closed_trees.remove(i).1;
+                    }
+                    _ => crate::layout::insert(&mut st, p, self.cfg.library_right),
+                }
+                self.closed_trees.retain(|(q, _)| *q != p);
             } else if !want && inside {
+                self.closed_trees.retain(|(q, _)| *q != p);
+                self.closed_trees.push((p, st.clone()));
                 crate::layout::remove(&mut st, p);
             }
         }
@@ -1384,6 +1399,7 @@ impl App {
         let mut st = self.cfg.layout.take().unwrap_or_else(|| crate::layout::default_layout(false, true, self.win_w));
         st.translations.tab_context_menu.close_button = t("dk_close_menu").to_string();
         let style = egui_dock::Style::from_egui(ui.style());
+        let before = st.clone();
         let mut v = Panes { app: self, closed: Vec::new(), detach: Vec::new() };
         egui::CentralPanel::default().frame(egui::Frame::NONE).show(ui, |ui| {
             egui_dock::DockArea::new(&mut st).id(egui::Id::new("disposition")).style(style).show_leaf_collapse_buttons(false).show_leaf_close_all_buttons(false).show_inside(ui, &mut v);
@@ -1391,6 +1407,8 @@ impl App {
         let Panes { closed, detach, .. } = v;
         self.cfg.layout = Some(st);
         for p in closed {
+            self.closed_trees.retain(|(q, _)| *q != p);
+            self.closed_trees.push((p, before.clone()));
             self.set_pane_wanted(p, false);
         }
         for p in detach {
@@ -3035,10 +3053,17 @@ impl App {
                 ui.label(t("tb_phosphor"));
                 self.phosphor_combo(ui, "phosphore");
             }
-            ui.label(t("dr_display"));
+            // « Affichage : Normal Rapide » stays together when the row wraps
+            // (the German « Schnell » went alone to the next line, note 6)
             let thr = self.s.m.board.config.display_throttle;
-            let a = ui.selectable_label(thr, t("dr_normal")).hint(h, t("dr_normal_tip"), "h_dr_display").clicked() && !thr;
-            let b = ui.selectable_label(!thr, t("dr_fast")).hint(h, t("dr_fast_tip"), "h_dr_display").clicked() && thr;
+            let (a, b) = ui
+                .horizontal(|ui| {
+                    ui.label(t("dr_display"));
+                    let a = ui.selectable_label(thr, t("dr_normal")).hint(h, t("dr_normal_tip"), "h_dr_display").clicked() && !thr;
+                    let b = ui.selectable_label(!thr, t("dr_fast")).hint(h, t("dr_fast_tip"), "h_dr_display").clicked() && thr;
+                    (a, b)
+                })
+                .inner;
             if a || b {
                 self.toggle_throttle();
             }
