@@ -53,6 +53,10 @@ STACKS = {
     "editeur-erreur": ("editeur-erreur", 1474, [(112, 580), (1562, 1690)]),
 }
 
+# German, Spanish, Italian, Portuguese: the colour monitor pane only, below its display row
+for _l in ("de", "es", "it", "pt"):
+    LANG_BOXES.setdefault(_l, {})["gen2-moniteur"] = ("gen2-lores", 1295, 1270, 1900, 480)
+
 LANG_STACKS = {
     "fr": {"editeur-erreur": ("editeur-erreur", 1474, [(112, 580), (1556, 1702)])},
     "ru": {"editeur-erreur": ("editeur-erreur", 1474, [(112, 580), (1560, 1702)])},
@@ -63,13 +67,95 @@ LANG_STACKS = {
     "pt": {"editeur-erreur": ("editeur-erreur", 1974, [(112, 580), (1595, 1722)])},
 }
 
+# dialogs whose place and size change with the language and the version: the
+# crop follows their 1-point frame (grey 60,60,60), found on the raw capture
+DIALOGS = {"preferences": ("preferences", None), "preferences-editeur": ("preferences-editeur", None),
+           "programmateur-eprom": ("programmateur-eprom", None), "fenetre-fichiers": ("fenetre-fichiers", None),
+           "oscilloscope": ("cassette-basic", (20, 1250, 1600, 1750))}
+
+
+def toolbar_groups(path):
+    """x of the end of the graphics-card group, and of the start and end of the
+    Cassette group, from their frames (grey 60) on row 33 of a raw capture."""
+    im = Image.open(path).convert("RGB")
+    px = im.load()
+    xs = []
+    for x in range(im.size[0]):
+        p = px[x, 33]
+        if all(abs(c - 60) <= 1 for c in p) and px[x, 8][0] == 27 and (not xs or x > xs[-1] + 2):
+            xs.append(x)
+    triples = [a for a in xs if 1500 < a < 2800 and [x for x in xs if a <= x <= a + 46] == [a, a + 23, a + 46]]
+    if not triples:
+        return None
+    a = triples[-1]          # the separator just before the Cassette group
+    rest = [x for x in xs if x > a + 46]
+    end = next(x for p, x in zip([a + 46] + rest, rest) if x - p > 200)
+    return a, a + 46, end
+
+
+def dialog_box(path, region=None, minh=250):
+    """(left, top, width, height) of the window frame on a capture (or in a region of it), or None."""
+    im = Image.open(path).convert("RGB")
+    ox, oy = 0, 0
+    if region:
+        im = im.crop(region)
+        ox, oy = region[0], region[1]
+    W, H = im.size
+    px = im.load()
+    grey = lambda p: all(abs(c - 60) <= 3 for c in p)
+    cols = []
+    for x in range(W):
+        best = run = 0
+        for y in range(H):
+            run = run + 1 if grey(px[x, y]) else 0
+            if run > best:
+                best, end = run, y + 1
+        if best >= minh:
+            cols.append((x, end - best, end))
+    if len(cols) < 2:
+        return None
+    left, right = cols[0][0], cols[-1][0]
+    top = min(c[1] for c in cols)
+    bot = max(c[2] for c in cols)
+    # top and bottom: the rows where the frame runs across the whole width
+    full = [y for y in range(max(0, top - 20), min(H, bot + 20))
+            if sum(grey(px[x, y]) for x in range(left, right + 1, 4)) > 0.8 * (right - left) / 4]
+    if full:
+        top, bot = full[0], full[-1]
+    return left + ox, top + oy, right - left + 1, bot - top + 1
+
+
 if __name__ == "__main__":
     lang = sys.argv[1] if len(sys.argv) > 1 else "en"
     base = DOCS / "img" / ("" if lang == "fr" else lang)
     for name, (raw, x, y, w, h) in {**BOXES, **LANG_BOXES.get(lang, {})}.items():
+        if not (base / "brut" / f"{raw}.png").exists():
+            print(name, "skipped: no raw capture", raw)   # e.g. a language with the quick-start guide only
+            continue
         im = Image.open(base / "brut" / f"{raw}.png").crop((x, y, x + w, y + h))
         im.save(base / f"{name}.png", optimize=True)
         print(name, im.size)
+    if lang in ("de", "es", "it", "pt"):
+        f = base / "brut" / "defaut.png"
+        g = f.exists() and toolbar_groups(f)
+        if g:   # the toolbar strips follow the width of the labels
+            gfx_end, cas_start, cas_end = g
+            for name, box in (("barre-1", (0, 0, gfx_end + 12, 66)),
+                              ("barre-cassette", (cas_start - 9, 0, cas_end - cas_start + 13, 66))):
+                x, y, w, h = box
+                im = Image.open(f).crop((x, y, x + w, y + h))
+                im.save(base / f"{name}.png", optimize=True)
+                print(name, im.size, "(groups found)")
+        for name, (raw, region) in DIALOGS.items():
+            f = base / "brut" / f"{raw}.png"
+            box = f.exists() and dialog_box(f, region)
+            if not box:
+                print(name, "skipped: no raw capture or no frame found")
+                continue
+            x, y, w, h = box
+            im = Image.open(f).crop((x, y, x + w, y + h))
+            im.save(base / f"{name}.png", optimize=True)
+            print(name, im.size, "(frame found)")
     for name, (raw, w, bands) in {**STACKS, **LANG_STACKS.get(lang, {})}.items():
         src = Image.open(base / "brut" / f"{raw}.png")
         im = Image.new("RGB", (w, sum(b - a for a, b in bands)))
