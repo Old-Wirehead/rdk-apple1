@@ -44,8 +44,9 @@ Vous pouvez en imposer une autre dans ⚙ Préférences.
 DIFFÉRENCES AVEC LA VERSION LINUX
 ---------------------------------
 
-- Pas de son de la cassette pour l'instant (le bouton 🔊 reste sans effet).
-  L'oscilloscope de la cassette fonctionne.
+- Le son de la cassette (bouton 🔊) passe par la sortie audio par défaut
+  de Windows. Sans périphérique audio, il reste coupé ; l'oscilloscope de
+  la cassette fonctionne dans tous les cas.
 - Seule la fenêtre graphique est fournie : pas de version terminal
   (apple1-emu) ni de serveur MCP dans cette archive.
 - Les options de la ligne de commande fonctionnent, mais --help n'affiche
