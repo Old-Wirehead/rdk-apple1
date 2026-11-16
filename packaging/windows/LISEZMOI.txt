@@ -58,8 +58,15 @@ SI LA FENÊTRE NE S'OUVRE PAS
 ----------------------------
 
 L'émulateur dessine avec Direct3D 12. Sur un PC ou une machine virtuelle
-sans pilote 3D, il devrait utiliser le moteur logiciel de Windows
-(« Microsoft Basic Render Driver »), plus lent (pas encore vérifié).
+sans pilote 3D, il utilise le moteur logiciel de Windows (« Microsoft Basic
+Render Driver »).
+
+Dans une machine virtuelle (essayé avec VirtualBox et Windows 10) :
+- donnez-lui 2 à 4 processeurs : avec un seul, l'émulateur est très lent ;
+- sans accélération 3D, l'émulateur tourne à la vitesse réelle de l'Apple-1
+  avec 4 processeurs ;
+- avec l'accélération 3D de VirtualBox, Windows a fait des écrans bleus
+  0x109 sur cette machine : si cela vous arrive, décochez-la.
 
 En cas d'erreur, un message s'affiche et l'erreur est notée dans
 %LOCALAPPDATA%\apple1-emu\gui.log (ou cache\gui.log en mode portable).

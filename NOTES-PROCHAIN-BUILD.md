@@ -16,6 +16,3 @@ quand elle est traitée.
 - Seulement au premier lancement (réglages par défaut : `carte_couleur` vaut
   `false` dans `GuiConfig`), ou à chaque lancement même si l'utilisateur a
   changé le réglage ?
-3. **LISEZMOI Windows** : conseiller, pour une machine virtuelle, 2 à 4 cœurs
-   et l'accélération 3D (vérifié sur la VM VirtualBox de Wirehead : très lent
-   avec 1 cœur sans 3D, fluide avec 4 cœurs et la 3D).
