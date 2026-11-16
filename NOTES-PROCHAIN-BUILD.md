@@ -53,5 +53,8 @@ Décisions de Wirehead (16/11/2026) :
     `.txt`** (`hello.txt` et `multi.txt`, des vidages hexadécimaux Woz).
     Comme le dossier BASIC (note 3), il faut y mettre des exemples (`.s`).
     Décision de Wirehead (16/11/2026) : **retirer ces `.txt` du dossier
-    6502 pour l'instant** (pas de renommage). Constaté par Wirehead, 16/11/2026 ; vérifié sur une
+    6502 pour l'instant** (pas de renommage). Les fichiers du dossier
+    `samples/` du dépôt restent tels quels, temporairement : la version 1.0
+    Linux et ses manuels, qui s'en servent, circulent déjà. Le format sera
+    revu pour la version 2.0 (issue n°9). Constaté par Wirehead, 16/11/2026 ; vérifié sur une
     bibliothèque neuve sous Linux (même contenu).
