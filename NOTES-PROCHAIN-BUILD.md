@@ -9,13 +9,13 @@ quand elle est traitée.
 1. **Démarrer en plein écran.**
 2. **Démarrer avec l'écran couleur et la carte GEN2 actifs.**
 
-À préciser avec Wirehead au moment du build :
-- Plein écran = vrai plein écran (comme F11) ? Aujourd'hui la fenêtre démarre
-  déjà agrandie (`with_maximized` dans `crates/apple1-gui/src/main.rs`).
-- Pour Linux et Windows, ou seulement pour Windows ?
-- Seulement au premier lancement (réglages par défaut : `carte_couleur` vaut
-  `false` dans `GuiConfig`), ou à chaque lancement même si l'utilisateur a
-  changé le réglage ?
+Décisions de Wirehead (16/11/2026) :
+- Plein écran = **fenêtre agrandie**, comme aujourd'hui : rien à changer
+  pour le point 1 (la fenêtre démarre déjà agrandie, `with_maximized` dans
+  `crates/apple1-gui/src/main.rs`). À vérifier sous Windows.
+- Point 2 (GEN2 et écran couleur actifs) : **version Windows seulement**,
+  **au premier lancement** (réglage par défaut ; un choix de l'utilisateur est
+  ensuite gardé).
 
 ## 16/11/2026 (suite)
 
