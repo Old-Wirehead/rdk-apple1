@@ -42,6 +42,10 @@ DOCSET = {
                      title="Краткое руководство", kicker="Retro Dev Kit Apple 1",
                      subtitle="Установить эмулятор, загрузить кассету, написать первую программу на BASIC и отправить её на настоящий Apple-1",
                      cover_img="img/couverture-guide.png", header="Краткое руководство"),
+    "guide-de": dict(src="guide-de", out="Schnellstartanleitung.pdf", lang="de",
+                     title="Schnellstartanleitung", kicker="Retro Dev Kit Apple 1",
+                     subtitle="Den Emulator installieren, eine Kassette laden, ein erstes BASIC-Programm schreiben und an einen echten Apple-1 senden",
+                     cover_img="img/couverture-guide.png", header="Schnellstartanleitung"),
     "manual-ru": dict(src="manual-ru", out="Polnoe-rukovodstvo.pdf", lang="ru",
                       title="Полное руководство", kicker="Retro Dev Kit Apple 1",
                       subtitle="Эмулятор, кассетный интерфейс ACI, цветная карта GEN2, отладчик — с полными руководствами по Integer BASIC и ассемблеру 6502",
@@ -57,6 +61,12 @@ L10N = {
                css='@page toc { @top-right { content: "Contents" } } '
                    'h1::before { content: "Chapter " counter(chapter); } '
                    'h1.appendix::before { content: "Appendix " counter(appendix, upper-alpha); }'),
+    "de": dict(machine="Die Erbsünde", toc="Inhalt", index="Index", edition="Deutsche Ausgabe",
+               version="Version", quotes=("&bdquo;", "&ldquo;"),
+               css='@page toc { @top-right { content: "Inhalt" } } '
+                   'h1::before { content: "Kapitel " counter(chapter); } '
+                   'h1.appendix::before { content: "Anhang " counter(appendix, upper-alpha); } '
+                   'figcaption::before { content: "Abbildung " counter(figure) " — "; }'),
     "ru": dict(machine="Первородный грех", toc="Содержание", index="Указатель", edition="Русское издание",
                version="Версия", quotes=("«", "»"),
                css='@page toc { @top-right { content: "Содержание" } } '
@@ -330,6 +340,6 @@ if __name__ == "__main__":
     if "--png" in args:
         i = args.index("--png"); png = args[i + 1]; del args[i:i + 2]
     which = args[0] if args else "all"
-    sets = {"all": list(DOCSET), "fr": ["guide", "manuel"], "en": ["guide-en", "manual-en"], "ru": ["guide-ru", "manual-ru"]}
+    sets = {"all": list(DOCSET), "fr": ["guide", "manuel"], "en": ["guide-en", "manual-en"], "ru": ["guide-ru", "manual-ru"], "de": ["guide-de"]}
     for n in sets.get(which, [which]):
         build(n, png)
