@@ -53,6 +53,10 @@ STACKS = {
     "editeur-erreur": ("editeur-erreur", 1474, [(112, 580), (1562, 1690)]),
 }
 
+# German, Spanish, Italian, Portuguese: the « State » menu with the toolbar around it
+for _l in ("de", "es", "it", "pt"):
+    LANG_BOXES.setdefault(_l, {})["menu-etat"] = ("menu-etat", 0, 0, 1280, 580)
+
 # German, Spanish, Italian, Portuguese: the colour monitor pane only, below its display row
 for _l in ("de", "es", "it", "pt"):
     LANG_BOXES.setdefault(_l, {})["gen2-moniteur"] = ("gen2-lores", 1295, 1270, 1900, 480)
@@ -70,7 +74,7 @@ LANG_STACKS = {
 # dialogs whose place and size change with the language and the version: the
 # crop follows their 1-point frame (grey 60,60,60), found on the raw capture
 DIALOGS = {"preferences": ("preferences", None), "preferences-editeur": ("preferences-editeur", None),
-           "programmateur-eprom": ("programmateur-eprom", None), "fenetre-fichiers": ("fenetre-fichiers", None),
+           "programmateur-eprom": ("programmateur-eprom", (700, 250, 2500, 1500)), "fenetre-fichiers": ("fenetre-fichiers", None),
            "oscilloscope": ("cassette-basic", (20, 1250, 1600, 1750))}
 
 
