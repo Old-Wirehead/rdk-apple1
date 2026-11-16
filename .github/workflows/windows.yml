@@ -1,0 +1,52 @@
+# Version Windows de Retro Dev Kit Apple 1 : compile apple1-emu-gui.exe sur une
+# vraie machine Windows et produit l'archive .zip comme artefact du workflow
+# (GitHub compresse lui-même le dossier : le téléchargement est le .zip).
+# Ne crée ni tag ni release (décision réservée à Wirehead, voir CONTRIBUTING.md).
+name: Windows
+
+on:
+  push:
+    branches: [main, "claude/windows"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      # CRT statique : pas de « Visual C++ Redistributable » à installer
+      RUSTFLAGS: -C target-feature=+crt-static
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Compiler apple1-emu-gui.exe
+        run: cargo build --release --locked -p apple1-gui
+
+      - name: Préparer l'archive
+        shell: pwsh
+        run: |
+          $v = (Select-String -Path Cargo.toml -Pattern '^version = "(.+)"').Matches[0].Groups[1].Value
+          $name = "RDK-Apple1-$v-windows-x86_64"
+          $d = "dist/$name"
+          New-Item -ItemType Directory -Force "$d/docs" | Out-Null
+          Copy-Item target/release/apple1-emu-gui.exe $d
+          Copy-Item packaging/windows/LISEZMOI.txt $d
+          Copy-Item LICENSE "$d/LICENSE.txt"
+          Copy-Item NOTICE "$d/NOTICE.txt"
+          Copy-Item docs/pdf/*.pdf "$d/docs"
+          Copy-Item -Recurse docs/exemples "$d/docs/exemples"
+          "ZIP_NAME=$name" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ZIP_NAME }}
+          path: dist/${{ env.ZIP_NAME }}
+          if-no-files-found: error

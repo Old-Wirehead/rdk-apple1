@@ -1,5 +1,8 @@
 //! Retro Dev Kit Apple 1 ("The Original Sin"): Apple-1 emulator, graphical interface (egui).
 
+// Windows: no console window behind the emulator window.
+#![cfg_attr(windows, windows_subsystem = "windows")]
+
 mod app;
 mod fontsz;
 mod wizard;
@@ -18,6 +21,7 @@ mod github;
 mod gen2screen;
 mod help;
 mod i18n;
+mod os;
 mod known;
 mod launch;
 mod library;
@@ -314,11 +318,25 @@ fn parse_args() -> Result<(Script, GuiConfig, bool, Option<f64>), String> {
     Ok((s, cfg, from_disk, hz))
 }
 
-fn main() -> eframe::Result {
+fn main() {
+    // a panic or a window that cannot open is reported (on Windows, where
+    // there is no console: message box and gui.log)
+    let default_hook = std::panic::take_hook();
+    std::panic::set_hook(Box::new(move |info| {
+        os::fatal(&format!("erreur interne : {info}"));
+        default_hook(info);
+    }));
+    if let Err(e) = run() {
+        os::fatal(&format!("la fenêtre n'a pas pu s'ouvrir : {e}"));
+        std::process::exit(1);
+    }
+}
+
+fn run() -> eframe::Result {
     let (script, cfg, from_disk, hz) = match parse_args() {
         Ok(v) => v,
         Err(e) => {
-            eprintln!("apple1-emu-gui : {e}");
+            os::fatal(&e);
             std::process::exit(2);
         }
     };
@@ -338,7 +356,12 @@ fn main() -> eframe::Result {
     if let Some(i) = icon() {
         vp = vp.with_icon(i);
     }
-    let options = eframe::NativeOptions { viewport: vp, ..Default::default() };
+    #[cfg_attr(not(windows), allow(unused_mut))]
+    let mut options = eframe::NativeOptions { viewport: vp, ..Default::default() };
+    #[cfg(windows)]
+    {
+        options.renderer = eframe::Renderer::Wgpu;
+    }
     let session = session::Session::new(Config { color_card: cfg.carte_couleur, color_50hz: cfg.couleur_50hz, plab_card: cfg.carte_plab, plab_nmi: cfg.plab_nmi, codetank: cfg.plab_rom.as_ref().and_then(|p| std::fs::read(p).ok()), ..Config::default() });
     eframe::run_native(
         "apple1-emu",

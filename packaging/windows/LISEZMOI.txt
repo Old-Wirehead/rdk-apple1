@@ -1,0 +1,90 @@
+Retro Dev Kit Apple 1 — Le péché originel
+Version Windows (64 bits)
+==========================================
+
+Émulateur et atelier de développement Apple-1 (famille Retro Dev Kit).
+Dépôt : https://github.com/Old-Wirehead/rdk-apple1
+
+
+LANCER
+------
+
+1. Décompressez l'archive (clic droit → « Extraire tout… »).
+   Ne lancez pas le programme depuis l'intérieur du .zip.
+2. Double-cliquez sur apple1-emu-gui.exe.
+   Si Windows affiche « Windows a protégé votre ordinateur » (SmartScreen),
+   cliquez sur « Informations complémentaires », puis « Exécuter quand
+   même ». Le programme n'est pas signé numériquement.
+
+Rien d'autre à installer.
+
+
+OÙ SONT VOS FICHIERS
+--------------------
+
+- Bibliothèque de programmes : %USERPROFILE%\apple1\programmes
+  (créée au premier lancement, avec les exemples).
+- Réglages : %APPDATA%\apple1-emu
+- Cache (cassettes converties, projets GitHub) : %LOCALAPPDATA%\apple1-emu
+
+Mode portable (tout dans le dossier du programme, par exemple sur une clé
+USB) : créez un fichier vide nommé « portable » (sans extension) à côté de
+apple1-emu-gui.exe. La bibliothèque, les réglages et le cache vont alors
+dans les dossiers programmes, config et cache de ce dossier.
+
+
+LANGUE
+------
+
+En mode « Automatique », l'interface suit la langue de Windows (français,
+anglais, allemand, russe, espagnol, italien ou portugais ; sinon anglais).
+Vous pouvez en imposer une autre dans ⚙ Préférences.
+
+
+DIFFÉRENCES AVEC LA VERSION LINUX
+---------------------------------
+
+- Pas de son de la cassette pour l'instant (le bouton 🔊 reste sans effet).
+  L'oscilloscope de la cassette fonctionne.
+- Seule la fenêtre graphique est fournie : pas de version terminal
+  (apple1-emu) ni de serveur MCP dans cette archive.
+- Les options de la ligne de commande fonctionnent, mais --help n'affiche
+  rien, car le programme n'a pas de fenêtre de console.
+- « Tester le dernier build » d'un projet GitHub en assembleur demande
+  ca65 et ld65 (cc65 pour Windows) dans le PATH.
+
+
+SI LA FENÊTRE NE S'OUVRE PAS
+----------------------------
+
+L'émulateur dessine avec Direct3D 12. Sur un PC ou une machine virtuelle
+sans pilote 3D, il utilise le moteur logiciel de Windows (« Microsoft Basic
+Render Driver »).
+
+Dans une machine virtuelle (essayé avec VirtualBox et Windows 10) :
+- donnez-lui 2 à 4 processeurs : avec un seul, l'émulateur est très lent ;
+- sans accélération 3D, avec 4 processeurs, l'émulateur fonctionne
+  correctement (Hello World et Puissance 4 couleur jouables).
+
+En cas d'erreur, un message s'affiche et l'erreur est notée dans
+%LOCALAPPDATA%\apple1-emu\gui.log (ou cache\gui.log en mode portable).
+Envoyez ce fichier avec votre signalement.
+
+
+DOCUMENTATION
+-------------
+
+- docs\Guide-demarrage-rapide.pdf et docs\Manuel-complet.pdf (français)
+- docs\Quick-Start-Guide.pdf et docs\Complete-Manual.pdf (anglais)
+- docs\Kratkoe-rukovodstvo.pdf et docs\Polnoe-rukovodstvo.pdf (russe)
+- docs\exemples : les programmes BASIC et assembleur des manuels
+  (docs\exemples\en pour la version anglaise)
+
+Les manuels décrivent la version Linux ; tout ce qui concerne la fenêtre
+s'applique aussi à Windows, sauf les différences ci-dessus.
+
+
+LICENCE
+-------
+
+GNU GPL 3.0 (fichier LICENSE.txt). Éléments tiers : voir NOTICE.txt.

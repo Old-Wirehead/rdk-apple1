@@ -920,7 +920,7 @@ impl App {
     }
 
     fn remember_state(&mut self, path: &Path, title: &str) {
-        let when = std::process::Command::new("date").arg("+%d/%m %H:%M").output().ok().filter(|o| o.status.success()).map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string()).unwrap_or_default();
+        let when = crate::os::now_short();
         self.cfg.states.retain(|s| s.path != path);
         self.cfg.states.insert(0, crate::config::RecentState { title: title.to_string(), path: path.to_path_buf(), when });
         self.cfg.states.truncate(8);
@@ -3580,7 +3580,7 @@ impl App {
                     }
                     if ui.button("🌐").hint(h, t("gh_open_page"), "h_gh_page").clicked() {
                         if let Ok(spec) = Spec::parse(g) {
-                            let _ = std::process::Command::new("xdg-open").arg(spec.url()).spawn();
+                            let _ = crate::os::open(spec.url());
                         }
                     }
                     if ui.button("✖").hint(h, t("gh_remove"), "h_gh_remove").clicked() {
@@ -3866,9 +3866,9 @@ impl App {
     }
 
     fn open_folder(&mut self, dir: &Path) {
-        match std::process::Command::new("xdg-open").arg(dir).spawn() {
-            Ok(_) => self.info(tf("lib_opening", &[&dir.display()])),
-            Err(e) => self.fail(format!("xdg-open : {e}")),
+        match crate::os::open(dir) {
+            Ok(()) => self.info(tf("lib_opening", &[&dir.display()])),
+            Err(e) => self.fail(format!("{} : {e}", crate::os::opener_name())),
         }
     }
 
@@ -4907,9 +4907,10 @@ fn shown_path(p: &Path) -> String {
         let tail: PathBuf = n.into_iter().rev().collect();
         return format!("…/{}", tail.display());
     }
-    if let Some(home) = std::env::var_os("HOME").map(PathBuf::from).filter(|h| h.as_os_str().len() > 1) {
+    let home = crate::config::home();
+    if home.as_os_str().len() > 1 {
         if let Ok(rest) = p.strip_prefix(&home) {
-            return format!("~/{}", rest.display());
+            return format!("~{}{}", std::path::MAIN_SEPARATOR, rest.display());
         }
     }
     p.display().to_string()

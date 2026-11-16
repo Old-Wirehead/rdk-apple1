@@ -198,6 +198,7 @@ impl TempDir {
             // RandomState is seeded by the OS: unpredictable names
             let r = std::collections::hash_map::RandomState::new().build_hasher().finish();
             let path = std::env::temp_dir().join(format!("{prefix}-{}-{r:016x}", std::process::id()));
+            #[cfg_attr(not(unix), allow(unused_mut))]
             let mut b = std::fs::DirBuilder::new();
             #[cfg(unix)]
             std::os::unix::fs::DirBuilderExt::mode(&mut b, 0o700);

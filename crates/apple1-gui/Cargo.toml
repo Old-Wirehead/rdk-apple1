@@ -25,3 +25,9 @@ ureq = { version = "2.12", default-features = false, features = ["tls", "json"] 
 zip = { version = "2", default-features = false, features = ["deflate"] }
 libloading = "0.8"
 arboard = { version = "3.7", default-features = false }
+
+[target.'cfg(windows)'.dependencies]
+# Windows: wgpu (Direct3D 12, or Microsoft's software renderer on a PC or a
+# virtual machine without a 3D driver) instead of OpenGL, often missing there
+eframe = { version = "0.36", default-features = false, features = ["wgpu"] }
+windows-sys = { version = "0.59", features = ["Win32_Globalization", "Win32_System_SystemInformation", "Win32_Foundation", "Win32_UI_WindowsAndMessaging"] }

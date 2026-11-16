@@ -257,7 +257,7 @@ fn page_rom(ui: &mut egui::Ui) {
     ui.painter().rect(rect, 6.0, fill, Stroke::new(1.0, AMBER_SOFT), egui::StrokeKind::Inside);
     ui.painter().galley(rect.min + egui::vec2(14.0, 9.0), galley, AMBER);
     if resp.clicked() {
-        let _ = std::process::Command::new("xdg-open").arg(t("wiz_s2_url")).spawn();
+        let _ = crate::os::open(t("wiz_s2_url"));
     }
 }
 

@@ -1,7 +1,8 @@
 //! Cassette sound through ALSA. libasound is opened at run time (dlopen),
 //! so the program has no link dependency on it and keeps starting on any
 //! Linux (glibc 2.31 build); without ALSA or without an audio device, the
-//! sound is simply off.
+//! sound is simply off. On Windows there is no sound yet (the oscilloscope
+//! still works).
 
 use std::ffi::{c_char, c_int, c_long, c_uint, c_ulong, c_void, CString};
 use std::sync::mpsc::{sync_channel, Receiver, SyncSender, TrySendError};
@@ -45,6 +46,11 @@ impl Audio {
 }
 
 unsafe fn play(rx: Receiver<Vec<i16>>, ok: SyncSender<bool>) {
+    // ALSA exists only on Linux: elsewhere (Windows) the sound stays off for now
+    if !cfg!(target_os = "linux") {
+        let _ = ok.send(false);
+        return;
+    }
     let lib = ["libasound.so.2", "libasound.so"].iter().find_map(|n| libloading::Library::new(n).ok());
     let Some(lib) = lib else {
         let _ = ok.send(false);
