@@ -40,3 +40,8 @@ Décisions de Wirehead (16/11/2026) :
    l'éditeur.** On peut le rouvrir par le menu « Disposition », mais il faut
    corriger. Constaté par Wirehead sur la
    version Windows (VM Windows 10), 16/11/2026. À vérifier aussi sous Linux.
+8. **Son Windows (PR n°6) : il fonctionne sur la VM Windows 10, mais il
+   saccade un peu.** D'après Wirehead, cela vient du chargement de la
+   cassette, qui avance par à-coups (barre de progression). À regarder :
+   régularité de l'émulation sur la VM, ou une file audio plus longue
+   (QUEUE dans `audio.rs`). Constaté le 16/11/2026.
