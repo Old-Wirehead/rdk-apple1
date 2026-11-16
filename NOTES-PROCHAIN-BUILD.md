@@ -22,3 +22,6 @@ Décisions de Wirehead (16/11/2026) :
 3. **Ajouter des exemples `.bas` dans le dossier BASIC de la bibliothèque.**
    Constat sur les captures de la version Windows : le dossier « BASIC »
    affiche « BASIC (0) », il est vide.
+4. **Ajouter la mention « Beta » au nom du prochain build.**
+   À préciser : nom de l'archive Windows, titre de la fenêtre, numéro de
+   version (Cargo.toml), ou tout cela.
