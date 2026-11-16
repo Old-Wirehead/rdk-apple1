@@ -52,8 +52,6 @@ Décisions de Wirehead (16/11/2026) :
 10. **Dossier « 6502 » de la bibliothèque : aucun source `.s`, mais deux
     `.txt`** (`hello.txt` et `multi.txt`, des vidages hexadécimaux Woz).
     Comme le dossier BASIC (note 3), il faut y mettre des exemples (`.s`).
-    Les `.txt` n'y ont pas leur place tels quels : les retirer, ou les
-    renommer avec une extension qui dit ce qu'ils sont (`.dump` ? à décider
-    avec Wirehead ; attention, l'émulateur charge aujourd'hui les vidages par
-    l'extension `.txt`). Constaté par Wirehead, 16/11/2026 ; vérifié sur une
+    Décision de Wirehead (16/11/2026) : **retirer ces `.txt` du dossier
+    6502 pour l'instant** (pas de renommage). Constaté par Wirehead, 16/11/2026 ; vérifié sur une
     bibliothèque neuve sous Linux (même contenu).
