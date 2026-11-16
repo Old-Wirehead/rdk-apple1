@@ -16,3 +16,9 @@ quand elle est traitée.
 - Seulement au premier lancement (réglages par défaut : `carte_couleur` vaut
   `false` dans `GuiConfig`), ou à chaque lancement même si l'utilisateur a
   changé le réglage ?
+
+## 16/11/2026 (suite)
+
+3. **Ajouter des exemples `.bas` dans le dossier BASIC de la bibliothèque.**
+   Constat sur les captures de la version Windows : le dossier « BASIC »
+   affiche « BASIC (0) », il est vide.
