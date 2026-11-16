@@ -23,5 +23,8 @@ Décisions de Wirehead (16/11/2026) :
    Constat sur les captures de la version Windows : le dossier « BASIC »
    affiche « BASIC (0) », il est vide.
 4. **Ajouter la mention « Beta » au nom du prochain build.**
-   À préciser : nom de l'archive Windows, titre de la fenêtre, numéro de
-   version (Cargo.toml), ou tout cela.
+   Décision de Wirehead : dans le **numéro de version**, pour la **version
+   Windows seulement**. Attention : la version de Cargo.toml est commune à
+   Linux et Windows ; il faudra donc ajouter « Beta » seulement dans le
+   numéro affiché par la version Windows (« À propos », nom de l'archive),
+   sans changer Cargo.toml. À confirmer avec Wirehead au moment du build.
