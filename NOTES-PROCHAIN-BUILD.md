@@ -36,3 +36,7 @@ Décisions de Wirehead (16/11/2026) :
    rangée d'affichage de l'écran monochrome (disposition par défaut, fenêtre
    de 1920 points de large). Constaté sur les captures allemandes du guide
    (`docs/img/de/defaut-annote.png`), 16/11/2026.
+7. **Fermer le dernier onglet de l'éditeur ferme le panneau de l'éditeur, et
+   le bouton « BASIC » ne le fait pas revenir.** On peut le rouvrir par le
+   menu « Disposition », mais il faut corriger. Constaté par Wirehead sur la
+   version Windows (VM Windows 10), 16/11/2026. À vérifier aussi sous Linux.
