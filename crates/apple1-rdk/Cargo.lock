@@ -453,7 +453,7 @@ dependencies = [
  "libc",
  "option-ext",
  "redox_users",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -1934,7 +1934,7 @@ checksum = "20675572f6f24e9e76ef639bc5552774ed45f1c30e2951e1e99c59888861c539"
 [[package]]
 name = "rdk-interface"
 version = "0.1.6"
-source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=64add222ebfb7444fabe98142372a2a63ba4f41e#64add222ebfb7444fabe98142372a2a63ba4f41e"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=837e367b88fe0fef05c00e489dfd3a4417536fd8#837e367b88fe0fef05c00e489dfd3a4417536fd8"
 dependencies = [
  "dirs",
  "eframe",
@@ -1948,7 +1948,7 @@ dependencies = [
 [[package]]
 name = "rdk-machine-factice"
 version = "0.1.6"
-source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=64add222ebfb7444fabe98142372a2a63ba4f41e#64add222ebfb7444fabe98142372a2a63ba4f41e"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=837e367b88fe0fef05c00e489dfd3a4417536fd8#837e367b88fe0fef05c00e489dfd3a4417536fd8"
 dependencies = [
  "rdk-pilotes",
 ]
@@ -1956,7 +1956,7 @@ dependencies = [
 [[package]]
 name = "rdk-pilotes"
 version = "0.1.6"
-source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=64add222ebfb7444fabe98142372a2a63ba4f41e#64add222ebfb7444fabe98142372a2a63ba4f41e"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=837e367b88fe0fef05c00e489dfd3a4417536fd8#837e367b88fe0fef05c00e489dfd3a4417536fd8"
 
 [[package]]
 name = "read-fonts"

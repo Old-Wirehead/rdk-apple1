@@ -216,7 +216,7 @@ pub struct MachineApple1 {
     dbg: Debugger,
     marche: Marche,
     vitesse: Vitesse,
-    /// Dossier du kit (bibliothèque `Biblio/`, BASIC de l'utilisateur).
+    /// Dossier du kit (réglages, exemples du paquet `Biblio/`).
     dossier: PathBuf,
     symboles: Symbols,
     depart: u16,
@@ -1068,7 +1068,7 @@ impl MachineApple1 {
     }
 
     /// Démarre ou arrête l'enregistrement de la sortie ACI ; à l'arrêt, le
-    /// signal est écrit dans `Biblio/Cassettes/` (fichier WAV).
+    /// signal est écrit dans `Cassettes/` de la bibliothèque (fichier WAV).
     fn basculer_enregistrement(&mut self) {
         if self.m.board.recording.is_none() {
             self.m.board.recording = Some(Vec::new());
@@ -1919,7 +1919,7 @@ impl Machine for MachineApple1 {
         v.push(bouton(
             BOUTON_CHARGEMENT_CASSETTE,
             "📼",
-            "Chargement cassette",
+            "Temps réel",
             "Allumé : Charger et ▶ de la bibliothèque passent par la cassette, comme sur la vraie machine (RESET, C100R, lecture de l'ACI en temps réel). Éteint : chargement ⚡ rapide, directement en mémoire.",
             o.cassette,
         ));
@@ -1944,12 +1944,12 @@ impl Machine for MachineApple1 {
                 "P-LAB : cavalier NMI (interruption du VDP à chaque image).",
                 o.plab_nmi,
             ));
-            v.push(bouton(BOUTON_CODETANK, "💾", "CodeTank", "P-LAB : EEPROM CodeTank en $4000-$7FFF, lue dans Biblio/P-LAB/ (votre image .bin ou .rom, 16 Ko au plus) ; second clic : la retirer.", self.m.board.config.codetank.is_some()));
+            v.push(bouton(BOUTON_CODETANK, "💾", "CodeTank", "P-LAB : EEPROM CodeTank en $4000-$7FFF, lue dans le dossier P-LAB de la bibliothèque (votre image .bin ou .rom, 16 Ko au plus) ; second clic : la retirer.", self.m.board.config.codetank.is_some()));
         }
         if o.gen2 && o.plab {
             v.push(bouton(BOUTON_SOURCE, "🖵", "Écran P-LAB", "Les deux cartes sont branchées : le moniteur couleur montre la P-LAB (allumé) ou la GEN2 (éteint).", o.source == SourceCouleur::Plab));
         }
-        v.push(bouton(BOUTON_ECRAN_VINTAGE, "📺", "Écran vintage", "Imitation d'un moniteur à tube des années 1970 (v1.0 « screening ») : lignes de balayage, rémanence, halo, tube bombé.", o.ecran.actif));
+        v.push(bouton(BOUTON_ECRAN_VINTAGE, "📺", "Vintage", "Écran vintage : imitation d'un moniteur à tube des années 1970 (v1.0 « screening ») : lignes de balayage, rémanence, halo, tube bombé.", o.ecran.actif));
         v.push(bouton(
             BOUTON_REGLAGES_ECRAN,
             "🎚",
@@ -1957,7 +1957,7 @@ impl Machine for MachineApple1 {
             "Phosphore du moniteur (vert, blanc, ambre) et réglages de l'écran vintage.",
             self.fenetres.ecran,
         ));
-        v.push(bouton(BOUTON_ASCII, "🎨", "Photo → ASCII", "Une photo (jpg, png) devient un art ASCII de 40 × 24 caractères, puis un programme BASIC ou 6502, une cassette ou un .txt du dossier Art ASCII.", self.fenetres.ascii.ouvert));
+        v.push(bouton(BOUTON_ASCII, "🎨", "ASCII", "Photo → ASCII : une photo (jpg, png) devient un art ASCII de 40 × 24 caractères, puis un programme BASIC ou 6502, une cassette ou un .txt du dossier Art ASCII.", self.fenetres.ascii.ouvert));
         v.push(bouton(BOUTON_EXEMPLES, "📥", "Exemples", "Copie les exemples du kit (BASIC, assembleur, GEN2, P-LAB, art ASCII, cassette) dans votre bibliothèque, sans rien remplacer.", false));
         v
     }

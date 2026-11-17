@@ -1,6 +1,6 @@
 # Manifeste — RDK Apple 1 (spécificités)
 
-> Rempli à partir du modèle de RDK-Interface-Commune 0.1.4 (`modeles/manifest-modele.md`). Ne décrit que ce qui diffère des défauts de l'interface commune. Code : `crates/apple1-rdk`.
+> Rempli à partir du modèle de RDK-Interface-Commune 0.1.4 (`modeles/manifest-modele.md`), mis à jour pour la 0.1.6 (épinglée : `837e367`, étiquette `v0.1.6`). Ne décrit que ce qui diffère des défauts de l'interface commune. Code : `crates/apple1-rdk`.
 >
 > Rédigé le : 17/11/2026 · Auteur : Rusty Sr IA · Statut : brouillon, à valider par Wirehead
 > Mentions : **fixé** (décidé par Wirehead), **proposé, à valider**.
@@ -19,8 +19,9 @@
 | Mémoire | RAM 8 Ko en `$0000-$1FFF` + 4 Ko en `$E000-$EFFF` ; ACI `$C000-$C1FF` ; PIA `$D010-$D013` ; Woz Monitor `$FF00-$FFFF` |
 | Vidéo | terminal 40 × 24 caractères, majuscules, ROM 2513, curseur `@` clignotant, ~60 car./s |
 | Clavier | ASCII 7 bits ; clavier dessiné **QWERTY générique sans pavé numérique** (**fixé**) |
-| Langages | BASIC entier de l'Apple 1 (copie de l'utilisateur), assembleur 6502 (syntaxe ca65 de la v1.0) |
-| Périphériques | cassette ACI ; programmateur de PROM |
+| Langages | Integer BASIC : RDK G2 Basic intégré (Émulation, défaut de la v1.0) ou BASIC d'origine de l'utilisateur (ROM réelle) ; assembleur 6502 (syntaxe ca65 de la v1.0) |
+| Périphériques | cassette ACI ; programmateur d'EPROM (minipro) ; cartes GEN2 (couleur) et P-LAB (TMS9918A) de la v1.0 |
+| Configurations | « Apple 1 moniteur vert » (défaut), « Apple 1 moniteur vert + couleur GEN2 », « Apple 1 + P-LAB » |
 
 ## 2. Pilote `clavier-editeur`
 
@@ -44,16 +45,18 @@ Défaut commun (tous les caractères passent). Le BASIC et l'assembleur sont mis
 - Rangées : Échap · `` ` `` 1-0 - = ⌫ · Tab Q-P [ ] \ · Verr. Maj A-L ; ' Entrée · Maj Z-M , . / Maj · Ctrl Alt Espace Alt Gr Ctrl.
 - Maj et Ctrl du clavier dessiné sont **rémanents** (s'appliquent à la touche suivante).
 - Dessin fourni par `manifeste_clavier` (pas de dessin personnalisé) ; fenêtre ouverte au démarrage sous l'écran monochrome : **oui**.
-- Double-clic qui charge (`double_clic_charge`) : `.wav`, `.aif(f)`, `.bin`, `.prg`, `.mon`, `.hex`, `.apl`.
+- Double-clic qui charge (`double_clic_charge`) : `.woz`, `.dump`, `.hex`, `.wav`, `.aif(f)`, `.bin`, `.prg`, `.mon`, `.apl`, `.txt` (vidage Woz ou art ASCII), photos.
+- Coller (Ctrl+V) : le texte est tapé dans l'Apple 1, comme en v1.0.
 
 ## 4. Moniteurs et pilotes vidéo
 
 | Moniteur | Pilote | Détails |
 |---|---|---|
-| Monochrome | `video-numerique` | 280 × 192 points (40 × 24 cases de 7 × 8), ROM 2513 de la v1.0 |
-| Couleur | — | **absent** (`manifeste_moniteurs` = monochrome seul ; **fixé** : l'Apple 1 est monochrome) |
+| Monochrome | `video-numerique` | terminal 280 × 192 points (40 × 24 cases de 7 × 8), ROM 2513 de la v1.0 ; image calculée à 3 fois (840 × 576) |
+| Couleur | `video-couleur` | carte GEN2 (280 × 192, LORES/HIRES/TEXTE/MIXED) ou P-LAB (256 × 192), agrandie 3 fois ; pas d'image sans carte |
 
-Effets CRT : non en 2.0. Option `video-couleur` : non (carte GEN2 de la v1.0 non reprise en 2.0).
+- Phosphore (0.1.6, `phosphore_monochrome`) : vert (défaut), blanc ou ambre, couleurs de la v1.0 ; la partie commune teinte le moniteur monochrome.
+- Écran vintage (effets CRT de la v1.0, **oui**) : lignes de balayage, rémanence (selon le phosphore), halo, points adoucis, tube bombé et coins assombris, scintillement, masque RVB (moniteur couleur). Bouton 📺 et fenêtre 🎚 Écran ; calculé par la machine.
 
 ## 5. Mémoire
 
@@ -70,15 +73,27 @@ Désassemblage : départ `$FF00`, puis l'adresse du dernier programme assemblé 
 
 | Identifiant | Icône | Libellé | Effet |
 |---|---|---|---|
-| `aci-enregistrer` | ⏺ | Sortie ACI | 1er clic : enregistre la sortie cassette ; 2e clic : écrit `Biblio/Cassettes/sortie-aci-<horodatage>.wav` |
+| `aci-enregistrer` | ⏺ | Sortie ACI | 1er clic : enregistre la sortie cassette ; 2e clic : écrit `Cassettes/sortie-aci-<horodatage>.wav` dans la bibliothèque |
+| `chargement-cassette` | 📼 | Chargement cassette | allumé : Charger et ▶ passent par l'ACI en temps réel (RESET, `C100R`, lecture) ; éteint : ⚡ rapide |
+| `sauver` | 💾 | Sauver | fenêtre : plages → `.woz`, `.wav`, `.aiff`, Intel `.hex`, `.dump`, `.bin`, `.prg` |
+| `gen2` (+ `gen2-50hz`, `accolades`) | 🌈 | GEN2 | carte couleur d'Uncle Bernie ; suit la configuration |
+| `plab` (+ `plab-nmi`, `codetank`, `source-couleur`) | 🎮 | P-LAB | TMS9918A, NMI, CodeTank (`P-LAB/` de la bibliothèque) ; suit la configuration |
+| `ecran-vintage` | 📺 | Écran vintage | effets CRT |
+| `reglages-ecran` | 🎚 | Écran | fenêtre : phosphore et réglages CRT |
+| `photo-ascii` | 🎨 | Photo → ASCII | fenêtre de la v1.0 : photo ou `.txt` → art ASCII → BASIC / 6502, cassette, `.txt` |
+| `exemples` | 📥 | Exemples | copie les exemples du paquet et l'art ASCII de la v1.0 dans la bibliothèque (sans rien remplacer) |
 
-Programmateur de PROM : **oui**. 2.0 : écrit l'image `$E000-$EFFF` dans `Biblio/PROM/prom-E000-EFFF.bin` et donne la commande `minipro -p 2732@DIP24 -w …` (la v1.0 pilotait minipro elle-même : à reprendre plus tard).
+Programmateur de PROM : **oui**. Fenêtre de la v1.0 (minipro : lire, écrire, vérifier ; puce ; mémoire ou fichier), fichiers en **Intel HEX** dans `PROM/` ; sans fenêtre : image `$E000-$EFFF` en `PROM/prom-E000-EFFF.hex`. Les fenêtres de la machine sont dessinées par la machine (contexte egui reçu par `OptionsLancement::preparer`).
 
 ## 7. Bibliothèque
 
-- Dossiers en plus : `Cassettes`, `PROM`.
-- Charger : sources `.bas`/`.asm` → ⬇ RAM ; `.wav`/`.aif` (ACI, décodé comme en v1.0), `.mon`/`.hex`/`.apl` (vidage Woz), `.bin`, `.prg` → mémoire.
-- Play : RESET, chargement, puis `xxxxR` (adresse de lancement) ou, pour une cassette BASIC (page zéro `$004A`), `E2B3R` puis `RUN`.
+- Dossier (0.1.5) : `Documents/RDK librairies/Apple 1` ; l'ancien `Biblio/` du kit reste lu.
+- Dossiers en plus : `Cassettes`, `PROM`, `GEN2 COLOR`, `P-LAB`, `Art ASCII`.
+- Formats (0.1.5) : `.woz` (dump du Woz Monitor, lecture et écriture), `.txt`/`.mon`/`.apl` (anciens dumps, lecture seule), `.dump` et Intel `.hex` communs (un ancien `.hex` au format Woz reste lu), `.wav`/`.aif(f)` (ACI), `.bin`, `.prg`, `.s` (assembleur), photos (art ASCII).
+- ROM (0.1.5) : Woz Monitor, ACI et 2513 intégrés ; seul `integer_basic.bin` (4096 octets, facultatif, variable `RDK_APPLE1_BASIC`) est cherché dans `ROM/`, identifié par sa signature. ROM réelle = ce BASIC ; Émulation = RDK G2 Basic.
+- Charger : sources `.bas`/`.asm`/`.s` → ⬇ RAM ; programmes → mémoire (RAM étendue au besoin, sauf GEN2) ou cassette 📼.
+- Play : RESET, chargement, puis `xxxxR` (adresse de lancement) ou, pour un programme BASIC (page zéro `$004A`), `E2B3R` puis `RUN`.
+- Programmes reconnus de la v1.0 (empreinte SHA-256) : adresse de lancement et notes.
 
 ### 7 bis. Éditeur → machine
 
@@ -132,7 +147,7 @@ PC, RAM, BASIC (en mémoire / absent), Moniteur, Cassette (nom, position), Messa
 | `clavier-machine` | oui | 3 | |
 | `video-analogique` | | | oui |
 | `video-numerique` | oui | 4 | |
-| `video-couleur` | | | oui (pas de couleur) |
+| `video-couleur` | oui | 4 (GEN2, P-LAB, phosphore 0.1.6) | |
 | `souris-machine`, `machine-imprimante`, `joystick-machine`, `port-parallele`, `port-serie` | | | oui |
 | `dump-memoire`, `debogueur-memoire` | oui | 5, 9 | |
 | `debogueur-processeur` | oui | 9 | |
@@ -144,13 +159,13 @@ PC, RAM, BASIC (en mémoire / absent), Moniteur, Cassette (nom, position), Messa
 | `biblio-cassette` | oui | non (défaut) | |
 | `cassette-machine` | oui | 10 | |
 | `syntaxe-basic`, `syntaxe-asm` | oui | 8 | |
+| `rom-machine` (0.1.5) | oui | 7 | |
 | `machine-etat` | oui | 12 | |
 
 ## 18. Points à préciser
 
-1. Carte couleur GEN2 et carte P-LAB de la v1.0 : à reprendre en 2.x (option `video-couleur`) ?
-2. Programmateur de PROM : fenêtre propre (choix de la puce, lecture, vérification) quand l'interface commune le permettra.
-3. Bibliothèque d'origine de la v1.0 (programmes reconnus, art ASCII) : à reprendre ?
+1. Paramètres par programme (⚙, `programs.json` de la v1.0) : l'interface commune ne donne pas le fichier choisi dans la bibliothèque.
+2. Son (ALSA) et oscilloscope de la cassette, projets GitHub, 7 langues, sauvegarde de l'état de la machine : non repris en 2.0.
 
 ## 19. Restrictions
 

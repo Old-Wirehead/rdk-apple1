@@ -22,14 +22,14 @@ path = "src/main.rs"
 
 # La machine vient du noyau de la v1.0 (apple1-core, dans ce dépôt) ;
 # l'interface vient de RDK-Interface-Commune, épinglée sur le commit de
-# la version 0.1.6 (PR n° 9 : phosphore du moniteur monochrome, additif ;
+# fusion de la version 0.1.6 (PR n° 9, étiquette `v0.1.6` : phosphore du moniteur monochrome, additif ;
 # 0.1.5 : bibliothèques par machine, ROM, formats .dump / Intel .hex,
 # configurations). Changer de
 # version de l'interface commune = changer ces deux révisions, ensemble.
 [dependencies]
 apple1-core = { path = "../apple1-core" }
-rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "64add222ebfb7444fabe98142372a2a63ba4f41e" }
-rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "64add222ebfb7444fabe98142372a2a63ba4f41e" }
+rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "837e367b88fe0fef05c00e489dfd3a4417536fd8" }
+rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "837e367b88fe0fef05c00e489dfd3a4417536fd8" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
 # Comme la v1.0 (apple1-gui) : cassettes reconnues (SHA-256), photos → art ASCII.

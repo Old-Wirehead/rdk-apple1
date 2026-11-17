@@ -315,13 +315,15 @@ fn carte_gen2_sur_le_moniteur_couleur() {
     m.editeur_lancer(&doc(Langage::Assembleur, prog)).unwrap();
     assert!(m.jusqua_attente(10_000_000));
     m.machine_avancer(Duration::from_millis(40));
-    // sans l'écran vintage : pixels purs, agrandis 3 fois
+    // avec l'écran vintage (défaut de la v1.0) : image calculée à 3 fois
+    assert_eq!(m.image(Moniteur::Couleur).unwrap().largeur, 840);
+    // sans : l'image native, pixels purs
     m.options_mut().ecran.actif = false;
     let img = m.image(Moniteur::Couleur).expect("image GEN2");
-    assert_eq!((img.largeur, img.hauteur), (840, 576));
+    assert_eq!((img.largeur, img.hauteur), (280, 192));
     let magenta = m.palette()[1].rvb;
     assert_eq!(
-        &img.pixels[(140 * 3 + 1) * 840 + 100 * 3 + 1][..3],
+        &img.pixels[140 * 280 + 100][..3],
         &magenta[..],
         "pixel LORES magenta"
     );

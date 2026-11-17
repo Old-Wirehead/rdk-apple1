@@ -11,8 +11,9 @@
 //! est appliqué par le moniteur monochrome de l'interface commune 0.1.6
 //! (`VideoCouleur::phosphore_monochrome`).
 //!
-//! L'image des moniteurs a toujours la même taille, effet allumé ou non :
-//! le zoom ×1 de l'interface commune correspond au zoom 3 de la v1.0.
+//! Avec l'écran vintage, l'image des moniteurs est à 3 fois la résolution :
+//! le zoom ×1 de l'interface commune correspond au zoom 3 de la v1.0. Sans
+//! lui, l'image native (280 × 192) est agrandie par le zoom commun.
 
 use rdk_pilotes::ImageVideo;
 use std::time::Instant;
@@ -167,25 +168,6 @@ fn encoder(v: f32) -> u8 {
     tables().srgb[(v.clamp(0.0, 1.0) * (PAS_SRGB - 1) as f32 + 0.5) as usize]
 }
 
-/// Agrandit une image de [`FACTEUR`] sans effet (écran vintage éteint).
-pub fn agrandir(src: &ImageVideo) -> ImageVideo {
-    let (w, h) = (src.largeur * FACTEUR, src.hauteur * FACTEUR);
-    let mut px = Vec::with_capacity(w * h);
-    for y in 0..h {
-        let ligne = &src.pixels[(y / FACTEUR) * src.largeur..(y / FACTEUR + 1) * src.largeur];
-        for p in ligne {
-            for _ in 0..FACTEUR {
-                px.push(*p);
-            }
-        }
-    }
-    ImageVideo {
-        largeur: w,
-        hauteur: h,
-        pixels: px,
-    }
-}
-
 /// Le tube d'un moniteur : garde la rémanence d'une image à l'autre.
 #[derive(Default)]
 pub struct Tube {
@@ -219,9 +201,11 @@ impl Tube {
         self.dernier = Some(maintenant);
         let depart = *self.depart.get_or_insert(maintenant);
         if !r.actif {
+            // écran vintage éteint : l'image native (280 × 192), agrandie
+            // par le zoom du moniteur de la partie commune
             self.acc.clear();
             self.cache = None;
-            return agrandir(&src);
+            return src;
         }
         let meme = self.source == src.pixels
             && self.reglages == Some(*r)
@@ -542,7 +526,7 @@ mod tests {
     }
 
     #[test]
-    fn taille_constante_effet_ou_non() {
+    fn taille_3x_avec_effet_native_sans() {
         let mut t = Tube::default();
         let r = ReglagesEcran::default();
         let a = t.image(damier(280, 192), &r, Phosphore::Vert.tau(), false);
@@ -553,7 +537,7 @@ mod tests {
             0.06,
             false,
         );
-        assert_eq!((b.largeur, b.hauteur), (840, 576));
+        assert_eq!((b.largeur, b.hauteur), (280, 192));
         assert_eq!(b.pixels[0], [255, 255, 255, 255]);
     }
 

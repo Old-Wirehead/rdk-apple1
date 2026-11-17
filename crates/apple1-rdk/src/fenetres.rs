@@ -74,7 +74,7 @@ fn fenetre_ecran(ctx: &egui::Context, m: &mut MachineApple1) -> bool {
             o.phosphore = Phosphore::Vert;
             change = true;
         }
-        ui.weak("L'image des moniteurs est calculée à 3 fois la résolution de l'Apple 1 : le zoom ×1 correspond au zoom 3 de la v1.0.");
+        ui.weak("Avec l'écran vintage, l'image des moniteurs est calculée à 3 fois la résolution de l'Apple 1 (zoom ×1 = zoom 3 de la v1.0) ; sans lui, image native de 280 × 192 points.");
     });
     if change {
         m.enregistrer_reglages();
