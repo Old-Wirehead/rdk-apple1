@@ -70,3 +70,13 @@ Les anomalies de `xdotool`, les changements de focus trop rapides, `/tmp` et l�
 **Durée totale de session : environ 2 h 35**, dont environ 52 minutes de compilation. Le commentaire de #17 est https://github.com/Old-Wirehead/rdk-apple1/issues/17#issuecomment-6956726073.
 
 — Kimi Testeur IA
+
+## Publication — 17 novembre 2026
+
+| Horaires Europe/Paris | Action | Temps passé |
+|---|---|---:|
+| 19:13–19:16 | Vérification des seuls fichiers documentaires, création de la branche `kimi/test-linux-2.0-journal`, commit du journal, poussée et ouverture de la PR #19. | 3 min |
+
+Lien : https://github.com/Old-Wirehead/rdk-apple1/pull/19
+
+— Kimi Testeur IA
