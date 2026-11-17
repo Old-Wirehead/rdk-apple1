@@ -1,6 +1,6 @@
 [package]
 name = "apple1-rdk"
-description = "Retro Dev Kit Apple 1 2.0 : l'Apple 1 (6502, PIA 6820, Woz Monitor, ACI) branché sur RDK-Interface-Commune 0.1.4 (pilotes), programme retro-dev-kit-apple1."
+description = "Retro Dev Kit Apple 1 2.0 : l'Apple 1 (6502, PIA 6820, Woz Monitor, ACI) branché sur RDK-Interface-Commune 0.1.6 (pilotes), programme retro-dev-kit-apple1."
 version = "2.0.0"
 rust-version = "1.95"
 edition = "2021"
@@ -22,12 +22,14 @@ path = "src/main.rs"
 
 # La machine vient du noyau de la v1.0 (apple1-core, dans ce dépôt) ;
 # l'interface vient de RDK-Interface-Commune, épinglée sur le commit de
-# fusion de la version 0.1.4 (PR n° 7, étiquette `v0.1.4`). Changer de
+# la version 0.1.6 (PR n° 9 : phosphore du moniteur monochrome, additif ;
+# 0.1.5 : bibliothèques par machine, ROM, formats .dump / Intel .hex,
+# configurations). Changer de
 # version de l'interface commune = changer ces deux révisions, ensemble.
 [dependencies]
 apple1-core = { path = "../apple1-core" }
-rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "add001d33416986ec2bcc2c68242ead806abb9d1" }
-rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "add001d33416986ec2bcc2c68242ead806abb9d1" }
+rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "64add222ebfb7444fabe98142372a2a63ba4f41e" }
+rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "64add222ebfb7444fabe98142372a2a63ba4f41e" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
 # Comme la v1.0 (apple1-gui) : cassettes reconnues (SHA-256), photos → art ASCII.

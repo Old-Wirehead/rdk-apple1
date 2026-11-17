@@ -15,10 +15,11 @@ pub const CASE_H: usize = 8;
 pub const LARGEUR: usize = COLS * CASE_L; // 280
 pub const HAUTEUR: usize = ROWS * CASE_H; // 192
 
-/// Points allumés (blanc : le moniteur monochrome de l'interface commune
-/// convertit en niveaux de gris) et fond.
-pub const ALLUME: [u8; 4] = [0xE8, 0xEE, 0xFF, 0xFF];
-pub const ETEINT: [u8; 4] = [0x08, 0x08, 0x0B, 0xFF];
+/// Points allumés et fond, en blanc et noir purs : le moniteur monochrome de
+/// l'interface commune (0.1.6) les teinte avec le phosphore déclaré par la
+/// machine (vert, blanc ou ambre de la v1.0).
+pub const ALLUME: [u8; 4] = [0xFF, 0xFF, 0xFF, 0xFF];
+pub const ETEINT: [u8; 4] = [0x00, 0x00, 0x00, 0xFF];
 
 /// Adresse dans la 2513 d'un code ASCII ($20-$5F) : 6 bits, b6 inversé.
 pub fn code_rom(ascii: u8) -> usize {
@@ -32,11 +33,18 @@ pub fn ligne_glyphe(ascii: u8, ligne: usize) -> u8 {
 }
 
 /// Image de l'écran ; `curseur` = position du « @ » clignotant s'il est visible.
-pub fn image_texte(cases: &dyn Fn(usize, usize) -> u8, curseur: Option<(usize, usize)>) -> ImageVideo {
+pub fn image_texte(
+    cases: &dyn Fn(usize, usize) -> u8,
+    curseur: Option<(usize, usize)>,
+) -> ImageVideo {
     let mut px = vec![ETEINT; LARGEUR * HAUTEUR];
     for r in 0..ROWS {
         for c in 0..COLS {
-            let ch = if curseur == Some((r, c)) { b'@' } else { cases(r, c) };
+            let ch = if curseur == Some((r, c)) {
+                b'@'
+            } else {
+                cases(r, c)
+            };
             if ch == b' ' {
                 continue;
             }
@@ -50,7 +58,11 @@ pub fn image_texte(cases: &dyn Fn(usize, usize) -> u8, curseur: Option<(usize, u
             }
         }
     }
-    ImageVideo { largeur: LARGEUR, hauteur: HAUTEUR, pixels: px }
+    ImageVideo {
+        largeur: LARGEUR,
+        hauteur: HAUTEUR,
+        pixels: px,
+    }
 }
 
 /// Image de la machine, curseur clignotant (minuterie 555 de la carte).
@@ -68,7 +80,10 @@ mod tests {
     #[test]
     fn dimensions_et_glyphe() {
         let img = image_texte(&|_, _| b' ', None);
-        assert_eq!((img.largeur, img.hauteur, img.pixels.len()), (280, 192, 280 * 192));
+        assert_eq!(
+            (img.largeur, img.hauteur, img.pixels.len()),
+            (280, 192, 280 * 192)
+        );
         assert!(img.pixels.iter().all(|p| *p == ETEINT));
         // « @ » a des points allumés
         assert!((0..8).any(|l| ligne_glyphe(b'@', l) != 0));

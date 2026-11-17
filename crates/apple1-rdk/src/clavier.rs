@@ -29,7 +29,10 @@ pub fn dessin() -> DessinClavier {
     r1.push(ToucheVirtuelle::commande("⌫ Retour", "Retour arrière", 2.0));
     let mut r2 = vec![ToucheVirtuelle::commande("Tab", "Tab", 1.5)];
     r2.extend(car("QWERTYUIOP[]"));
-    r2.push(ToucheVirtuelle { largeur: 1.5, ..ToucheVirtuelle::caractere('\\') });
+    r2.push(ToucheVirtuelle {
+        largeur: 1.5,
+        ..ToucheVirtuelle::caractere('\\')
+    });
     let mut r3 = vec![ToucheVirtuelle::commande("Verr. Maj", "Verr. Maj", 1.75)];
     r3.extend(car("ASDFGHJKL;'"));
     r3.push(ToucheVirtuelle::commande("Entrée ⏎", "Entrée", 2.25));
@@ -47,7 +50,17 @@ pub fn dessin() -> DessinClavier {
         ToucheVirtuelle::commande("Alt Gr", "Alt Gr", 1.5),
         ToucheVirtuelle::commande("Ctrl", CTRL, 1.5),
     ];
-    DessinClavier { titre: TITRE.to_string(), rangees: vec![vec![ToucheVirtuelle::commande("Échap", "Échap", 1.25)], r1, r2, r3, r4, r5] }
+    DessinClavier {
+        titre: TITRE.to_string(),
+        rangees: vec![
+            vec![ToucheVirtuelle::commande("Échap", "Échap", 1.25)],
+            r1,
+            r2,
+            r3,
+            r4,
+            r5,
+        ],
+    }
 }
 
 /// Caractère obtenu avec Maj sur un clavier QWERTY (États-Unis).
@@ -89,23 +102,49 @@ mod tests {
     #[test]
     fn qwerty_sans_pave_numerique() {
         let d = dessin();
-        let libelles: Vec<String> = d.rangees.iter().flatten().map(|t| t.libelle.clone()).collect();
-        let lettres: String = d.rangees[2].iter().skip(1).take(10).map(|t| t.libelle.clone()).collect();
+        let libelles: Vec<String> = d
+            .rangees
+            .iter()
+            .flatten()
+            .map(|t| t.libelle.clone())
+            .collect();
+        let lettres: String = d.rangees[2]
+            .iter()
+            .skip(1)
+            .take(10)
+            .map(|t| t.libelle.clone())
+            .collect();
         assert_eq!(lettres, "QWERTYUIOP");
         assert!(d.rangees[4].iter().any(|t| t.libelle == "Z"));
         // une seule fois chaque chiffre : pas de pavé numérique
         for chiffre in "0123456789".chars() {
-            assert_eq!(libelles.iter().filter(|l| **l == chiffre.to_string()).count(), 1, "{chiffre}");
+            assert_eq!(
+                libelles
+                    .iter()
+                    .filter(|l| **l == chiffre.to_string())
+                    .count(),
+                1,
+                "{chiffre}"
+            );
         }
-        assert!(!libelles.iter().any(|l| l.contains("Pavé") || l.contains("Verr. Num")));
+        assert!(!libelles
+            .iter()
+            .any(|l| l.contains("Pavé") || l.contains("Verr. Num")));
         assert!(d.rangees.len() <= 6);
     }
 
     #[test]
     fn traduction_des_touches() {
-        let t = |nom: &str, c: Option<char>| ToucheHote { nom: nom.into(), caractere: c, ..ToucheHote::default() };
+        let t = |nom: &str, c: Option<char>| ToucheHote {
+            nom: nom.into(),
+            caractere: c,
+            ..ToucheHote::default()
+        };
         assert_eq!(code_apple1(&t("Entrée", None), false, false), Some(0x0D));
-        assert_eq!(code_apple1(&t("Retour arrière", None), false, false), Some(b'_'));
+        assert_eq!(
+            code_apple1(&t("Retour arrière", None), false, false),
+            Some(b'_')
+        );
         assert_eq!(code_apple1(&t("A", Some('a')), false, false), Some(b'A'));
         assert_eq!(code_apple1(&t("1", Some('1')), true, false), Some(b'!'));
         assert_eq!(code_apple1(&t("'", Some('\'')), true, false), Some(b'"'));

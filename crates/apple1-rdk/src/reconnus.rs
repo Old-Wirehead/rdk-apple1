@@ -10,11 +10,17 @@ use std::path::Path;
 include!(concat!(env!("OUT_DIR"), "/known_table.rs"));
 
 pub fn sha256_hex(data: &[u8]) -> String {
-    Sha256::digest(data).iter().map(|b| format!("{b:02x}")).collect()
+    Sha256::digest(data)
+        .iter()
+        .map(|b| format!("{b:02x}"))
+        .collect()
 }
 
 fn norm(nom: &str) -> String {
-    nom.chars().filter(|c| c.is_ascii_alphanumeric()).collect::<String>().to_ascii_lowercase()
+    nom.chars()
+        .filter(|c| c.is_ascii_alphanumeric())
+        .collect::<String>()
+        .to_ascii_lowercase()
 }
 
 /// Même règle que la v1.0 : d'abord le contenu, puis le nom du fichier
@@ -25,13 +31,27 @@ pub fn identifier(imp: &Imported, chemin: Option<&Path>) -> Option<Match> {
         return None;
     }
     let tailles: Vec<usize> = blocs.iter().map(|r| r.len()).collect();
-    let memes = |k: &Known| k.records.len() == tailles.len() && k.records.iter().zip(&tailles).all(|(r, s)| r.0 == *s);
+    let memes = |k: &Known| {
+        k.records.len() == tailles.len() && k.records.iter().zip(&tailles).all(|(r, s)| r.0 == *s)
+    };
     let empreintes: Vec<String> = blocs.iter().map(|r| sha256_hex(r)).collect();
-    if let Some(k) = TABLE.iter().find(|k| memes(k) && k.records.iter().zip(&empreintes).all(|(r, h)| r.1 == h)) {
-        return Some(Match { known: k, how: How::Content });
+    if let Some(k) = TABLE
+        .iter()
+        .find(|k| memes(k) && k.records.iter().zip(&empreintes).all(|(r, h)| r.1 == h))
+    {
+        return Some(Match {
+            known: k,
+            how: How::Content,
+        });
     }
     let nom = norm(&chemin?.file_stem()?.to_string_lossy());
-    TABLE.iter().find(|k| memes(k) && k.names.iter().any(|n| *n == nom)).map(|k| Match { known: k, how: How::Name })
+    TABLE
+        .iter()
+        .find(|k| memes(k) && k.names.iter().any(|n| *n == nom))
+        .map(|k| Match {
+            known: k,
+            how: How::Name,
+        })
 }
 
 impl Known {
@@ -49,7 +69,8 @@ mod tests {
     fn table_valide() {
         assert!(TABLE.len() > 20);
         for k in TABLE {
-            let plages = apple1_core::program::parse_ranges(k.ranges).unwrap_or_else(|e| panic!("{} : {e}", k.title));
+            let plages = apple1_core::program::parse_ranges(k.ranges)
+                .unwrap_or_else(|e| panic!("{} : {e}", k.title));
             let tailles: Vec<usize> = plages.iter().map(|&(a, b)| (b - a) as usize + 1).collect();
             let attendu: Vec<usize> = k.records.iter().map(|r| r.0).collect();
             assert_eq!(tailles, attendu, "{}", k.title);

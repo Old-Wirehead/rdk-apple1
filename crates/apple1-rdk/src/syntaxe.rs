@@ -3,7 +3,9 @@
 //! réutilise le tokeniseur et l'assembleur de la v1.0 (`apple1-core`).
 
 use apple1_core::{asm6502, intbasic};
-use rdk_pilotes::pilotes::syntaxe::{Categorie, ErreurSyntaxe, Segment, Syntaxe, NOM_ASM, NOM_BASIC};
+use rdk_pilotes::pilotes::syntaxe::{
+    Categorie, ErreurSyntaxe, Segment, Syntaxe, NOM_ASM, NOM_BASIC,
+};
 
 /// Découpe une ligne en mots, nombres, chaînes et commentaire.
 fn decouper(ligne: &str, commentaire: &str, mot: &dyn Fn(&str, bool) -> Categorie) -> Vec<Segment> {
@@ -17,9 +19,15 @@ fn decouper(ligne: &str, commentaire: &str, mot: &dyn Fn(&str, bool) -> Categori
         let cat = if ligne[i..].to_ascii_uppercase().starts_with(commentaire) {
             i = b.len();
             if commentaire == "REM" {
-                v.push(Segment { plage: debut..debut + 3, categorie: Categorie::MotCle });
+                v.push(Segment {
+                    plage: debut..debut + 3,
+                    categorie: Categorie::MotCle,
+                });
                 if debut + 3 < b.len() {
-                    v.push(Segment { plage: debut + 3..b.len(), categorie: Categorie::Commentaire });
+                    v.push(Segment {
+                        plage: debut + 3..b.len(),
+                        categorie: Categorie::Commentaire,
+                    });
                 }
                 break;
             }
@@ -31,7 +39,9 @@ fn decouper(ligne: &str, commentaire: &str, mot: &dyn Fn(&str, bool) -> Categori
             }
             i = (i + 1).min(b.len());
             Categorie::Chaine
-        } else if c.is_ascii_digit() || (c == b'$' && i + 1 < b.len() && b[i + 1].is_ascii_hexdigit()) {
+        } else if c.is_ascii_digit()
+            || (c == b'$' && i + 1 < b.len() && b[i + 1].is_ascii_hexdigit())
+        {
             i += 1;
             while i < b.len() && b[i].is_ascii_hexdigit() {
                 i += 1;
@@ -54,7 +64,10 @@ fn decouper(ligne: &str, commentaire: &str, mot: &dyn Fn(&str, bool) -> Categori
         if !c.is_ascii_whitespace() {
             premier = false;
         }
-        v.push(Segment { plage: debut..i, categorie: cat });
+        v.push(Segment {
+            plage: debut..i,
+            categorie: cat,
+        });
     }
     v
 }
@@ -68,10 +81,23 @@ impl Syntaxe for SyntaxeBasicApple1 {
         NOM_BASIC.to_string()
     }
     fn verifier(&self, texte: &str) -> Vec<ErreurSyntaxe> {
-        intbasic::tokenize(texte).errors.into_iter().map(|e| ErreurSyntaxe { ligne: e.src_line, message: e.to_string() }).collect()
+        intbasic::tokenize(texte)
+            .errors
+            .into_iter()
+            .map(|e| ErreurSyntaxe {
+                ligne: e.src_line,
+                message: e.to_string(),
+            })
+            .collect()
     }
     fn colorer(&self, ligne: &str) -> Vec<Segment> {
-        decouper(ligne, "REM", &|m, _| if intbasic::KEYWORDS.contains(&m.to_ascii_uppercase().as_str()) { Categorie::MotCle } else { Categorie::Variable })
+        decouper(ligne, "REM", &|m, _| {
+            if intbasic::KEYWORDS.contains(&m.to_ascii_uppercase().as_str()) {
+                Categorie::MotCle
+            } else {
+                Categorie::Variable
+            }
+        })
     }
     fn commentaire(&self) -> Option<&'static str> {
         Some("REM")
@@ -89,7 +115,13 @@ impl Syntaxe for SyntaxeAsm6502 {
     fn verifier(&self, texte: &str) -> Vec<ErreurSyntaxe> {
         match asm6502::assemble_text(texte, None, &[]) {
             Ok(_) => Vec::new(),
-            Err(erreurs) => erreurs.into_iter().map(|e| ErreurSyntaxe { ligne: e.line, message: e.to_string() }).collect(),
+            Err(erreurs) => erreurs
+                .into_iter()
+                .map(|e| ErreurSyntaxe {
+                    ligne: e.line,
+                    message: e.to_string(),
+                })
+                .collect(),
         }
     }
     fn colorer(&self, ligne: &str) -> Vec<Segment> {
@@ -119,7 +151,8 @@ mod tests {
         let s = SyntaxeBasicApple1;
         let seg = s.colorer("10 PRINT \"HI\": REM X");
         assert_eq!(seg[0].categorie, Categorie::Etiquette);
-        assert!(seg.iter().any(|g| g.categorie == Categorie::MotCle && &"10 PRINT \"HI\": REM X"[g.plage.clone()] == "PRINT"));
+        assert!(seg.iter().any(|g| g.categorie == Categorie::MotCle
+            && &"10 PRINT \"HI\": REM X"[g.plage.clone()] == "PRINT"));
         assert!(seg.iter().any(|g| g.categorie == Categorie::Chaine));
         assert!(seg.iter().any(|g| g.categorie == Categorie::Commentaire));
         assert!(s.verifier("10 PRINT \"HI\"\n20 END\n").is_empty());

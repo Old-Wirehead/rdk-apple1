@@ -16,10 +16,19 @@ fn main() {
     println!("cargo:rerun-if-changed={}", f.display());
     let s = std::fs::read_to_string(&f).expect("gen2screen.rs de la v1.0");
     let fin = s.find("#[cfg(test)]\nmod tests").unwrap_or(s.len());
-    let glyphes = gui.join("../glyphs").canonicalize().expect("glyphes GEN2 de la v1.0");
+    let glyphes = gui
+        .join("../glyphs")
+        .canonicalize()
+        .expect("glyphes GEN2 de la v1.0");
     let s = s[..fin]
-        .replace("use crate::screen::{CELL_W, HEIGHT, WIDTH};", "const CELL_W: usize = 7;\nconst HEIGHT: usize = 192;\nconst WIDTH: usize = 280;")
-        .replace("include_str!(\"../glyphs/", &format!("include_str!(\"{}/", glyphes.display()))
+        .replace(
+            "use crate::screen::{CELL_W, HEIGHT, WIDTH};",
+            "const CELL_W: usize = 7;\nconst HEIGHT: usize = 192;\nconst WIDTH: usize = 280;",
+        )
+        .replace(
+            "include_str!(\"../glyphs/",
+            &format!("include_str!(\"{}/", glyphes.display()),
+        )
         .lines()
         .filter(|l| !l.starts_with("//!"))
         .collect::<Vec<_>>()
@@ -30,7 +39,12 @@ fn main() {
     let f = gui.join("known.rs");
     println!("cargo:rerun-if-changed={}", f.display());
     let s = std::fs::read_to_string(&f).expect("known.rs de la v1.0");
-    let debut = s.find("#[derive(Debug, PartialEq, Eq)]\npub struct Known").expect("struct Known");
-    let fin = s[debut..].find("\n];\n").map(|i| debut + i + 4).expect("fin de TABLE");
+    let debut = s
+        .find("#[derive(Debug, PartialEq, Eq)]\npub struct Known")
+        .expect("struct Known");
+    let fin = s[debut..]
+        .find("\n];\n")
+        .map(|i| debut + i + 4)
+        .expect("fin de TABLE");
     std::fs::write(sortie.join("known_table.rs"), &s[debut..fin]).unwrap();
 }
