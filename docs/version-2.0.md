@@ -8,6 +8,7 @@ La 2.0 reconstruit le kit Apple 1 sur **RDK-Interface-Commune 0.1.4**, comme le 
 
 - Programme `retro-dev-kit-apple1` (paquet `crates/apple1-rdk`) : l'interface commune (fenêtres, barre d'icônes, éditeur, moniteur, Dump, débogueur, désassemblage, bibliothèque, assistant, préférences, barre d'état) avec l'Apple 1.
 - La machine est **celle de la v1.0** (`crates/apple1-core`, inchangé) ; seule la liaison par les pilotes est nouvelle. Le manifeste est [`manifest-apple1.md`](../manifest-apple1.md).
+- `crates/apple1-rdk` est un **espace de travail à part** (exclu de celui de la v1.0) : la v1.0 et sa construction Windows ne dépendent pas du dépôt privé de l'interface commune.
 - Interface commune épinglée sur le commit `add001d33416986ec2bcc2c68242ead806abb9d1` (fusion de la 0.1.4, étiquette `v0.1.4`).
 - Moniteur **monochrome** seul ; clavier dessiné **QWERTY générique sans pavé numérique**.
 - **Linux seulement.** Les fichiers Windows de la v1.0 sont gardés tels quels, sans travail 2.0.
@@ -21,8 +22,10 @@ La 2.0 reconstruit le kit Apple 1 sur **RDK-Interface-Commune 0.1.4**, comme le 
 ## Construire et lancer
 
 ```sh
-cargo build --release -p apple1-rdk
-cargo test -p apple1-rdk
+cd crates/apple1-rdk          # espace de travail à part, son propre Cargo.lock
+cargo build --release
+cargo test
+cd ../..
 packaging/linux-2.0/construire-paquet.sh   # dist/retro-dev-kit-apple1-2.0-linux.zip
 cd dist/retro-dev-kit-apple1-2.0-linux && ./run.sh
 ```

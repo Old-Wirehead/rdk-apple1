@@ -2,11 +2,11 @@
 name = "apple1-rdk"
 description = "Retro Dev Kit Apple 1 2.0 : l'Apple 1 (6502, PIA 6820, Woz Monitor, ACI) branché sur RDK-Interface-Commune 0.1.4 (pilotes), programme retro-dev-kit-apple1."
 version = "2.0.0"
-rust-version.workspace = true
-edition.workspace = true
-license.workspace = true
-authors.workspace = true
-repository.workspace = true
+rust-version = "1.95"
+edition = "2021"
+license = "GPL-3.0-only"
+authors = ["Wirehead"]
+repository = "https://github.com/Old-Wirehead/rdk-apple1"
 
 [lib]
 name = "apple1_rdk"
@@ -28,3 +28,17 @@ rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", r
 rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "add001d33416986ec2bcc2c68242ead806abb9d1" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
+
+# Espace de travail à part (exclu de celui de la v1.0, à la racine) : la
+# v1.0 se construit sans accès au dépôt privé RDK-Interface-Commune.
+# Construire : `cargo build --release` dans ce dossier.
+[workspace]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+
+# Les essais de cassette émulent des millions de cycles du 6502 : optimisés.
+[profile.test]
+opt-level = 3

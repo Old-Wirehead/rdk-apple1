@@ -20,11 +20,11 @@ VERSION_COURTE=$(echo "$VERSION" | sed 's/\.0$//')
 NOM="retro-dev-kit-apple1-$VERSION_COURTE-linux"
 CIBLE="dist/$NOM"
 
-cargo build --release --locked -p apple1-rdk
+(cd crates/apple1-rdk && cargo build --release --locked)
 
 rm -rf "$CIBLE" "dist/$NOM.zip"
 mkdir -p "$CIBLE/Biblio/BASIC" "$CIBLE/Biblio/Assembleur" "$CIBLE/Biblio/Cassettes" "$CIBLE/Biblio/PROM" "$CIBLE/Biblio/Jeux"
-cp target/release/retro-dev-kit-apple1 "$CIBLE/"
+cp crates/apple1-rdk/target/release/retro-dev-kit-apple1 "$CIBLE/"
 strip "$CIBLE/retro-dev-kit-apple1" 2>/dev/null || true
 cp "$ICI/run.sh" "$ICI/LISEZMOI-INSTALLATION.md" LICENSE NOTICE "$CIBLE/"
 cp "$ICI"/Biblio/BASIC/*.bas "$CIBLE/Biblio/BASIC/"

@@ -1,13 +1,10 @@
 [workspace]
 resolver = "2"
-members = [
-    "crates/apple1-core",
-    "crates/apple1-emu",
-    "crates/apple1-gui",
-    "crates/apple1-mcp",
-    # 2.0 : l'Apple 1 sur RDK-Interface-Commune (programme retro-dev-kit-apple1, Linux)
-    "crates/apple1-rdk",
-]
+members = ["crates/apple1-core", "crates/apple1-emu", "crates/apple1-gui", "crates/apple1-mcp"]
+# 2.0 : l'Apple 1 sur RDK-Interface-Commune (crates/apple1-rdk) est un espace
+# de travail à part, avec son propre Cargo.lock : la v1.0 (et sa construction
+# Windows) ne dépend pas du dépôt privé de l'interface commune.
+exclude = ["crates/apple1-rdk"]
 
 [workspace.package]
 rust-version = "1.95"
