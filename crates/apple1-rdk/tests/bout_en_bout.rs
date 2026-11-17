@@ -9,11 +9,23 @@ use rdk_pilotes::pilotes::{
 };
 use rdk_pilotes::*;
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::Duration;
 
+/// Un dossier de kit neuf par machine (les réglages des cartes y sont écrits).
+fn dossier_neuf() -> PathBuf {
+    static N: AtomicUsize = AtomicUsize::new(0);
+    let d = std::env::temp_dir().join(format!("rdk-apple1-essai-{}-{}", std::process::id(), N.fetch_add(1, Ordering::SeqCst)));
+    let _ = std::fs::remove_dir_all(&d);
+    std::fs::create_dir_all(&d).unwrap();
+    d
+}
+
 fn machine() -> MachineApple1 {
-    let dossier = std::env::temp_dir().join(format!("rdk-apple1-essai-{}", std::process::id()));
-    let _ = std::fs::create_dir_all(&dossier);
+    machine_dans(dossier_neuf())
+}
+
+fn machine_dans(dossier: PathBuf) -> MachineApple1 {
     let mut m = MachineApple1::new(dossier);
     m.coeur_mut().board.config.display_throttle = false;
     assert!(m.jusqua_attente(3_000_000));
@@ -44,8 +56,16 @@ fn identite_et_manifeste() {
     assert_eq!(m.machine_nom(), "Apple 1");
     assert_eq!(m.machine_titre_fenetre(), "Retro Dev Kit Apple 1");
     assert_eq!(m.machine_version(), "2.0.0");
-    assert_eq!(m.manifeste_moniteurs(), vec![Moniteur::Monochrome]);
-    assert!(!m.couleur_disponible());
+    assert_eq!(m.manifeste_moniteurs(), vec![Moniteur::Monochrome, Moniteur::Couleur]);
+    assert!(m.couleur_disponible());
+    let pal = m.palette();
+    assert_eq!(pal.len(), 16);
+    assert_eq!((pal[0].nom.as_str(), pal[15].nom.as_str(), pal[15].gris), ("noir", "blanc", 255));
+    let ids: Vec<String> = m.manifeste_boutons_peripheriques().into_iter().map(|b| b.id).collect();
+    for id in [apple1_rdk::BOUTON_ENREGISTRER, apple1_rdk::BOUTON_GEN2, apple1_rdk::BOUTON_PLAB, apple1_rdk::BOUTON_BASIC_G2] {
+        assert!(ids.iter().any(|i| i == id), "{id} : {ids:?}");
+    }
+    assert!(m.manifeste_dossiers_bibliotheque().iter().any(|d| d == "GEN2 COLOR"));
     assert!(m.manifeste_clavier_au_demarrage());
     assert!(m.manifeste_a_programmateur_prom());
     let c = m.manifeste_clavier().expect("clavier dessiné par le manifeste");
@@ -67,7 +87,7 @@ fn wozmon_au_demarrage_et_clavier_reel() {
     let mut m2 = m;
     let img = m2.image(Moniteur::Monochrome).expect("image monochrome");
     assert_eq!((img.largeur, img.hauteur), (280, 192));
-    assert!(m2.image(Moniteur::Couleur).is_none(), "pas d'écran couleur");
+    assert!(m2.image(Moniteur::Couleur).is_none(), "sans carte, le moniteur couleur n'a pas d'image");
 }
 
 #[test]
@@ -103,27 +123,116 @@ fn erreurs_de_l_editeur() {
 }
 
 #[test]
-fn basic_range_en_memoire() {
+fn basic_g2_integre_tape_le_listing() {
+    // v1.0 : RDK G2 Basic par défaut, listing tapé (E000R, lignes), puis RUN
+    let mut m = machine();
+    assert!(m.options().basic_g2);
+    let r = m.editeur_lancer(&doc(Langage::Basic, "10 FOR I = 1 TO 3\n20 PRINT \"HELLO \"; I\n30 NEXT I\n40 END\n")).expect("lancer");
+    assert!(r.contains("RDK G2 Basic") && r.contains("RUN"), "{r}");
+    assert!(m.g2_present());
+    assert!(m.jusqua_attente(80_000_000));
+    let t = m.texte_ecran();
+    assert!(t.contains("HELLO 1") && t.contains("HELLO 3"), "{t}");
+    assert!(m.debogueur_variables().iter().any(|v| v.nom == "I" && v.valeur == "4"), "{:?}", m.debogueur_variables());
+    // ⬇ RAM : tapé sans RUN
     let mut m = machine();
     assert!(m.injection_possible(&Langage::Basic));
-    let r = m.injecter(&doc(Langage::Basic, "10 PRINT \"HELLO\"\n20 END\n")).expect("injecter");
-    assert!(r.contains("E2B3R"), "{r}");
-    // LOMEM / HIMEM dans la page zéro, programme sous HIMEM ($1000)
-    assert_eq!(m.dump_lire(0x4C), Some(0x00));
-    assert_eq!(m.dump_lire(0x4D), Some(0x10));
-    let pp = m.dump_lire(0xCA).unwrap() as u32 | (m.dump_lire(0xCB).unwrap() as u32) << 8;
-    assert!(pp < 0x1000 && pp > 0x0800);
+    let r = m.injecter(&doc(Langage::Basic, "10 PRINT \"OK\"\n")).expect("injecter");
+    assert!(r.contains("RUN ou LIST"), "{r}");
+    assert!(m.jusqua_attente(30_000_000));
+    m.taper("LIST\n");
+    assert!(m.jusqua_attente(30_000_000));
+    assert!(m.texte_ecran().contains("10 PRINT \"OK\""), "{}", m.texte_ecran());
 }
 
 #[test]
-fn basic_sans_copie_de_l_utilisateur() {
+fn basic_d_origine_sans_copie_de_l_utilisateur() {
     std::env::remove_var(apple1_rdk::VARIABLE_BASIC);
     let mut m = machine();
     if m.chercher_basic().is_some() {
         return; // une copie personnelle existe sur ce poste
     }
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_BASIC_G2);
+    assert!(!m.options().basic_g2);
     let e = m.editeur_lancer(&doc(Langage::Basic, "10 PRINT 1\n")).unwrap_err();
     assert!(e.to_string().contains("integer_basic.bin"), "{e}");
+}
+
+#[test]
+fn carte_gen2_sur_le_moniteur_couleur() {
+    let dossier = dossier_neuf();
+    let mut m = machine_dans(dossier.clone());
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_GEN2);
+    assert!(m.coeur().board.config.color_card);
+    assert!(m.etat().peripheriques_actifs.iter().any(|p| p == "GEN2"));
+    // LORES plein écran, page 1 : couleur 1 (magenta) partout
+    let prog = "  .org $0300\n  LDA $C250\n  LDA $C252\n  LDA $C254\n  LDA $C256\n  LDA #$11\n  LDX #0\nl: STA $0400,X\n  STA $0500,X\n  STA $0600,X\n  STA $0700,X\n  INX\n  BNE l\n  JMP $FF1F\n";
+    m.editeur_lancer(&doc(Langage::Assembleur, prog)).unwrap();
+    assert!(m.jusqua_attente(10_000_000));
+    m.machine_avancer(Duration::from_millis(40));
+    let img = m.image(Moniteur::Couleur).expect("image GEN2");
+    assert_eq!((img.largeur, img.hauteur), (280, 192));
+    let magenta = m.palette()[1].rvb;
+    assert_eq!(&img.pixels[140 * 280 + 100][..3], &magenta[..], "pixel LORES magenta");
+    assert!(m.etat().complements.iter().any(|c| c.0 == "GEN2" && c.1.contains("LORES")), "{:?}", m.etat().complements);
+    // le terminal reste sur le moniteur monochrome
+    assert!(m.image(Moniteur::Monochrome).is_some());
+    // réglage gardé dans le dossier du kit
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_GEN2_50HZ);
+    let m2 = machine_dans(dossier);
+    assert!(m2.options().gen2 && m2.options().gen2_50hz);
+    assert!(m2.coeur().board.config.color_card && m2.coeur().board.config.color_50hz);
+}
+
+#[test]
+fn carte_plab_sur_le_moniteur_couleur() {
+    let mut m = machine();
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_PLAB);
+    assert!(m.coeur().board.config.plab_card);
+    let img = m.image(Moniteur::Couleur).expect("image P-LAB");
+    assert_eq!((img.largeur, img.hauteur), (256, 192));
+    assert!(m.etat().complements.iter().any(|c| c.0 == "P-LAB"));
+    // NMI et CodeTank (absent : message d'aide)
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_PLAB_NMI);
+    assert!(m.coeur().board.config.plab_nmi);
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_CODETANK);
+    assert!(m.etat().erreurs.iter().any(|e| e.contains("Biblio/P-LAB")), "{:?}", m.etat().erreurs);
+    // les deux cartes : un bouton choisit la source du moniteur couleur
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_GEN2);
+    assert_eq!(m.image(Moniteur::Couleur).unwrap().largeur, 280);
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_SOURCE);
+    assert_eq!(m.image(Moniteur::Couleur).unwrap().largeur, 256);
+}
+
+#[test]
+fn codetank_lu_dans_la_bibliotheque() {
+    let dossier = dossier_neuf();
+    let d = dossier.join("Biblio").join(apple1_rdk::DOSSIER_PLAB);
+    std::fs::create_dir_all(&d).unwrap();
+    let mut img = vec![0xEA; 16384];
+    img[0] = 0x42;
+    std::fs::write(d.join("essai.bin"), &img).unwrap();
+    let mut m = machine_dans(dossier);
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_PLAB);
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_CODETANK);
+    assert_eq!(m.dump_lire(0x4000), Some(0x42), "{:?}", m.etat().erreurs);
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_CODETANK);
+    assert!(m.coeur().board.config.codetank.is_none());
+}
+
+#[test]
+fn art_ascii_de_la_bibliotheque() {
+    let f = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../apple1-gui/ascii/pomme.txt");
+    let p = Programme { nom: "pomme.txt".into(), chemin: Some(f.clone()), octets: std::fs::read(&f).unwrap() };
+    let mut m = machine();
+    assert!(m.double_clic_charge(&p));
+    m.jouer(&p).unwrap();
+    assert!(m.jusqua_attente(50_000_000));
+    let premiere = std::fs::read_to_string(&f).unwrap().lines().find(|l| !l.trim().is_empty()).unwrap().trim().to_ascii_uppercase();
+    assert!(m.texte_ecran().contains(&premiere), "{}", m.texte_ecran());
+    // un texte ordinaire reste pour l'éditeur
+    let t = Programme { nom: "notes.txt".into(), chemin: Some("notes.txt".into()), octets: b"Bonjour, voici mes notes sur le programme.\n".to_vec() };
+    assert!(!m.double_clic_charge(&t));
 }
 
 #[test]
@@ -203,9 +312,11 @@ fn basic_lancer_avec_la_copie_de_l_utilisateur() {
     if m.chercher_basic().is_none() {
         return;
     }
+    m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_BASIC_G2);
     let r = m.editeur_lancer(&doc(Langage::Basic, "10 FOR I = 1 TO 3\n20 PRINT \"HELLO \"; I\n30 NEXT I\n40 END\n")).expect("lancer");
-    assert!(r.contains("RUN"), "{r}");
-    assert!(m.jusqua_attente(50_000_000));
+    assert!(r.contains("Integer BASIC") && r.contains("RUN"), "{r}");
+    assert!(!m.g2_present());
+    assert!(m.jusqua_attente(80_000_000));
     let t = m.texte_ecran();
     assert!(t.contains("HELLO 1") && t.contains("HELLO 3"), "{t}");
     assert!(m.debogueur_variables().iter().any(|v| v.nom == "I" && v.valeur == "4"), "{:?}", m.debogueur_variables());
@@ -229,4 +340,29 @@ fn exemples_du_paquet() {
     m.jouer(&p).unwrap();
     assert!(m.jusqua_attente(20_000_000));
     assert!(m.texte_ecran().contains("HELLO WORLD"), "{}", m.texte_ecran());
+}
+
+#[test]
+fn exemples_de_la_v1_copies_dans_le_paquet() {
+    // construire-paquet.sh copie ces programmes de la v1.0 dans Biblio/
+    let racine = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../docs/exemples");
+    for (dossier, ext, langage) in [("basic", "bas", Langage::Basic), ("asm", "s", Langage::Assembleur)] {
+        for f in std::fs::read_dir(racine.join(dossier)).unwrap().flatten() {
+            if f.path().extension().and_then(|e| e.to_str()) != Some(ext) {
+                continue;
+            }
+            let texte = std::fs::read_to_string(f.path()).unwrap();
+            let mut m = machine();
+            m.manifeste_basculer_peripherique(apple1_rdk::BOUTON_GEN2);
+            let r = m.injecter(&DocumentEditeur { titre: f.file_name().to_string_lossy().into(), chemin: Some(f.path()), langage: langage.clone(), texte });
+            // erreur.bas : l'exemple d'erreur du manuel
+            assert_eq!(r.is_ok(), f.file_name() != "erreur.bas", "{} : {r:?}", f.path().display());
+        }
+    }
+    let barres = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../samples/gen2-barres.txt");
+    let p = Programme { nom: "gen2-barres.txt".into(), chemin: Some(barres.clone()), octets: std::fs::read(&barres).unwrap() };
+    let mut m = machine();
+    assert!(m.double_clic_charge(&p));
+    m.charger(&p).unwrap();
+    assert_eq!(m.dump_lire(0x0C00), Some(0xAD));
 }

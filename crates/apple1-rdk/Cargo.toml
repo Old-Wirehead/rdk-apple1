@@ -8,6 +8,8 @@ license = "GPL-3.0-only"
 authors = ["Wirehead"]
 repository = "https://github.com/Old-Wirehead/rdk-apple1"
 
+build = "build.rs"
+
 [lib]
 name = "apple1_rdk"
 path = "src/lib.rs"
@@ -28,6 +30,9 @@ rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", r
 rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "add001d33416986ec2bcc2c68242ead806abb9d1" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
+# Comme la v1.0 (apple1-gui) : cassettes reconnues (SHA-256), photos → art ASCII.
+sha2 = "0.10"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png"] }
 
 # Espace de travail à part (exclu de celui de la v1.0, à la racine) : la
 # v1.0 se construit sans accès au dépôt privé RDK-Interface-Commune.

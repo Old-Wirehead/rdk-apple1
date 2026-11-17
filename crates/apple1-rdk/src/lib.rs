@@ -13,32 +13,46 @@
 //! | Pilote | Ce que fait l'Apple 1 |
 //! |---|---|
 //! | `clavier-machine` | touches → ASCII 7 bits en majuscules ; Retour arrière = `_` ; clavier QWERTY dessiné sans pavé numérique |
-//! | `video-numerique` | terminal 40 × 24, ROM de caractères 2513, 280 × 192, curseur `@` clignotant ; **moniteur monochrome seul** |
-//! | `video-couleur`, `video-analogique` | vides (pas de couleur, pas de signal composite émulé) |
+//! | `video-numerique` | moniteur monochrome : terminal 40 × 24, ROM de caractères 2513, 280 × 192, curseur `@` clignotant ; moniteur couleur : carte GEN2 (280 × 192) ou P-LAB (TMS9918A, 256 × 192) |
+//! | `video-couleur` | option du pilote précédent : les deux moniteurs, palette des 16 couleurs GEN2 |
+//! | `video-analogique` | vide (pas de signal composite émulé) |
 //! | `dump-memoire`, `debogueur-memoire` | `$0000`–`$FFFF`, ROM en lecture seule ; variables du BASIC lues dans sa table |
 //! | `debogueur-processeur` | liste commune du 6502 ; Pas, Par-dessus, Sortir, Continuer, Pause, Exécuter jusqu'à |
 //! | `desassembleur-memoire` | 6502 NMOS, étiquettes du Woz Monitor, de l'ACI et du programme assemblé |
-//! | `editeur-machine` | ▶ Lancer : BASIC rangé en mémoire puis `RUN` (BASIC de l'utilisateur) ; assembleur 6502 rangé puis `xxxxR` ; ⏹ = RESET |
-//! | `editeur-memoire` | ⬇ RAM : BASIC (forme tokenisée, avec sa page zéro) ou code assemblé |
-//! | `biblio-memoire` | `.wav`/`.aif` (cassette ACI), `.txt`/`.mon`/`.hex` (vidage Woz), `.bin`, `.prg` ; Play = `xxxxR` ou `E2B3R` + `RUN` |
+//! | `editeur-machine` | ▶ Lancer : comme la v1.0, le listing BASIC est tapé dans le BASIC (`E000R`, les lignes, `RUN`) ; assembleur 6502 rangé puis `xxxxR` ; ⏹ = RESET |
+//! | `editeur-memoire` | ⬇ RAM : listing BASIC tapé sans `RUN`, ou code assemblé |
+//! | `biblio-memoire` | `.wav`/`.aif` (cassette ACI, cassettes connues de la v1.0 reconnues), `.txt`/`.mon`/`.hex` (vidage Woz), `.bin`, `.prg`, art ASCII (`.txt`, `.png`, `.jpg`) ; Play = `xxxxR` ou `E2B3R` + `RUN` |
 //! | `cassette-machine` | entrée : échantillons à 44 100 Hz vers le comparateur de l'ACI ; sortie : signal de l'ACI rendu à 44 100 Hz |
 //! | `syntaxe-basic`, `syntaxe-asm` | BASIC entier de l'Apple 1, assembleur 6502 de la v1.0 |
-//! | `machine-etat` | marche, vitesse, PC, mémoire, BASIC, cassette, enregistrement |
+//! | `machine-etat` | marche, vitesse, PC, mémoire, BASIC, moniteur, modes GEN2 et P-LAB, cassette, enregistrement |
 //! | les autres | vides (pas de souris, joystick, imprimante ni ports sur l'Apple 1) |
 //!
+//! **Cartes** (comme la v1.0) : la carte couleur GEN2 d'Uncle Bernie et la
+//! carte graphique P-LAB (TMS9918A, CodeTank) sont des périphériques de la
+//! machine, branchés par les boutons Périphériques du manifeste ; leurs
+//! réglages sont gardés dans `apple1-rdk.cfg` (module [`options`]).
+//!
 //! **ROM** : seules celles de la v1.0 sont dans le dépôt (Woz Monitor, ACI,
-//! 2513). Le BASIC d'origine n'est **pas** fourni : l'utilisateur pose sa
-//! copie `integer_basic.bin` (4 Ko) dans le dossier du kit.
+//! 2513). Le BASIC par défaut est, comme en v1.0, **RDK G2 Basic** (clone
+//! « salle blanche » du kit, MIT, intégré au cœur) ; le BASIC d'origine n'est
+//! **pas** fourni : l'utilisateur qui le préfère pose sa copie
+//! `integer_basic.bin` (4 Ko) dans le dossier du kit.
 
+pub mod art;
 pub mod clavier;
+pub mod couleur;
 pub mod ecran;
+pub mod options;
+pub mod reconnus;
 pub mod syntaxe;
+
+use options::{Options, SourceCouleur};
 
 use apple1_core::debug::{self, Debugger, Mission, Stop, Symbols, VarValue};
 use apple1_core::machine::Config;
 use apple1_core::program::{self, Program};
 use apple1_core::tape::{self, TapePlayer};
-use apple1_core::{asm6502, intbasic, Machine as Apple1};
+use apple1_core::{asm6502, g2basic, intbasic, Machine as Apple1};
 use rdk_pilotes::pilotes::{
     biblio_memoire::BiblioMemoire,
     cassette_machine::CassetteMachine,
@@ -61,7 +75,7 @@ use rdk_pilotes::pilotes::{
     video_numerique::VideoNumerique,
 };
 use rdk_pilotes::{
-    Adresse, BoutonPeripherique, CommandeExecution, DessinClavier, DocumentEditeur, EcranAssistant, ErreurPilote, EtatMachine, ImageVideo, Langage, LigneDesassemblee, Machine, Marche, Moniteur,
+    Adresse, BoutonPeripherique, CommandeExecution, CouleurPalette, DessinClavier, DocumentEditeur, EcranAssistant, ErreurPilote, EtatMachine, ImageVideo, Langage, LigneDesassemblee, Machine, Marche, Moniteur,
     Processeur, Programme, Registre, Resultat, ToucheHote, Variable, Vitesse,
 };
 use std::ops::RangeInclusive;
@@ -85,6 +99,35 @@ pub const BASIC_CHAUD: &str = "E2B3R";
 
 /// Identifiant du bouton « Enregistrer la sortie ACI ».
 pub const BOUTON_ENREGISTRER: &str = "aci-enregistrer";
+/// Boutons des cartes et réglages de la v1.0 (Préférences et barre « Cartes »).
+pub const BOUTON_GEN2: &str = "gen2";
+pub const BOUTON_GEN2_50HZ: &str = "gen2-50hz";
+pub const BOUTON_ACCOLADES: &str = "gen2-accolades";
+pub const BOUTON_PLAB: &str = "plab";
+pub const BOUTON_PLAB_NMI: &str = "plab-nmi";
+pub const BOUTON_CODETANK: &str = "codetank";
+pub const BOUTON_SOURCE: &str = "source-couleur";
+pub const BOUTON_BASIC_G2: &str = "basic-g2";
+
+/// Dossier de la bibliothèque où l'utilisateur pose son image CodeTank.
+pub const DOSSIER_PLAB: &str = "P-LAB";
+/// Taille maximale de l'EEPROM CodeTank (v1.0 : 16 384 octets).
+pub const CODETANK_MAX: usize = 16384;
+
+/// Touches d'un listing BASIC (v1.0 : `build::basic_keys`) : `E000R`, puis
+/// chaque ligne non vide en majuscules.
+pub fn touches_basic(listing: &str) -> String {
+    let mut k = String::from("E000R\r");
+    for l in listing.lines() {
+        let l = l.trim_end();
+        if l.trim().is_empty() {
+            continue;
+        }
+        k.push_str(&l.to_ascii_uppercase());
+        k.push('\r');
+    }
+    k
+}
 
 /// Facteur de vitesse accélérée.
 const ACCELERATION: u64 = 20;
@@ -108,6 +151,16 @@ pub const ETIQUETTES: &[(u16, &str)] = &[
     (0xD013, "DSPCR"),
     (0xE000, "BASIC"),
     (0xE2B3, "BASIC-CHAUD"),
+    (0xC250, "GEN2-GR"),
+    (0xC251, "GEN2-TEXT"),
+    (0xC252, "GEN2-FULL"),
+    (0xC253, "GEN2-MIXED"),
+    (0xC254, "GEN2-PAGE1"),
+    (0xC255, "GEN2-PAGE2"),
+    (0xC256, "GEN2-LORES"),
+    (0xC257, "GEN2-HIRES"),
+    (0xCC00, "VDP-DATA"),
+    (0xCC01, "VDP-CTRL"),
 ];
 
 fn symboles_de_base() -> Symbols {
@@ -131,14 +184,20 @@ pub struct MachineApple1 {
     erreurs: Vec<String>,
     /// Dernier programme chargé par la bibliothèque (pour Play).
     dernier: Option<Program>,
+    /// Réglages des cartes et du BASIC (v1.0 : Préférences).
+    opts: Options,
+    /// Moniteur branché (Préférences de l'interface commune).
+    moniteur: Moniteur,
 }
 
 impl MachineApple1 {
-    /// Apple 1 standard de la v1.0 : 8 Ko de RAM en `$0000` + 4 Ko en `$E000`, ACI.
+    /// Apple 1 standard de la v1.0 : 8 Ko de RAM en `$0000` + `$E000`-`$FEFF`,
+    /// ACI ; cartes GEN2 et P-LAB selon `apple1-rdk.cfg` (débranchées par défaut).
     pub fn new(dossier: PathBuf) -> Self {
         let mut m = Apple1::new(Config::default());
         m.board.recording = None;
-        MachineApple1 {
+        let opts = Options::lire(&dossier);
+        let mut a = MachineApple1 {
             m,
             dbg: Debugger::default(),
             marche: Marche::Marche,
@@ -151,6 +210,149 @@ impl MachineApple1 {
             message: None,
             erreurs: Vec::new(),
             dernier: None,
+            opts,
+            moniteur: Moniteur::Monochrome,
+        };
+        a.appliquer_cartes();
+        a
+    }
+
+    /// Réglages en cours (cartes, BASIC).
+    pub fn options(&self) -> &Options {
+        &self.opts
+    }
+
+    /// Branche les cartes de `opts` sur la machine (v1.0 : `sync_cards`).
+    fn appliquer_cartes(&mut self) {
+        let mut c = self.m.board.config.clone();
+        c.color_card = self.opts.gen2;
+        c.color_50hz = self.opts.gen2_50hz;
+        c.plab_card = self.opts.plab;
+        c.plab_nmi = self.opts.plab_nmi;
+        c.codetank = None;
+        if let Some(p) = self.opts.codetank.clone() {
+            match std::fs::read(&p) {
+                Ok(b) if !b.is_empty() && b.len() <= CODETANK_MAX => c.codetank = Some(b),
+                Ok(b) => {
+                    let _ = self.erreur(format!("{} : {} octets ({CODETANK_MAX} max)", p.display(), b.len()));
+                }
+                Err(e) => {
+                    let _ = self.erreur(format!("{} : {e}", p.display()));
+                }
+            }
+        }
+        self.m.board.apply_config(c);
+        self.m.board.vdp_changed_config();
+    }
+
+    fn enregistrer_options(&mut self) {
+        if let Err(e) = self.opts.ecrire(&self.dossier) {
+            let _ = self.erreur(format!("{} : {e}", self.dossier.join(options::FICHIER).display()));
+        }
+    }
+
+    /// Change un réglage par son bouton de périphérique (comme les cases
+    /// des Préférences et la barre « Cartes » de la v1.0).
+    pub fn basculer(&mut self, id: &str) {
+        self.erreurs.clear();
+        let o = &mut self.opts;
+        let msg = match id {
+            BOUTON_GEN2 => {
+                o.gen2 = !o.gen2;
+                if o.gen2 {
+                    o.source = SourceCouleur::Gen2;
+                    "carte couleur GEN2 branchée (RAM $0000-$BFFF) : son image va au moniteur couleur".to_string()
+                } else {
+                    "carte couleur GEN2 débranchée".to_string()
+                }
+            }
+            BOUTON_GEN2_50HZ => {
+                o.gen2_50hz = !o.gen2_50hz;
+                format!("GEN2 : {}", if o.gen2_50hz { "50 Hz (PAL)" } else { "60 Hz (NTSC)" })
+            }
+            BOUTON_ACCOLADES => {
+                o.accolades_grasses = !o.accolades_grasses;
+                format!("GEN2 : accolades {}", if o.accolades_grasses { "grasses" } else { "fines" })
+            }
+            BOUTON_PLAB => {
+                o.plab = !o.plab;
+                if o.plab {
+                    if !o.gen2 {
+                        o.source = SourceCouleur::Plab;
+                    }
+                    "carte P-LAB branchée (TMS9918A en $CC00-$CC01) : son image va au moniteur couleur".to_string()
+                } else {
+                    "carte P-LAB débranchée".to_string()
+                }
+            }
+            BOUTON_PLAB_NMI => {
+                o.plab_nmi = !o.plab_nmi;
+                format!("P-LAB : cavalier NMI {}", if o.plab_nmi { "posé" } else { "retiré" })
+            }
+            BOUTON_SOURCE => {
+                o.source = if o.source == SourceCouleur::Gen2 { SourceCouleur::Plab } else { SourceCouleur::Gen2 };
+                format!("moniteur couleur : carte {}", if o.source == SourceCouleur::Gen2 { "GEN2" } else { "P-LAB" })
+            }
+            BOUTON_BASIC_G2 => {
+                o.basic_g2 = !o.basic_g2;
+                if o.basic_g2 {
+                    "BASIC : RDK G2 Basic intégré (chargé au prochain lancement)".to_string()
+                } else {
+                    "BASIC : Integer BASIC d'origine (votre copie integer_basic.bin, chargée au prochain lancement)".to_string()
+                }
+            }
+            BOUTON_CODETANK => {
+                if o.codetank.is_some() {
+                    o.codetank = None;
+                    "P-LAB : image CodeTank retirée".to_string()
+                } else {
+                    match self.chercher_codetank() {
+                        Some(p) => {
+                            let m = format!("P-LAB : image CodeTank {} chargée en $4000-$7FFF", p.display());
+                            self.opts.codetank = Some(p);
+                            m
+                        }
+                        None => {
+                            let _ = self.erreur(format!(
+                                "CodeTank : posez votre image (.bin ou .rom, {CODETANK_MAX} octets au plus) dans Biblio/{DOSSIER_PLAB}/ puis recliquez"
+                            ));
+                            return;
+                        }
+                    }
+                }
+            }
+            _ => return,
+        };
+        self.appliquer_cartes();
+        self.enregistrer_options();
+        if self.erreurs.is_empty() {
+            self.noter(msg);
+        }
+    }
+
+    /// Première image CodeTank de `Biblio/P-LAB/` (par ordre alphabétique).
+    pub fn chercher_codetank(&self) -> Option<PathBuf> {
+        let d = self.dossier.join("Biblio").join(DOSSIER_PLAB);
+        let mut v: Vec<PathBuf> = std::fs::read_dir(d)
+            .ok()?
+            .flatten()
+            .map(|e| e.path())
+            .filter(|p| {
+                let ext = p.extension().and_then(|e| e.to_str()).unwrap_or("").to_ascii_lowercase();
+                matches!(ext.as_str(), "bin" | "rom") && p.metadata().map(|m| m.len() > 0 && m.len() <= CODETANK_MAX as u64).unwrap_or(false)
+            })
+            .collect();
+        v.sort();
+        v.into_iter().next()
+    }
+
+    /// Carte dont l'image va au moniteur couleur.
+    pub fn source_couleur(&self) -> Option<SourceCouleur> {
+        match (self.opts.gen2, self.opts.plab) {
+            (true, true) => Some(self.opts.source),
+            (true, false) => Some(SourceCouleur::Gen2),
+            (false, true) => Some(SourceCouleur::Plab),
+            (false, false) => None,
         }
     }
 
@@ -202,19 +404,32 @@ impl MachineApple1 {
         dossiers.iter().flat_map(|d| NOMS_BASIC.iter().map(move |n| d.join(n))).find(|p| p.is_file())
     }
 
-    /// Le BASIC est-il en mémoire en `$E000` ?
+    /// Un BASIC (RDK G2 Basic ou celui d'origine) est-il en mémoire en `$E000` ?
     pub fn basic_present(&self) -> bool {
         debug::basic_present(&|a| self.m.board.peek(a))
     }
 
-    /// Range le BASIC de l'utilisateur en `$E000` s'il n'y est pas déjà.
+    /// RDK G2 Basic est-il en mémoire ?
+    pub fn g2_present(&self) -> bool {
+        g2basic::present(&|a| self.m.board.peek(a))
+    }
+
+    /// Range en `$E000` le BASIC choisi (v1.0 : `ensure_basic`) : RDK G2 Basic
+    /// intégré par défaut, sinon la copie du BASIC d'origine de l'utilisateur.
     fn assurer_basic(&mut self) -> Resultat<()> {
-        if self.basic_present() {
+        if self.opts.basic_g2 {
+            if self.basic_present() {
+                return Ok(());
+            }
+            let p = g2basic::program();
+            return self.ranger(&p.blocks).map(|_| ());
+        }
+        if self.basic_present() && !self.g2_present() {
             return Ok(());
         }
         let Some(chemin) = self.chercher_basic() else {
             return Err(self.erreur(
-                "BASIC absent : il n'est pas fourni (propriétaire). Copiez votre integer_basic.bin (4 Ko) dans le dossier du kit, dans Biblio/ ou ~/apple1/, ou donnez son chemin dans RDK_APPLE1_BASIC.",
+                "BASIC d'origine absent : il n'est pas fourni (propriétaire). Copiez votre integer_basic.bin (4 Ko) dans le dossier du kit, dans Biblio/ ou ~/apple1/, ou donnez son chemin dans RDK_APPLE1_BASIC ; ou revenez à RDK G2 Basic (bouton G2 Basic).",
             ));
         };
         let octets = std::fs::read(&chemin).map_err(|e| self.erreur(format!("{} : {e}", chemin.display())))?;
@@ -266,7 +481,8 @@ impl MachineApple1 {
         }
     }
 
-    fn image_basic(&mut self, texte: &str) -> Resultat<intbasic::Image> {
+    /// Contrôle du listing (même analyse que le pilote `syntaxe-basic`).
+    fn verifier_basic(&mut self, texte: &str) -> Resultat<usize> {
         let l = intbasic::tokenize(texte);
         if let Some(e) = l.errors.first() {
             return Err(self.erreur(format!("{} erreur(s) BASIC ; {e}", l.errors.len())));
@@ -274,16 +490,61 @@ impl MachineApple1 {
         if l.lines.is_empty() {
             return Err(self.erreur("aucune ligne BASIC numérotée"));
         }
-        let (lomem, himem) = intbasic::layout(l.size(), Some(8));
-        intbasic::Image::build(&l.lines, lomem, himem).map_err(|e| self.erreur(format!("BASIC : mémoire pleine ({e:?}), programme trop grand pour 8 Ko")))
+        Ok(l.lines.len())
+    }
+
+    /// Comme la v1.0 (`run_source`) : le BASIC choisi en `$E000`, RESET, puis
+    /// le listing tapé au clavier (`E000R`, les lignes en majuscules) et,
+    /// après une pause au hasard (graine de RND), `RUN`.
+    fn taper_basic(&mut self, texte: &str, lancer: bool) -> Resultat<String> {
+        let n = self.verifier_basic(texte)?;
+        self.assurer_basic()?;
+        self.reset_et_taper(&touches_basic(texte));
+        if lancer {
+            self.m.type_pause();
+            self.m.type_text("RUN\r");
+        }
+        self.erreurs.clear();
+        let basic = if self.g2_present() { "RDK G2 Basic" } else { "Integer BASIC" };
+        Ok(format!("{basic} : {n} ligne(s) tapée(s){}", if lancer { ", puis RUN" } else { " ; tapez RUN ou LIST" }))
     }
 
     fn est_basic(p: &Program) -> bool {
         p.blocks.iter().any(|b| b.0 == intbasic::ZP_START)
     }
 
+    /// Art ASCII de la v1.0 : dessin `.txt` ou photo, en programme 6502 (`300R`).
+    fn programme_art(&mut self, programme: &Programme, chemin: &Path) -> Resultat<Option<Program>> {
+        let titre = chemin.file_stem().map(|n| n.to_string_lossy().to_string()).unwrap_or_default();
+        let dessin = if art::est_image(&programme.nom) {
+            art::depuis_image(&programme.octets).map_err(|e| self.erreur(format!("{} : {e}", programme.nom)))?
+        } else if Self::est_art(programme, chemin) {
+            apple1_core::asciiart::Art::from_text(&String::from_utf8_lossy(&programme.octets))
+        } else {
+            return Ok(None);
+        };
+        let a = asm6502::assemble_text(&art::source(&dessin, &titre), None, &[])
+            .map_err(|e| self.erreur(format!("art ASCII : {}", e.first().map(|x| x.to_string()).unwrap_or_default())))?;
+        Ok(Some(Program { blocks: vec![(a.origin, a.bytes)], run: Some(a.origin), notes: vec!["art ASCII".into()] }))
+    }
+
+    /// Le texte se lit comme un vidage du Woz Monitor (`0300: A9 01…`).
+    fn est_vidage_woz(programme: &Programme) -> bool {
+        program::load_bytes(&programme.octets, program::Kind::Hex, None).map(|p| !p.blocks.is_empty()).unwrap_or(false)
+    }
+
+    /// Un `.txt` de dessin (et pas un vidage du Woz Monitor).
+    fn est_art(programme: &Programme, chemin: &Path) -> bool {
+        let txt = chemin.extension().and_then(|e| e.to_str()).map(|e| e.eq_ignore_ascii_case("txt")).unwrap_or(false);
+        txt && !Self::est_vidage_woz(programme)
+            && std::str::from_utf8(&programme.octets).map(|t| art::ressemble_art(t, chemin)).unwrap_or(false)
+    }
+
     fn programme_de(&mut self, programme: &Programme) -> Resultat<Program> {
         let chemin = programme.chemin.clone().unwrap_or_else(|| PathBuf::from(&programme.nom));
+        if let Some(p) = self.programme_art(programme, &chemin)? {
+            return Ok(p);
+        }
         let nom = chemin.file_name().map(|n| n.to_string_lossy().to_lowercase()).unwrap_or_default();
         // le BASIC de l'utilisateur, posé dans la bibliothèque
         if programme.octets.len() == 4096 && programme.octets[0] == 0x4C && nom.contains("basic") {
@@ -297,6 +558,20 @@ impl MachineApple1 {
             return Ok(Program { blocks: vec![(a, programme.octets[2..].to_vec())], run: Some(a), notes: vec![] });
         }
         let genre = program::kind_of(&chemin, Some(&programme.octets));
+        // cassettes connues de la v1.0 : plages et lancement de la table
+        if genre == program::Kind::Wav {
+            if let Ok(imp) = apple1_core::aciwav::import_wav_bytes(&programme.octets) {
+                if let Some(k) = reconnus::identifier(&imp, Some(&chemin)) {
+                    let plages = program::parse_ranges(k.known.ranges).map_err(|e| self.erreur(e))?;
+                    let mut p = program::wav_with_ranges(&imp, &plages).map_err(|e| self.erreur(format!("{} : {e}", programme.nom)))?;
+                    if !k.known.basic {
+                        p.run = program::parse_addr(k.known.run_cmd.trim_end_matches('R')).ok();
+                    }
+                    p.notes.push(format!("cassette reconnue : {}", k.known.title));
+                    return Ok(p);
+                }
+            }
+        }
         program::load_bytes(&programme.octets, genre, None).map_err(|e| self.erreur(format!("{} : {e}", programme.nom)))
     }
 
@@ -353,7 +628,7 @@ impl MachineApple1 {
 }
 
 // ----- pilotes vides : l'Apple 1 n'a ni souris, ni joystick, ni imprimante,
-// ni ports, ni signal analogique émulé, ni couleur.
+// ni ports, ni signal analogique émulé.
 impl SourisMachine for MachineApple1 {}
 impl JoystickMachine for MachineApple1 {}
 impl MachineImprimante for MachineApple1 {}
@@ -361,18 +636,34 @@ impl PortParallele for MachineApple1 {}
 impl PortSerie for MachineApple1 {}
 impl VideoAnalogique for MachineApple1 {}
 
+/// v1.0 : deux écrans, le terminal de l'Apple 1 (moniteur monochrome) et
+/// l'écran de la carte GEN2 ou P-LAB (moniteur couleur). L'interface commune
+/// montre les deux moniteurs ; sans carte branchée, le moniteur couleur n'a
+/// pas d'image (« non branché »).
 impl VideoCouleur for MachineApple1 {
     fn couleur_disponible(&self) -> bool {
-        false
+        true
+    }
+    fn palette(&self) -> Vec<CouleurPalette> {
+        couleur::palette()
+    }
+    fn brancher_moniteur(&mut self, moniteur: Moniteur) {
+        self.moniteur = moniteur;
     }
     fn moniteur_branche(&self) -> Moniteur {
-        Moniteur::Monochrome
+        self.moniteur
     }
 }
 
 impl VideoNumerique for MachineApple1 {
     fn image(&mut self, moniteur: Moniteur) -> Option<ImageVideo> {
-        (moniteur == Moniteur::Monochrome).then(|| ecran::image(&self.m))
+        match moniteur {
+            Moniteur::Monochrome => Some(ecran::image(&self.m)),
+            Moniteur::Couleur => match self.source_couleur()? {
+                SourceCouleur::Gen2 => Some(couleur::image_gen2(&self.m, self.opts.accolades_grasses)),
+                SourceCouleur::Plab => Some(couleur::image_plab(&self.m)),
+            },
+        }
     }
 }
 
@@ -524,16 +815,7 @@ impl DesassembleurMemoire for MachineApple1 {
 impl EditeurMachine for MachineApple1 {
     fn editeur_lancer(&mut self, document: &DocumentEditeur) -> Resultat<String> {
         match document.langage {
-            Langage::Basic => {
-                let img = self.image_basic(&document.texte)?;
-                self.assurer_basic()?;
-                let n = img.prog.len();
-                self.reset_et_taper("");
-                self.ranger(&img.blocks())?;
-                self.m.type_text(&format!("{BASIC_CHAUD}\rRUN\r"));
-                self.erreurs.clear();
-                Ok(format!("BASIC : {n} octets rangés en ${:04X}, RUN", img.pp))
-            }
+            Langage::Basic => self.taper_basic(&document.texte, true),
             Langage::Assembleur => {
                 let a = self.assembler(document)?;
                 self.reset_et_taper("");
@@ -562,12 +844,7 @@ impl EditeurMemoire for MachineApple1 {
     }
     fn injecter(&mut self, document: &DocumentEditeur) -> Resultat<String> {
         match document.langage {
-            Langage::Basic => {
-                let img = self.image_basic(&document.texte)?;
-                let n = self.ranger(&img.blocks())?;
-                self.erreurs.clear();
-                Ok(format!("BASIC : {n} octets rangés ($004A-$00FF et ${:04X}-${:04X}) ; tapez {BASIC_CHAUD} puis LIST ou RUN", img.pp, img.himem - 1))
-            }
+            Langage::Basic => self.taper_basic(&document.texte, false),
             Langage::Assembleur => {
                 let a = self.assembler(document)?;
                 self.ranger(&[(a.origin, a.bytes.clone())])?;
@@ -591,7 +868,8 @@ impl BiblioMemoire for MachineApple1 {
                 self.depart = *a;
             }
         }
-        self.noter(format!("{} : {n} octets chargés ({})", programme.nom, p.ranges().iter().map(|(a, b)| format!("${a:04X}-${b:04X}")).collect::<Vec<_>>().join(", ")));
+        let notes: String = p.notes.iter().map(|n| format!(" ; {n}")).collect();
+        self.noter(format!("{} : {n} octets chargés ({}){notes}", programme.nom, p.ranges().iter().map(|(a, b)| format!("${a:04X}-${b:04X}")).collect::<Vec<_>>().join(", ")));
         self.erreurs.clear();
         self.dernier = Some(p);
         Ok(())
@@ -626,7 +904,10 @@ impl BiblioMemoire for MachineApple1 {
     }
     fn double_clic_charge(&self, programme: &Programme) -> bool {
         let ext = Path::new(&programme.nom).extension().and_then(|e| e.to_str()).unwrap_or("").to_ascii_lowercase();
-        matches!(ext.as_str(), "wav" | "wave" | "aif" | "aiff" | "bin" | "prg" | "mon" | "hex" | "apl")
+        let chemin = programme.chemin.clone().unwrap_or_else(|| PathBuf::from(&programme.nom));
+        // .txt : vidage du Woz Monitor ou dessin ASCII (sinon ouvert dans l'éditeur)
+        let txt = ext == "txt" && (Self::est_vidage_woz(programme) || Self::est_art(programme, &chemin));
+        txt || matches!(ext.as_str(), "wav" | "wave" | "aif" | "aiff" | "bin" | "prg" | "mon" | "hex" | "apl" | "png" | "jpg" | "jpeg")
     }
 }
 
@@ -651,16 +932,47 @@ impl CassetteMachine for MachineApple1 {
 
 impl MachineEtatPilote for MachineApple1 {
     fn etat(&self) -> EtatMachine {
+        let b = &self.m.board;
         let mut actifs = vec!["ACI".to_string()];
-        if self.m.board.recording.is_some() {
+        if b.config.color_card {
+            actifs.push("GEN2".to_string());
+        }
+        if b.config.plab_card {
+            actifs.push("P-LAB".to_string());
+        }
+        if b.recording.is_some() {
             actifs.push("⏺ enregistrement ACI".to_string());
         }
+        let ko = (0..0xE0u16).filter(|p| b.is_ram(p << 8)).count() / 4;
+        let basic = if self.g2_present() {
+            "RDK G2 Basic".to_string()
+        } else if self.basic_present() {
+            "Integer BASIC".to_string()
+        } else if self.opts.basic_g2 {
+            "RDK G2 Basic (chargé au lancement)".to_string()
+        } else {
+            "Integer BASIC d'origine (chargé au lancement)".to_string()
+        };
         let mut complements = vec![
             ("PC".to_string(), format!("${:04X}", self.m.cpu.pc)),
-            ("RAM".to_string(), format!("{} Ko + 4 Ko en $E000", self.m.board.config.ram_kb)),
-            ("BASIC".to_string(), if self.basic_present() { "en mémoire".to_string() } else { "absent".to_string() }),
-            ("Moniteur".to_string(), "monochrome".to_string()),
+            ("RAM".to_string(), format!("{ko} Ko + $E000-$FEFF")),
+            ("BASIC".to_string(), basic),
+            ("Moniteur".to_string(), if self.moniteur == Moniteur::Couleur { "couleur" } else { "monochrome" }.to_string()),
         ];
+        if b.config.color_card {
+            complements.push(("GEN2".to_string(), format!("{} ({} Hz)", b.gen2.mode_name(), if b.config.color_50hz { 50 } else { 60 })));
+        }
+        if b.config.plab_card {
+            let v = &b.vdp;
+            let mut t = if v.display_on() { v.mode().name().to_string() } else { "écran éteint".to_string() };
+            if b.config.plab_nmi {
+                t.push_str(", NMI");
+            }
+            if let Some(ct) = &b.config.codetank {
+                t.push_str(&format!(", CodeTank {} Ko", ct.len() / 1024));
+            }
+            complements.push(("P-LAB".to_string(), t));
+        }
         if let Some(p) = &self.m.board.player {
             let now = self.m.board.now_secs();
             complements.push(("Cassette".to_string(), format!("{} {:.1}/{:.1} s", p.name, p.position(now), p.duration())));
@@ -684,7 +996,8 @@ impl Machine for MachineApple1 {
             format!("Retro Dev Kit Apple 1 {VERSION} (Linux), sur RDK-Interface-Commune {}.", rdk_interface::VERSION),
             "Licence GPL-3.0. Machine reprise de la v1.0 « Original Sin » (crate apple1-core).".to_string(),
             "ROM fournies : Woz Monitor, ACI (Steve Wozniak, 1976) et générateur de caractères 2513, comme en v1.0.".to_string(),
-            "Le BASIC d'origine n'est pas fourni : posez votre copie integer_basic.bin dans le dossier du kit.".to_string(),
+            "BASIC : RDK G2 Basic intégré (clone « salle blanche » du kit, licence MIT), comme en v1.0. Le BASIC d'origine n'est pas fourni : posez votre copie integer_basic.bin dans le dossier du kit.".to_string(),
+            "Cartes de la v1.0 : couleur GEN2 (Uncle Bernie) et graphique P-LAB (TMS9918A, CodeTank).".to_string(),
         ]
     }
     fn machine_reset(&mut self) {
@@ -718,21 +1031,46 @@ impl Machine for MachineApple1 {
         self.m.clear_screen();
     }
     fn manifeste_boutons_peripheriques(&self) -> Vec<BoutonPeripherique> {
-        vec![BoutonPeripherique {
-            id: BOUTON_ENREGISTRER.to_string(),
-            icone: "⏺".to_string(),
-            libelle: "Sortie ACI".to_string(),
-            info_bulle: "Enregistre la sortie cassette de l'ACI (C100R puis début.finW) ; au second clic, le fichier WAV est écrit dans Biblio/Cassettes.".to_string(),
-            actif: self.m.board.recording.is_some(),
-        }]
+        let bouton = |id: &str, icone: &str, libelle: &str, info_bulle: &str, actif: bool| BoutonPeripherique {
+            id: id.to_string(),
+            icone: icone.to_string(),
+            libelle: libelle.to_string(),
+            info_bulle: info_bulle.to_string(),
+            actif,
+        };
+        let o = &self.opts;
+        let mut v = vec![bouton(
+            BOUTON_ENREGISTRER,
+            "⏺",
+            "Sortie ACI",
+            "Enregistre la sortie cassette de l'ACI (C100R puis début.finW) ; au second clic, le fichier WAV est écrit dans Biblio/Cassettes.",
+            self.m.board.recording.is_some(),
+        )];
+        v.push(bouton(BOUTON_GEN2, "🌈", "GEN2", "Carte couleur GEN2 d'Uncle Bernie : LORES, HIRES, TEXTE et MIXED (commutateurs $C250-$C257), RAM $0000-$BFFF ; son image va au moniteur couleur.", o.gen2));
+        if o.gen2 {
+            v.push(bouton(BOUTON_GEN2_50HZ, "〰", "50 Hz", "GEN2 : balayage 50 Hz (PAL) au lieu de 60 Hz (NTSC).", o.gen2_50hz));
+            v.push(bouton(BOUTON_ACCOLADES, "{}", "Accolades grasses", "GEN2 : dessin des accolades du générateur de caractères (grasses par défaut, ou fines).", o.accolades_grasses));
+        }
+        v.push(bouton(BOUTON_PLAB, "🎮", "P-LAB", "Carte graphique P-LAB : TMS9918A en $CC00-$CC01 (Graphics I et II, Multicolor, Text, sprites) ; son image va au moniteur couleur.", o.plab));
+        if o.plab {
+            v.push(bouton(BOUTON_PLAB_NMI, "⚡", "NMI", "P-LAB : cavalier NMI (interruption du VDP à chaque image).", o.plab_nmi));
+            v.push(bouton(BOUTON_CODETANK, "💾", "CodeTank", "P-LAB : EEPROM CodeTank en $4000-$7FFF, lue dans Biblio/P-LAB/ (votre image .bin ou .rom, 16 Ko au plus) ; second clic : la retirer.", self.m.board.config.codetank.is_some()));
+        }
+        if o.gen2 && o.plab {
+            v.push(bouton(BOUTON_SOURCE, "🖵", "Écran P-LAB", "Les deux cartes sont branchées : le moniteur couleur montre la P-LAB (allumé) ou la GEN2 (éteint).", o.source == SourceCouleur::Plab));
+        }
+        v.push(bouton(BOUTON_BASIC_G2, "🅱", "G2 Basic", "BASIC chargé en $E000 : RDK G2 Basic intégré (allumé, défaut de la v1.0) ou votre copie de l'Integer BASIC d'origine (éteint).", o.basic_g2));
+        v
     }
     fn manifeste_basculer_peripherique(&mut self, id: &str) {
         if id == BOUTON_ENREGISTRER {
             self.basculer_enregistrement();
+        } else {
+            self.basculer(id);
         }
     }
     fn manifeste_dossiers_bibliotheque(&self) -> Vec<String> {
-        vec!["Cassettes".to_string(), "PROM".to_string()]
+        vec!["Cassettes".to_string(), "PROM".to_string(), "GEN2 COLOR".to_string(), DOSSIER_PLAB.to_string(), art::DOSSIER.to_string()]
     }
     fn manifeste_ecrans_assistant(&self) -> [EcranAssistant; 2] {
         [
@@ -740,17 +1078,18 @@ impl Machine for MachineApple1 {
                 titre: "Bienvenue dans le Retro Dev Kit Apple 1".to_string(),
                 sous_titre: "Version 2.0, sur l'interface commune des Retro Dev Kits".to_string(),
                 paragraphes: vec![
-                    "L'Apple 1 (1976) : un 6502 à 1 MHz, 8 Ko de RAM (plus 4 Ko en $E000), un terminal de 40 × 24 caractères en majuscules, et le Woz Monitor en ROM.".to_string(),
+                    "L'Apple 1 (1976) : un 6502 à 1 MHz, 8 Ko de RAM (plus $E000-$FEFF pour le BASIC), un terminal de 40 × 24 caractères en majuscules, et le Woz Monitor en ROM.".to_string(),
                     "Au démarrage, le Woz Monitor affiche « \\ ». Tapez une adresse (FF00), une plage (FF00.FF0F), une écriture (300: A9 01) ou un lancement (300R).".to_string(),
                     "Écrivez en BASIC ou en assembleur 6502 dans l'éditeur, puis ▶ Lancer ; suivez le programme dans le débogueur, le Dump et le désassemblage.".to_string(),
                 ],
             },
             EcranAssistant {
                 titre: "Avant de commencer".to_string(),
-                sous_titre: "ROM, BASIC et cassette".to_string(),
+                sous_titre: "ROM, BASIC, cartes et cassette".to_string(),
                 paragraphes: vec![
                     "Le Woz Monitor, la ROM de l'ACI et le générateur de caractères 2513 sont fournis.".to_string(),
-                    "Le BASIC d'origine n'est pas fourni : copiez votre integer_basic.bin (4 Ko) dans le dossier du kit ou dans ~/apple1/. Sans lui, l'assembleur et le Woz Monitor marchent, pas le BASIC.".to_string(),
+                    "BASIC : RDK G2 Basic, le clone de l'Integer BASIC du kit, est intégré et chargé en $E000 au premier lancement d'un programme BASIC. Pour le BASIC d'origine (non fourni), copiez votre integer_basic.bin dans le dossier du kit ou dans ~/apple1/ et éteignez le bouton 🅱 G2 Basic.".to_string(),
+                    "Cartes de la v1.0, dans les boutons Périphériques : 🌈 GEN2 (carte couleur d'Uncle Bernie, 50 Hz, accolades) et 🎮 P-LAB (TMS9918A, NMI, CodeTank). Leur image va à l'écran couleur ; le terminal reste sur l'écran monochrome.".to_string(),
                     "Cassette : la bibliothèque lit les fichiers WAV de l'ACI ; le bouton ⏺ Sortie ACI enregistre ce que la machine écrit (C100R puis début.finW).".to_string(),
                     "Cliquez sur l'écran pour envoyer le clavier de l'ordinateur à la machine, ou utilisez la fenêtre Clavier (QWERTY).".to_string(),
                 ],
@@ -780,7 +1119,7 @@ impl Machine for MachineApple1 {
         Some(clavier::dessin())
     }
     fn manifeste_moniteurs(&self) -> Vec<Moniteur> {
-        vec![Moniteur::Monochrome]
+        vec![Moniteur::Monochrome, Moniteur::Couleur]
     }
     fn manifeste_clavier_au_demarrage(&self) -> bool {
         true
