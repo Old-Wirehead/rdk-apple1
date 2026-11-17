@@ -73,7 +73,11 @@ fn doc(langage: Langage, texte: &str) -> DocumentEditeur {
 fn identite_et_manifeste() {
     let m = machine();
     assert_eq!(m.machine_nom(), "Apple 1");
-    assert_eq!(m.machine_titre_fenetre(), "Retro Dev Kit Apple 1");
+    // titre de la v1.0 (rdk-apple1#17)
+    assert_eq!(
+        m.machine_titre_fenetre(),
+        "Retro Dev Kit Apple 1 — Original Sin"
+    );
     assert_eq!(m.machine_version(), "2.0.0");
     assert_eq!(
         m.manifeste_moniteurs(),
@@ -649,14 +653,15 @@ fn manifeste_0_1_5_formats_roms_configurations() {
     let noms: Vec<&str> = c.iter().map(|c| c.nom.as_str()).collect();
     assert_eq!(
         noms,
+        // la première est celle du premier lancement (rdk-apple1#17, point 4)
         [
-            "Apple 1 moniteur vert",
             "Apple 1 moniteur vert + couleur GEN2",
+            "Apple 1 moniteur vert",
             "Apple 1 + P-LAB"
         ]
     );
-    assert!(c[1].a(apple1_rdk::BOUTON_GEN2) && c[2].a(apple1_rdk::BOUTON_PLAB));
-    assert!(!c[0].a(apple1_rdk::BOUTON_GEN2) && !c[0].a(apple1_rdk::BOUTON_PLAB));
+    assert!(c[0].a(apple1_rdk::BOUTON_GEN2) && c[2].a(apple1_rdk::BOUTON_PLAB));
+    assert!(!c[1].a(apple1_rdk::BOUTON_GEN2) && !c[1].a(apple1_rdk::BOUTON_PLAB));
     assert_eq!(
         m.phosphore_monochrome().map(|p| p.encre),
         Some([0x44, 0xFF, 0x66])
@@ -869,4 +874,89 @@ fn textes_de_la_machine_traduits() {
             );
         }
     }
+}
+
+/// rdk-apple1#17, point 1 : ▶ Lancer pose le programme comme la v1.0
+/// (tokenisé, LOMEM/HIMEM d'après sa taille) au lieu de le taper dans 2 Ko.
+#[test]
+fn lancer_un_gros_basic_comme_la_v1() {
+    let mut m = machine();
+    // 220 lignes d'environ 40 octets : plus de 8 Ko, impossible en 8 Ko
+    let mut texte = String::new();
+    for i in 1..=220 {
+        texte.push_str(&format!(
+            "{} PRINT \"LIGNE NUMERO {} DU GROS PROGRAMME\";\n",
+            i * 5,
+            i
+        ));
+    }
+    texte.push_str("2000 PRINT \"FIN DU PROGRAMME\"\n2010 END\n");
+    let r = m
+        .editeur_lancer(&doc(Langage::Basic, &texte))
+        .expect("lancer");
+    assert!(
+        r.contains("HIMEM $3000") && r.contains("12 Ko") && r.contains("RUN"),
+        "{r}"
+    );
+    // le terminal affiche à la vitesse de l'Apple 1 : on regarde le début
+    m.jusqua_attente(20_000_000);
+    let t = m.texte_ecran();
+    assert!(
+        t.contains("LIGNE NUMERO 1 DU GROS") && !t.contains("MEM FULL"),
+        "{t}"
+    );
+}
+
+/// rdk-apple1#17, point 2 : un document assembleur vide n'est pas lancé.
+#[test]
+fn assembleur_vide_refuse() {
+    let mut m = machine();
+    let e = m
+        .editeur_lancer(&doc(Langage::Assembleur, "; rien\n"))
+        .unwrap_err();
+    assert!(e.to_string().contains("aucune instruction"), "{e}");
+}
+
+/// rdk-apple1#17 : description de la v1.0 dans la bibliothèque, signets du
+/// Dump, étiquettes pour « Aller », identifiant stable et titre.
+#[test]
+fn reprises_de_la_v1() {
+    let m = machine();
+    let prog = |nom: &str, t: &str| Programme {
+        nom: nom.into(),
+        chemin: Some(PathBuf::from(nom)),
+        octets: t.as_bytes().to_vec(),
+    };
+    assert_eq!(
+        m.biblio_description(&prog("a.bas", "10 PRINT 1\n20 END\n"))
+            .as_deref(),
+        Some("Source BASIC · 2 lignes · lancer : RUN")
+    );
+    let d = m
+        .biblio_description(&prog("h.woz", "0300: A9 C1 20 EF FF 60\n"))
+        .unwrap();
+    assert!(d.contains("0300.0305") && d.contains("300R"), "{d}");
+    let a = m
+        .biblio_description(&prog("x.asm", "  .org $0300\n  rts\n"))
+        .unwrap();
+    assert!(a.contains("0300.0300") && a.contains("300R"), "{a}");
+    assert!(m.dump_signets().iter().any(|(n, a)| n == "ZP" && *a == 0));
+    assert_eq!(m.desassembleur_symbole("reset"), Some(0xFF00));
+    assert_eq!(m.machine_id(), "apple-1");
+    assert!(m.machine_titre_fenetre().contains("Original Sin"));
+    assert!(m.manifeste_configurations()[0].a(rdk_pilotes::configuration::ids::MONITEUR_COULEUR));
+}
+
+/// rdk-apple1#17, point 3 : une copie du BASIC sous un autre nom est
+/// signalée (faux BASIC : seulement la signature, jamais l'original).
+#[test]
+fn basic_mal_nomme_signale() {
+    let d = dossier_neuf().join("ROM");
+    std::fs::create_dir_all(&d).unwrap();
+    assert_eq!(apple1_rdk::basic_sous_un_autre_nom(&d), None);
+    std::fs::write(d.join("apple1basic.bin"), faux_basic()).unwrap();
+    assert_eq!(
+        apple1_rdk::basic_sous_un_autre_nom(&d).as_deref(),
+        Some("apple1basic.bin")
+    );
 }

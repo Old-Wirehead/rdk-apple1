@@ -29,8 +29,12 @@ path = "src/main.rs"
 # Changer de version de l'interface commune = changer ces deux révisions, ensemble.
 [dependencies]
 apple1-core = { path = "../apple1-core" }
-rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "fbd1dcc1a3692c614af3bf4b6720a9b701a01c3d" }
-rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "fbd1dcc1a3692c614af3bf4b6720a9b701a01c3d" }
+# Provisoire (rdk-apple1#17) : branche `claude/clavier-dans-les-dispositions`
+# de l'interface commune (PR 13, 14 et 15 : Dump, Désassemblage, Bibliothèque
+# au niveau de la v1.0, clavier dans les dispositions). À repointer sur la
+# version publiée (0.1.9) une fois ces PR fusionnées.
+rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "8b6c2b16b198141d09ecec79cf787cfa2c836567" }
+rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "8b6c2b16b198141d09ecec79cf787cfa2c836567" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
 # Comme la v1.0 (apple1-gui) : cassettes reconnues (SHA-256), photos → art ASCII.
