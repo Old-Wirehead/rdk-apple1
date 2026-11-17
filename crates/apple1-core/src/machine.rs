@@ -95,6 +95,13 @@ pub struct Board {
     pub aci_accesses: u64,
     pub key_queue: VecDeque<u8>,
     pub(crate) next_key_cycle: u64,
+    /// Cycle of the last read of KBDCR ($D011), and whether two reads came
+    /// close together since the last RETURN: the CPU spins in a key wait loop.
+    kbdcr_read: u64,
+    kbd_polled: bool,
+    /// After a typed RETURN, the next queued key waits until the program asks
+    /// for a key again, from this cycle on (#11).
+    after_return: Option<u64>,
     /// State of the GEN2 colour card (used only when `config.color_card`).
     pub gen2: Gen2,
     /// State of the P-LAB graphic card (used only when `config.plab_card`).
@@ -123,6 +130,9 @@ impl Board {
             aci_accesses: 0,
             key_queue: VecDeque::new(),
             next_key_cycle: 0,
+            kbdcr_read: 0,
+            kbd_polled: false,
+            after_return: None,
             gen2: Gen2::new(config.color_50hz),
             vdp: Vdp::new(),
             vdp_irq: false,
@@ -255,6 +265,16 @@ impl Board {
     /// Feed queued keys into the PIA when the previous one has been read.
     pub fn service_keyboard(&mut self) {
         if !self.pia.key_available() && self.cycles >= self.next_key_cycle {
+            // after a RETURN, the line is being executed: a key typed ahead
+            // would stop the command (BASIC tests the keyboard between
+            // statements), so it waits until the program waits for a key
+            // again, at most about 3 s of machine time (#11)
+            if let Some(since) = self.after_return {
+                if !self.kbd_polled && self.cycles < since + 3_000_000 && !self.key_queue.is_empty() {
+                    return;
+                }
+                self.after_return = None;
+            }
             if let Some(k) = self.key_queue.pop_front() {
                 if k == KEY_PAUSE {
                     // a human takes a variable time to type: 0.1 to 1.5 s of
@@ -267,6 +287,10 @@ impl Board {
                 self.pia.key_strobe(k);
                 // small gap between typed keys (like a fast typist)
                 self.next_key_cycle = self.cycles + 2_000;
+                if k & 0x7F == 0x0D {
+                    self.after_return = Some(self.cycles);
+                    self.kbd_polled = false;
+                }
             }
         }
     }
@@ -325,6 +349,14 @@ impl Bus for Board {
             0xD000..=0xDFFF if a & 0x10 != 0 => {
                 if a & 3 == 2 {
                     self.update_display_busy();
+                }
+                if a & 3 == 1 {
+                    // a key wait loop reads KBDCR every few cycles; a running
+                    // program checks it far less often
+                    if self.cycles - self.kbdcr_read <= 40 {
+                        self.kbd_polled = true;
+                    }
+                    self.kbdcr_read = self.cycles;
                 }
                 self.pia.read(a as u8)
             }

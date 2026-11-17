@@ -34,7 +34,8 @@ jobs:
         shell: pwsh
         run: |
           $v = (Select-String -Path Cargo.toml -Pattern '^version = "(.+)"').Matches[0].Groups[1].Value
-          $name = "RDK-Apple1-$v-windows-x86_64"
+          # « Beta » in the name of the Windows build only (note 4)
+          $name = "RDK-Apple1-$v-Beta-windows-x86_64"
           $d = "dist/$name"
           New-Item -ItemType Directory -Force "$d/docs" | Out-Null
           Copy-Item target/release/apple1-emu-gui.exe $d
@@ -43,6 +44,18 @@ jobs:
           Copy-Item NOTICE "$d/NOTICE.txt"
           Copy-Item docs/pdf/*.pdf "$d/docs"
           Copy-Item -Recurse docs/exemples "$d/docs/exemples"
+          # exemples/ next to the program: what the library installs at the first
+          # launch (BASIC, 6502, GEN2 COLOR, WAV). The Woz dumps hello.txt and
+          # multi.txt are left out (note 10); their tapes are made by the program.
+          $e = "$d/exemples"
+          New-Item -ItemType Directory -Force $e | Out-Null
+          Copy-Item docs/exemples/basic/*.bas $e
+          Remove-Item "$e/erreur.bas"
+          Copy-Item docs/exemples/asm/* $e
+          foreach ($f in "hangman.bas", "matches.bas", "battleship.bas") { Copy-Item "docs/exemples/en/basic/$f" $e }
+          foreach ($f in "tunnel-en.s", "tictactoe.s") { Copy-Item "docs/exemples/en/asm/$f" $e }
+          Copy-Item samples/gen2-* $e
+          Copy-Item samples/GEN2_TESTS_HOWTO $e
           "ZIP_NAME=$name" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - uses: actions/upload-artifact@v4

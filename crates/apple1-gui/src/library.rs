@@ -589,7 +589,8 @@ pub const PUISSANCE4: (&str, &str) = ("puissance4-couleur.bas", include_str!("..
 /// `basic_stem`: a `.hex.txt` next to a `.bas` of the same name is a BASIC program.
 fn category(p: &Path, basic_stem: bool) -> Option<&'static str> {
     let name = p.file_name()?.to_string_lossy().to_ascii_lowercase();
-    if name.starts_with("gen2-") || name.starts_with("gen2_") || (name.ends_with(".bas") && (name.contains("-couleur") || name.contains("-color"))) {
+    // gen2.inc goes with the gen2-*.s sources that include it
+    if name.starts_with("gen2-") || name.starts_with("gen2_") || name == "gen2.inc" || (name.ends_with(".bas") && (name.contains("-couleur") || name.contains("-color"))) {
         return Some(DIR_BERNIE);
     }
     if !is_program(p) || name.starts_with("readme") || name.starts_with("licen") {
@@ -713,16 +714,15 @@ pub fn ensure_layout(dir: &Path) -> usize {
 pub fn populate(dir: &Path) -> Result<usize, String> {
     std::fs::create_dir_all(dir).map_err(|e| format!("{} : {e}", dir.display()))?;
     let mut n = ensure_layout(dir);
-    if !dir.join(DIR_ASM).read_dir().map(|mut r| r.next().is_some()).unwrap_or(false) {
+    if !dir.join(DIR_WAV).read_dir().map(|mut r| r.next().is_some()).unwrap_or(false) {
         let asm = dir.join(DIR_ASM);
         let wav = dir.join(DIR_WAV);
         std::fs::create_dir_all(&asm).map_err(|e| format!("{} : {e}", asm.display()))?;
         std::fs::create_dir_all(&wav).map_err(|e| format!("{} : {e}", wav.display()))?;
+        // the Woz dumps hello.txt / multi.txt are no longer put in « 6502 »
+        // (Wirehead, 16/11/2026: their format is to be reviewed for 2.0); their
+        // tapes still go to « WAV »
         for (name, txt) in [("hello", HELLO_TXT), ("multi", MULTI_TXT)] {
-            let t = asm.join(format!("{name}.txt"));
-            if !t.exists() && std::fs::write(&t, txt).is_ok() {
-                n += 1;
-            }
             if let Ok(p) = program::load_bytes(txt.as_bytes(), Kind::Hex, None) {
                 for ext in ["wav", "aiff"] {
                     let f = wav.join(format!("{name}.{ext}"));

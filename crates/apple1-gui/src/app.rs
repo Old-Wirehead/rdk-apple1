@@ -417,6 +417,9 @@ pub struct App {
     wins: std::collections::BTreeMap<Pane, crate::dock::DockState>,
     /// The saved layout as last written (to see when it changes).
     layout_json: String,
+    /// The tree as it was when a pane was closed: reopened while nothing else
+    /// changed, the pane comes back at the same place and size (#8, note 7)
+    closed_trees: Vec<(Pane, egui_dock::DockState<Pane>)>,
     /// GitHub projects: network worker, cache, last download, progress.
     gh: github::Worker,
     gh_cache: PathBuf,
@@ -617,6 +620,7 @@ impl App {
             ascii: Default::default(),
             wins: Default::default(),
             layout_json: String::new(),
+            closed_trees: Vec::new(),
             dbg: Default::default(),
             s: {
                 let mut session = session;
@@ -1355,8 +1359,19 @@ impl App {
             let want = self.pane_wanted(p) && !self.pane_dock(p).detached;
             let inside = crate::layout::contains(&st, p);
             if want && !inside {
-                crate::layout::insert(&mut st, p, self.cfg.library_right);
+                // the tree of before the closing, when only this pane is missing
+                let panes = |t: &egui_dock::DockState<Pane>| Pane::ALL.iter().filter(|q| crate::layout::contains(t, **q)).copied().collect::<Vec<_>>();
+                let now = panes(&st);
+                match self.closed_trees.iter().position(|(q, _)| *q == p) {
+                    Some(i) if panes(&self.closed_trees[i].1).into_iter().filter(|q| *q != p).collect::<Vec<_>>() == now => {
+                        st = self.closed_trees.remove(i).1;
+                    }
+                    _ => crate::layout::insert(&mut st, p, self.cfg.library_right),
+                }
+                self.closed_trees.retain(|(q, _)| *q != p);
             } else if !want && inside {
+                self.closed_trees.retain(|(q, _)| *q != p);
+                self.closed_trees.push((p, st.clone()));
                 crate::layout::remove(&mut st, p);
             }
         }
@@ -1384,6 +1399,7 @@ impl App {
         let mut st = self.cfg.layout.take().unwrap_or_else(|| crate::layout::default_layout(false, true, self.win_w));
         st.translations.tab_context_menu.close_button = t("dk_close_menu").to_string();
         let style = egui_dock::Style::from_egui(ui.style());
+        let before = st.clone();
         let mut v = Panes { app: self, closed: Vec::new(), detach: Vec::new() };
         egui::CentralPanel::default().frame(egui::Frame::NONE).show(ui, |ui| {
             egui_dock::DockArea::new(&mut st).id(egui::Id::new("disposition")).style(style).show_leaf_collapse_buttons(false).show_leaf_close_all_buttons(false).show_inside(ui, &mut v);
@@ -1391,6 +1407,8 @@ impl App {
         let Panes { closed, detach, .. } = v;
         self.cfg.layout = Some(st);
         for p in closed {
+            self.closed_trees.retain(|(q, _)| *q != p);
+            self.closed_trees.push((p, before.clone()));
             self.set_pane_wanted(p, false);
         }
         for p in detach {
@@ -2120,7 +2138,7 @@ impl App {
         match src {
             library::Source::Basic => {
                 let text = match std::fs::read_to_string(path) {
-                    Ok(t) => t,
+                    Ok(t) => t.strip_prefix('\u{feff}').map(str::to_string).unwrap_or(t),
                     Err(e) => return self.fail(format!("{} : {e}", path.display())),
                 };
                 let basic_msg = match self.ensure_basic() {
@@ -2608,8 +2626,9 @@ impl App {
             }
         }
         let mut fullscreen = false;
+        // keys and typed characters are kept in their order of arrival: a RETURN
+        // typed just after a letter, in the same frame, must not overtake it (#13)
         let mut actions: Vec<Action> = Vec::new();
-        let mut text = String::new();
         let mut pasted = String::new();
         events.retain(|ev| match ev {
             egui::Event::Key { key, pressed: true, modifiers, .. } => {
@@ -2657,7 +2676,14 @@ impl App {
             }
             egui::Event::Key { .. } => !to_emu,
             egui::Event::Text(t) if to_emu => {
-                text.push_str(t);
+                let t = t.clone();
+                actions.push(Box::new(move |a| {
+                    for ch in t.chars() {
+                        if let Some(c) = map_key(ch) {
+                            a.latch_key(c);
+                        }
+                    }
+                }));
                 false
             }
             egui::Event::Paste(t) if to_emu => {
@@ -2672,11 +2698,6 @@ impl App {
         }
         for a in actions {
             a(self);
-        }
-        for ch in text.chars() {
-            if let Some(c) = map_key(ch) {
-                self.latch_key(c);
-            }
         }
         if !pasted.is_empty() {
             // typed at keyboard speed by the core
@@ -3032,10 +3053,17 @@ impl App {
                 ui.label(t("tb_phosphor"));
                 self.phosphor_combo(ui, "phosphore");
             }
-            ui.label(t("dr_display"));
+            // « Affichage : Normal Rapide » stays together when the row wraps
+            // (the German « Schnell » went alone to the next line, note 6)
             let thr = self.s.m.board.config.display_throttle;
-            let a = ui.selectable_label(thr, t("dr_normal")).hint(h, t("dr_normal_tip"), "h_dr_display").clicked() && !thr;
-            let b = ui.selectable_label(!thr, t("dr_fast")).hint(h, t("dr_fast_tip"), "h_dr_display").clicked() && thr;
+            let (a, b) = ui
+                .horizontal(|ui| {
+                    ui.label(t("dr_display"));
+                    let a = ui.selectable_label(thr, t("dr_normal")).hint(h, t("dr_normal_tip"), "h_dr_display").clicked() && !thr;
+                    let b = ui.selectable_label(!thr, t("dr_fast")).hint(h, t("dr_fast_tip"), "h_dr_display").clicked() && thr;
+                    (a, b)
+                })
+                .inner;
             if a || b {
                 self.toggle_throttle();
             }
@@ -4159,7 +4187,7 @@ impl App {
                 Ask::Fresh { previous } => {
                     ui.heading(t("ver_title"));
                     let old = if previous.is_empty() { t("ver_old").to_string() } else { previous.clone() };
-                    ui.label(tf("ver_text", &[&old, &crate::config::KIT_VERSION]));
+                    ui.label(tf("ver_text", &[&old, &crate::config::KIT_VERSION_SHOWN]));
                     ui.label(RichText::new(t("ver_keep_files")).small().weak());
                     ui.horizontal(|ui| {
                         if ui.button(t("ver_fresh")).clicked() {
@@ -4190,7 +4218,7 @@ impl App {
                 }
                 Ask::About => {
                     ui.heading(t("about_title"));
-                    ui.label(tf("about_version", &[&crate::config::KIT_VERSION]));
+                    ui.label(tf("about_version", &[&crate::config::KIT_VERSION_SHOWN]));
                     ui.hyperlink(env!("CARGO_PKG_REPOSITORY"));
                     ui.label(RichText::new(t("about_license")).small());
                     ui.label(t("help"));
@@ -4978,6 +5006,24 @@ impl eframe::App for App {
                 ctx.send_viewport_cmd(ViewportCommand::InnerSize(w.into()));
             } else if !ctx.input(|i| i.viewport().maximized.unwrap_or(false)) {
                 // the window manager did not take the request at creation
+                ctx.send_viewport_cmd(ViewportCommand::Maximized(true));
+            }
+        }
+        // Windows: a window marked maximized but much smaller than the monitor
+        // (#12) is restored, then maximized again, as F11 twice does
+        #[cfg(windows)]
+        if self.script.window.is_none() {
+            use std::sync::atomic::{AtomicBool, Ordering};
+            static RESTORED: AtomicBool = AtomicBool::new(false);
+            if self.frame_no == 12 {
+                let (inner, mon, max) = ctx.input(|i| (i.viewport().inner_rect, i.viewport().monitor_size, i.viewport().maximized.unwrap_or(false)));
+                if let (Some(r), Some(m), true) = (inner, mon, max) {
+                    if m.x > 100.0 && r.width() < m.x * 0.8 && r.height() < m.y * 0.8 {
+                        ctx.send_viewport_cmd(ViewportCommand::Maximized(false));
+                        RESTORED.store(true, Ordering::Relaxed);
+                    }
+                }
+            } else if self.frame_no == 16 && RESTORED.swap(false, Ordering::Relaxed) {
                 ctx.send_viewport_cmd(ViewportCommand::Maximized(true));
             }
         }

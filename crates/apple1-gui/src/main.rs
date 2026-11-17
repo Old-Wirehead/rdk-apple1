@@ -352,7 +352,10 @@ fn run() -> eframe::Result {
         .with_app_id("apple1-emu")
         .with_inner_size(size)
         .with_min_inner_size([480.0, 360.0])
-        .with_maximized(script.window.is_none());
+        // Windows: a window created maximized keeps its first size (1100 x 760)
+        // while marked maximized (#12); it is maximized after the first frames
+        // instead (App::update, frame 2)
+        .with_maximized(script.window.is_none() && !cfg!(windows));
     if let Some(i) = icon() {
         vp = vp.with_icon(i);
     }
@@ -367,6 +370,13 @@ fn run() -> eframe::Result {
         "apple1-emu",
         options,
         Box::new(move |cc| {
+            // which graphics engine draws the window: the graphics card, or
+            // « Microsoft Basic Render Driver » without a 3D driver (note 5)
+            #[cfg(windows)]
+            if let Some(rs) = &cc.wgpu_render_state {
+                let i = rs.adapter.get_info();
+                os::log(&format!("{} {} : wgpu {:?}, {} ({:?}, pilote {} {})", WINDOW_TITLE, config::KIT_VERSION_SHOWN, i.backend, i.name, i.device_type, i.driver, i.driver_info));
+            }
             let mut app = App::new(cc, session, cfg, !from_disk, script, detected);
             if let Some(h) = hz {
                 app.set_blink(CursorBlink::with_hz(h));

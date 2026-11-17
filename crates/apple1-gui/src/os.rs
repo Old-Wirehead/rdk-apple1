@@ -68,6 +68,17 @@ pub fn windows_locale() -> Option<String> {
     }
 }
 
+/// Windows: a line in `gui.log`, in the cache folder (as `fatal`).
+#[cfg(windows)]
+pub fn log(msg: &str) {
+    let dir = crate::config::cache_base();
+    let _ = std::fs::create_dir_all(&dir);
+    if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(dir.join("gui.log")) {
+        use std::io::Write;
+        let _ = writeln!(f, "[{}] {msg}", now_short());
+    }
+}
+
 /// Reports an error that stops the program on the error output. On Windows,
 /// where there is no console, it is also written at the end of `gui.log` in
 /// the cache folder and shown in a message box (on Linux, run.sh already
