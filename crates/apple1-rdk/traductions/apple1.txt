@@ -1,0 +1,2345 @@
+# Traductions des textes de l'Apple 1 2.0 (machine), même format que la
+# table de la partie commune (RDK-Interface-Commune 0.1.7) : « @ » puis le
+# texte français, puis une ligne par langue (en, de, ru, es, it, pt).
+# Les textes repris de la v1.0 (son, oscilloscope, réglages par programme,
+# GitHub) gardent la table de la v1.0 (apple1-gui/src/i18n/strings.txt).
+
+# ----- Photo → ASCII
+
+@ Photo « {0} » chargée ({1} × {2}).
+en Photo “{0}” loaded ({1} × {2}).
+de Foto „{0}“ geladen ({1} × {2}).
+ru Фото «{0}» загружено ({1} × {2}).
+es Foto «{0}» cargada ({1} × {2}).
+it Foto «{0}» caricata ({1} × {2}).
+pt Foto «{0}» carregada ({1} × {2}).
+
+@ Art ASCII « {0} » chargé.
+en ASCII art “{0}” loaded.
+de ASCII-Art „{0}“ geladen.
+ru ASCII-арт «{0}» загружен.
+es Arte ASCII «{0}» cargado.
+it ASCII art «{0}» caricata.
+pt Arte ASCII «{0}» carregada.
+
+@ Enregistré : {0}
+en Saved: {0}
+de Gespeichert: {0}
+ru Сохранено: {0}
+es Guardado: {0}
+it Salvato: {0}
+pt Guardado: {0}
+
+@ 📂 Ouvrir une image…
+en 📂 Open a picture…
+de 📂 Bild öffnen…
+ru 📂 Открыть изображение…
+es 📂 Abrir una imagen…
+it 📂 Apri un'immagine…
+pt 📂 Abrir uma imagem…
+
+@ Une photo (jpg, png) ou un dessin .txt du dossier Art ASCII
+en A photo (jpg, png) or a .txt drawing from the Art ASCII folder
+de Ein Foto (jpg, png) oder eine .txt-Zeichnung aus dem Ordner Art ASCII
+ru Фото (jpg, png) или рисунок .txt из папки Art ASCII
+es Una foto (jpg, png) o un dibujo .txt de la carpeta Art ASCII
+it Una foto (jpg, png) o un disegno .txt della cartella Art ASCII
+pt Uma foto (jpg, png) ou um desenho .txt da pasta Art ASCII
+
+@ Nom :
+en Name:
+de Name:
+ru Имя:
+es Nombre:
+it Nome:
+pt Nome:
+
+@ Titre du programme et nom des fichiers
+en Program title and file names
+de Programmtitel und Dateinamen
+ru Название программы и имена файлов
+es Título del programa y nombre de los archivos
+it Titolo del programma e nome dei file
+pt Título do programa e nome dos ficheiros
+
+@ Ouvrez une photo (jpg, png) ou un dessin .txt : il devient 40 × 24 caractères de l'Apple 1.
+en Open a photo (jpg, png) or a .txt drawing: it becomes 40 × 24 Apple 1 characters.
+de Öffnen Sie ein Foto (jpg, png) oder eine .txt-Zeichnung: Daraus werden 40 × 24 Zeichen des Apple 1.
+ru Откройте фото (jpg, png) или рисунок .txt: он станет 40 × 24 символами Apple 1.
+es Abra una foto (jpg, png) o un dibujo .txt: se convierte en 40 × 24 caracteres del Apple 1.
+it Apri una foto (jpg, png) o un disegno .txt: diventa 40 × 24 caratteri dell'Apple 1.
+pt Abra uma foto (jpg, png) ou um desenho .txt: torna-se 40 × 24 caracteres do Apple 1.
+
+@ Glisser : déplacer la partie gardée ; molette : zoom
+en Drag: move the kept part; wheel: zoom
+de Ziehen: behaltenen Teil verschieben; Mausrad: Zoom
+ru Перетаскивание: сдвиг сохраняемой части; колесо: масштаб
+es Arrastrar: mover la parte conservada; rueda: zoom
+it Trascina: sposta la parte tenuta; rotellina: zoom
+pt Arrastar: mover a parte mantida; roda: zoom
+
+@ {0} × {1} caractères
+en {0} × {1} characters
+de {0} × {1} Zeichen
+ru {0} × {1} символов
+es {0} × {1} caracteres
+it {0} × {1} caratteri
+pt {0} × {1} caracteres
+
+@ Colonnes
+en Columns
+de Spalten
+ru Столбцы
+es Columnas
+it Colonne
+pt Colunas
+
+@ Lignes
+en Rows
+de Zeilen
+ru Строки
+es Filas
+it Righe
+pt Linhas
+
+@ 23 lignes : l'invite du programme ne fait pas défiler le dessin
+en 23 rows: the program's prompt does not scroll the drawing
+de 23 Zeilen: Die Eingabeaufforderung des Programms rollt die Zeichnung nicht
+ru 23 строки: приглашение программы не прокручивает рисунок
+es 23 filas: el indicador del programa no desplaza el dibujo
+it 23 righe: il prompt del programma non fa scorrere il disegno
+pt 23 linhas: o prompt do programa não faz deslocar o desenho
+
+@ Zoom
+en Zoom
+de Zoom
+ru Масштаб
+es Zoom
+it Zoom
+pt Zoom
+
+@ Centre
+en Centre
+de Mitte
+ru Центр
+es Centro
+it Centro
+pt Centro
+
+@ Luminosité
+en Brightness
+de Helligkeit
+ru Яркость
+es Brillo
+it Luminosità
+pt Brilho
+
+@ Contraste
+en Contrast
+de Kontrast
+ru Контраст
+es Contraste
+it Contrasto
+pt Contraste
+
+@ Gamma
+en Gamma
+de Gamma
+ru Гамма
+es Gamma
+it Gamma
+pt Gama
+
+@ Inverser
+en Invert
+de Invertieren
+ru Инвертировать
+es Invertir
+it Inverti
+pt Inverter
+
+@ Niveaux automatiques
+en Auto levels
+de Automatische Tonwerte
+ru Автоуровни
+es Niveles automáticos
+it Livelli automatici
+pt Níveis automáticos
+
+@ Tramage
+en Dithering
+de Rasterung
+ru Дизеринг
+es Tramado
+it Retinatura
+pt Pontilhado
+
+@ Caractères
+en Characters
+de Zeichen
+ru Символы
+es Caracteres
+it Caratteri
+pt Caracteres
+
+@ Complète
+en Full
+de Vollständig
+ru Полный
+es Completa
+it Completa
+pt Completa
+
+@ Simple
+en Simple
+de Einfach
+ru Простой
+es Simple
+it Semplice
+pt Simples
+
+@ Personnalisée
+en Custom
+de Benutzerdefiniert
+ru Свой
+es Personalizada
+it Personalizzata
+pt Personalizada
+
+@ ↺ Réglages par défaut
+en ↺ Default settings
+de ↺ Standardeinstellungen
+ru ↺ Настройки по умолчанию
+es ↺ Ajustes predeterminados
+it ↺ Impostazioni predefinite
+pt ↺ Definições padrão
+
+@ Programme :
+en Program:
+de Programm:
+ru Программа:
+es Programa:
+it Programma:
+pt Programa:
+
+@ Assembleur 6502 (300R)
+en 6502 assembler (300R)
+de 6502-Assembler (300R)
+ru Ассемблер 6502 (300R)
+es Ensamblador 6502 (300R)
+it Assembler 6502 (300R)
+pt Assembler 6502 (300R)
+
+@ ▶ Lancer
+en ▶ Run
+de ▶ Starten
+ru ▶ Запуск
+es ▶ Ejecutar
+it ▶ Esegui
+pt ▶ Executar
+
+@ Taper le programme dans l'Apple 1 et le lancer
+en Type the program into the Apple 1 and run it
+de Programm in den Apple 1 tippen und starten
+ru Набрать программу в Apple 1 и запустить
+es Teclear el programa en el Apple 1 y ejecutarlo
+it Digitare il programma nell'Apple 1 ed eseguirlo
+pt Teclar o programa no Apple 1 e executá-lo
+
+@ 💾 Programme
+en 💾 Program
+de 💾 Programm
+ru 💾 Программа
+es 💾 Programa
+it 💾 Programma
+pt 💾 Programa
+
+@ Enregistrer le programme dans BASIC/ ou Assembleur/ de la bibliothèque
+en Save the program in BASIC/ or Assembleur/ of the library
+de Programm in BASIC/ oder Assembleur/ der Bibliothek speichern
+ru Сохранить программу в BASIC/ или Assembleur/ библиотеки
+es Guardar el programa en BASIC/ o Assembleur/ de la biblioteca
+it Salva il programma in BASIC/ o Assembleur/ della libreria
+pt Guardar o programa em BASIC/ ou Assembleur/ da biblioteca
+
+@ 📼 Cassette
+en 📼 Tape
+de 📼 Kassette
+ru 📼 Кассета
+es 📼 Casete
+it 📼 Cassetta
+pt 📼 Cassete
+
+@ Écrire le programme en cassette ACI (.wav) dans Cassettes/
+en Write the program as an ACI tape (.wav) in Cassettes/
+de Programm als ACI-Kassette (.wav) in Cassettes/ schreiben
+ru Записать программу на кассету ACI (.wav) в Cassettes/
+es Escribir el programa en casete ACI (.wav) en Cassettes/
+it Scrivi il programma su cassetta ACI (.wav) in Cassettes/
+pt Escrever o programa em cassete ACI (.wav) em Cassettes/
+
+@ cassette écrite : {0} (pour la relire : C100R puis {1})
+en tape written: {0} (to read it back: C100R then {1})
+de Kassette geschrieben: {0} (zum Zurücklesen: C100R, dann {1})
+ru кассета записана: {0} (чтобы прочитать: C100R, затем {1})
+es casete escrito: {0} (para releerlo: C100R y luego {1})
+it cassetta scritta: {0} (per rileggerla: C100R poi {1})
+pt cassete escrita: {0} (para a reler: C100R e depois {1})
+
+@ 💾 Art .txt
+en 💾 Art .txt
+de 💾 Art .txt
+ru 💾 Арт .txt
+es 💾 Arte .txt
+it 💾 Arte .txt
+pt 💾 Arte .txt
+
+@ Enregistrer le dessin dans le dossier Art ASCII de la bibliothèque
+en Save the drawing in the library's Art ASCII folder
+de Zeichnung im Ordner Art ASCII der Bibliothek speichern
+ru Сохранить рисунок в папку Art ASCII библиотеки
+es Guardar el dibujo en la carpeta Art ASCII de la biblioteca
+it Salva il disegno nella cartella Art ASCII della libreria
+pt Guardar o desenho na pasta Art ASCII da biblioteca
+
+@ 📋 Copier
+en 📋 Copy
+de 📋 Kopieren
+ru 📋 Копировать
+es 📋 Copiar
+it 📋 Copia
+pt 📋 Copiar
+
+@ Voir le code
+en Show the code
+de Code anzeigen
+ru Показать код
+es Ver el código
+it Vedi il codice
+pt Ver o código
+
+@ gris {0}
+en grey {0}
+de Grau {0}
+ru серый {0}
+es gris {0}
+it grigio {0}
+pt cinzento {0}
+
+# ----- écran, phosphore
+
+@ Vert
+en Green
+de Grün
+ru Зелёный
+es Verde
+it Verde
+pt Verde
+
+@ Blanc
+en White
+de Weiß
+ru Белый
+es Blanco
+it Bianco
+pt Branco
+
+@ Ambre
+en Amber
+de Bernstein
+ru Янтарный
+es Ámbar
+it Ambra
+pt Âmbar
+
+@ Phosphore du moniteur :
+en Monitor phosphor:
+de Leuchtstoff des Monitors:
+ru Люминофор монитора:
+es Fósforo del monitor:
+it Fosfori del monitor:
+pt Fósforo do monitor:
+
+@ Écran vintage (screening)
+en Vintage screen (screening)
+de Vintage-Bildschirm (Screening)
+ru Винтажный экран (screening)
+es Pantalla vintage (screening)
+it Schermo vintage (screening)
+pt Ecrã vintage (screening)
+
+@ Imitation d'un moniteur à tube des années 1970, comme la photo d'un vrai Apple 1.
+en Imitation of a 1970s tube monitor, like a photo of a real Apple 1.
+de Nachahmung eines Röhrenmonitors der 1970er, wie auf dem Foto eines echten Apple 1.
+ru Имитация лампового монитора 1970-х, как на фото настоящего Apple 1.
+es Imitación de un monitor de tubo de los años 1970, como la foto de un Apple 1 real.
+it Imitazione di un monitor a tubo degli anni '70, come la foto di un vero Apple 1.
+pt Imitação de um monitor de tubo dos anos 1970, como a foto de um verdadeiro Apple 1.
+
+@ Intensité
+en Intensity
+de Intensität
+ru Интенсивность
+es Intensidad
+it Intensità
+pt Intensidade
+
+@ Séparation des lignes de balayage
+en Scan-line separation
+de Trennung der Abtastzeilen
+ru Разделение строк развёртки
+es Separación de las líneas de barrido
+it Separazione delle linee di scansione
+pt Separação das linhas de varrimento
+
+@ Une fine ligne sombre sous chaque ligne de points (l'effet principal).
+en A thin dark line under each row of dots (the main effect).
+de Eine feine dunkle Linie unter jeder Punktzeile (der Haupteffekt).
+ru Тонкая тёмная линия под каждой строкой точек (основной эффект).
+es Una fina línea oscura bajo cada línea de puntos (el efecto principal).
+it Una sottile linea scura sotto ogni riga di punti (l'effetto principale).
+pt Uma linha escura fina sob cada linha de pontos (o efeito principal).
+
+@ Points adoucis (horizontalement)
+en Softened dots (horizontally)
+de Weichgezeichnete Punkte (horizontal)
+ru Смягчённые точки (по горизонтали)
+es Puntos suavizados (horizontalmente)
+it Punti ammorbiditi (orizzontalmente)
+pt Pontos suavizados (horizontalmente)
+
+@ Halo lumineux
+en Glow
+de Leuchtender Halo
+ru Светящийся ореол
+es Halo luminoso
+it Alone luminoso
+pt Halo luminoso
+
+@ Rémanence du phosphore
+en Phosphor persistence
+de Nachleuchten des Leuchtstoffs
+ru Послесвечение люминофора
+es Persistencia del fósforo
+it Persistenza dei fosfori
+pt Persistência do fósforo
+
+@ Durée pendant laquelle les points s'éteignent (à gauche : aucune). Plus courte en blanc, moyenne en vert, plus longue en ambre.
+en How long the dots take to fade (left: none). Shorter in white, medium in green, longer in amber.
+de Dauer, in der die Punkte verlöschen (links: keine). Kürzer bei Weiß, mittel bei Grün, länger bei Bernstein.
+ru Время угасания точек (слева: нет). Короче у белого, среднее у зелёного, дольше у янтарного.
+es Tiempo durante el que se apagan los puntos (a la izquierda: ninguno). Más corto en blanco, medio en verde, más largo en ámbar.
+it Durata in cui i punti si spengono (a sinistra: nessuna). Più breve in bianco, media in verde, più lunga in ambra.
+pt Tempo durante o qual os pontos se apagam (à esquerda: nenhum). Mais curto em branco, médio em verde, mais longo em âmbar.
+
+@ Tube bombé et coins assombris
+en Curved tube and darkened corners
+de Gewölbte Röhre und abgedunkelte Ecken
+ru Выпуклый кинескоп и затемнённые углы
+es Tubo curvado y esquinas oscurecidas
+it Tubo curvo e angoli scuriti
+pt Tubo curvo e cantos escurecidos
+
+@ Courbure
+en Curvature
+de Wölbung
+ru Кривизна
+es Curvatura
+it Curvatura
+pt Curvatura
+
+@ Scintillement
+en Flicker
+de Flimmern
+ru Мерцание
+es Parpadeo
+it Sfarfallio
+pt Cintilação
+
+@ Masque de phosphores RVB (moniteur couleur)
+en RGB phosphor mask (colour monitor)
+de RGB-Leuchtstoffmaske (Farbmonitor)
+ru Маска люминофоров RGB (цветной монитор)
+es Máscara de fósforos RGB (monitor en color)
+it Maschera di fosfori RGB (monitor a colori)
+pt Máscara de fósforos RGB (monitor a cores)
+
+@ Avec l'écran vintage, l'image des moniteurs est calculée à 3 fois la résolution de l'Apple 1 (zoom ×1 = zoom 3 de la v1.0) ; sans lui, image native de 280 × 192 points.
+en With the vintage screen, the monitors' picture is computed at 3 times the Apple 1 resolution (zoom ×1 = zoom 3 of v1.0); without it, native 280 × 192 picture.
+de Mit dem Vintage-Bildschirm wird das Bild der Monitore in 3-facher Apple-1-Auflösung berechnet (Zoom ×1 = Zoom 3 der v1.0); ohne ihn natives Bild mit 280 × 192 Punkten.
+ru С винтажным экраном изображение мониторов рассчитывается в 3 раза выше разрешения Apple 1 (масштаб ×1 = масштаб 3 версии 1.0); без него — исходное изображение 280 × 192 точек.
+es Con la pantalla vintage, la imagen de los monitores se calcula a 3 veces la resolución del Apple 1 (zoom ×1 = zoom 3 de la v1.0); sin ella, imagen nativa de 280 × 192 puntos.
+it Con lo schermo vintage, l'immagine dei monitor è calcolata a 3 volte la risoluzione dell'Apple 1 (zoom ×1 = zoom 3 della v1.0); senza, immagine nativa di 280 × 192 punti.
+pt Com o ecrã vintage, a imagem dos monitores é calculada a 3 vezes a resolução do Apple 1 (zoom ×1 = zoom 3 da v1.0); sem ele, imagem nativa de 280 × 192 pontos.
+
+# ----- 💾 Sauver, exemples
+
+@ Plages :
+en Ranges:
+de Bereiche:
+ru Диапазоны:
+es Rangos:
+it Intervalli:
+pt Intervalos:
+
+@ Comme pour l'ACI : 0300.03FF, ou 004A.00FF 0800.0FFF pour un programme BASIC (page zéro puis programme)
+en As for the ACI: 0300.03FF, or 004A.00FF 0800.0FFF for a BASIC program (zero page then program)
+de Wie beim ACI: 0300.03FF oder 004A.00FF 0800.0FFF für ein BASIC-Programm (Zeropage, dann Programm)
+ru Как для ACI: 0300.03FF или 004A.00FF 0800.0FFF для программы на BASIC (нулевая страница, затем программа)
+es Como para el ACI: 0300.03FF, o 004A.00FF 0800.0FFF para un programa BASIC (página cero y luego programa)
+it Come per l'ACI: 0300.03FF, o 004A.00FF 0800.0FFF per un programma BASIC (pagina zero poi programma)
+pt Como para o ACI: 0300.03FF, ou 004A.00FF 0800.0FFF para um programa BASIC (página zero e depois programa)
+
+@ Format :
+en Format:
+de Format:
+ru Формат:
+es Formato:
+it Formato:
+pt Formato:
+
+@ Fichier :
+en File:
+de Datei:
+ru Файл:
+es Archivo:
+it File:
+pt Ficheiro:
+
+@ 💾 Enregistrer
+en 💾 Save
+de 💾 Speichern
+ru 💾 Сохранить
+es 💾 Guardar
+it 💾 Salva
+pt 💾 Guardar
+
+@ {0} existe déjà : changez de nom
+en {0} already exists: change the name
+de {0} existiert bereits: Namen ändern
+ru {0} уже существует: измените имя
+es {0} ya existe: cambie el nombre
+it {0} esiste già: cambia nome
+pt {0} já existe: mude o nome
+
+@ Fermer
+en Close
+de Schließen
+ru Закрыть
+es Cerrar
+it Chiudi
+pt Fechar
+
+@ dossier de la bibliothèque inconnu
+en unknown library folder
+de unbekannter Bibliotheksordner
+ru неизвестная папка библиотеки
+es carpeta de la biblioteca desconocida
+it cartella della libreria sconosciuta
+pt pasta da biblioteca desconhecida
+
+@ {0} exemple(s) copié(s) dans {1}
+en {0} example(s) copied into {1}
+de {0} Beispiel(e) nach {1} kopiert
+ru Скопировано примеров: {0} в {1}
+es {0} ejemplo(s) copiado(s) en {1}
+it {0} esempio/i copiato/i in {1}
+pt {0} exemplo(s) copiado(s) para {1}
+
+@ Dump du Woz Monitor (.woz)
+en Woz Monitor dump (.woz)
+de Woz-Monitor-Dump (.woz)
+ru Дамп Woz Monitor (.woz)
+es Volcado del Woz Monitor (.woz)
+it Dump del Woz Monitor (.woz)
+pt Dump do Woz Monitor (.woz)
+
+@ Cassette ACI (.wav)
+en ACI tape (.wav)
+de ACI-Kassette (.wav)
+ru Кассета ACI (.wav)
+es Casete ACI (.wav)
+it Cassetta ACI (.wav)
+pt Cassete ACI (.wav)
+
+@ Cassette ACI pour smartphone (.aiff)
+en ACI tape for smartphones (.aiff)
+de ACI-Kassette für Smartphones (.aiff)
+ru Кассета ACI для смартфона (.aiff)
+es Casete ACI para smartphone (.aiff)
+it Cassetta ACI per smartphone (.aiff)
+pt Cassete ACI para smartphone (.aiff)
+
+@ Intel HEX (.hex, programmateurs de PROM)
+en Intel HEX (.hex, PROM programmers)
+de Intel HEX (.hex, PROM-Programmiergeräte)
+ru Intel HEX (.hex, программаторы ПЗУ)
+es Intel HEX (.hex, programadores de PROM)
+it Intel HEX (.hex, programmatori di PROM)
+pt Intel HEX (.hex, programadores de PROM)
+
+@ Dump RDK (.dump)
+en RDK dump (.dump)
+de RDK-Dump (.dump)
+ru Дамп RDK (.dump)
+es Volcado RDK (.dump)
+it Dump RDK (.dump)
+pt Dump RDK (.dump)
+
+@ Binaire brut (.bin, une plage)
+en Raw binary (.bin, one range)
+de Reine Binärdatei (.bin, ein Bereich)
+ru Двоичный файл (.bin, один диапазон)
+es Binario en bruto (.bin, un rango)
+it Binario grezzo (.bin, un intervallo)
+pt Binário bruto (.bin, um intervalo)
+
+@ Binaire avec adresse (.prg, une plage)
+en Binary with address (.prg, one range)
+de Binärdatei mit Adresse (.prg, ein Bereich)
+ru Двоичный файл с адресом (.prg, один диапазон)
+es Binario con dirección (.prg, un rango)
+it Binario con indirizzo (.prg, un intervallo)
+pt Binário com endereço (.prg, um intervalo)
+
+# ----- messages de la machine
+
+@ {0} octets
+en {0} bytes
+de {0} Bytes
+ru {0} байт
+es {0} bytes
+it {0} byte
+pt {0} bytes
+
+@ {0} : {1} octets ({2} max)
+en {0}: {1} bytes ({2} max)
+de {0}: {1} Bytes ({2} max.)
+ru {0}: {1} байт (макс. {2})
+es {0}: {1} bytes ({2} máx.)
+it {0}: {1} byte ({2} max)
+pt {0}: {1} bytes ({2} máx.)
+
+@ carte couleur GEN2 branchée (RAM $0000-$BFFF) : son image va au moniteur couleur (configuration « {0} »)
+en GEN2 colour card connected (RAM $0000-$BFFF): its picture goes to the colour monitor (configuration “{0}”)
+de GEN2-Farbkarte angeschlossen (RAM $0000-$BFFF): Ihr Bild geht an den Farbmonitor (Konfiguration „{0}“)
+ru цветная карта GEN2 подключена (ОЗУ $0000-$BFFF): её изображение идёт на цветной монитор (конфигурация «{0}»)
+es tarjeta de color GEN2 conectada (RAM $0000-$BFFF): su imagen va al monitor en color (configuración «{0}»)
+it scheda colore GEN2 collegata (RAM $0000-$BFFF): la sua immagine va al monitor a colori (configurazione «{0}»)
+pt placa de cor GEN2 ligada (RAM $0000-$BFFF): a sua imagem vai para o monitor a cores (configuração «{0}»)
+
+@ carte couleur GEN2 débranchée
+en GEN2 colour card disconnected
+de GEN2-Farbkarte abgezogen
+ru цветная карта GEN2 отключена
+es tarjeta de color GEN2 desconectada
+it scheda colore GEN2 scollegata
+pt placa de cor GEN2 desligada
+
+@ 50 Hz (PAL)
+en 50 Hz (PAL)
+de 50 Hz (PAL)
+ru 50 Гц (PAL)
+es 50 Hz (PAL)
+it 50 Hz (PAL)
+pt 50 Hz (PAL)
+
+@ 60 Hz (NTSC)
+en 60 Hz (NTSC)
+de 60 Hz (NTSC)
+ru 60 Гц (NTSC)
+es 60 Hz (NTSC)
+it 60 Hz (NTSC)
+pt 60 Hz (NTSC)
+
+@ GEN2 : accolades {0}
+en GEN2: {0} braces
+de GEN2: {0} geschweifte Klammern
+ru GEN2: фигурные скобки — {0}
+es GEN2: llaves {0}
+it GEN2: graffe {0}
+pt GEN2: chavetas {0}
+
+@ grasses
+en bold
+de fette
+ru жирные
+es gruesas
+it spesse
+pt grossas
+
+@ fines
+en thin
+de dünne
+ru тонкие
+es finas
+it sottili
+pt finas
+
+@ carte P-LAB branchée (TMS9918A en $CC00-$CC01) : son image va au moniteur couleur (configuration « {0} »)
+en P-LAB card connected (TMS9918A at $CC00-$CC01): its picture goes to the colour monitor (configuration “{0}”)
+de P-LAB-Karte angeschlossen (TMS9918A bei $CC00-$CC01): Ihr Bild geht an den Farbmonitor (Konfiguration „{0}“)
+ru карта P-LAB подключена (TMS9918A по $CC00-$CC01): её изображение идёт на цветной монитор (конфигурация «{0}»)
+es tarjeta P-LAB conectada (TMS9918A en $CC00-$CC01): su imagen va al monitor en color (configuración «{0}»)
+it scheda P-LAB collegata (TMS9918A a $CC00-$CC01): la sua immagine va al monitor a colori (configurazione «{0}»)
+pt placa P-LAB ligada (TMS9918A em $CC00-$CC01): a sua imagem vai para o monitor a cores (configuração «{0}»)
+
+@ carte P-LAB débranchée
+en P-LAB card disconnected
+de P-LAB-Karte abgezogen
+ru карта P-LAB отключена
+es tarjeta P-LAB desconectada
+it scheda P-LAB scollegata
+pt placa P-LAB desligada
+
+@ P-LAB : cavalier NMI {0}
+en P-LAB: NMI jumper {0}
+de P-LAB: NMI-Jumper {0}
+ru P-LAB: перемычка NMI — {0}
+es P-LAB: puente NMI {0}
+it P-LAB: ponticello NMI {0}
+pt P-LAB: jumper NMI {0}
+
+@ posé
+en fitted
+de gesetzt
+ru установлена
+es puesto
+it inserito
+pt colocado
+
+@ retiré
+en removed
+de entfernt
+ru снята
+es quitado
+it rimosso
+pt retirado
+
+@ moniteur couleur : carte {0}
+en colour monitor: {0} card
+de Farbmonitor: Karte {0}
+ru цветной монитор: карта {0}
+es monitor en color: tarjeta {0}
+it monitor a colori: scheda {0}
+pt monitor a cores: placa {0}
+
+@ écran vintage {0}
+en vintage screen {0}
+de Vintage-Bildschirm {0}
+ru винтажный экран {0}
+es pantalla vintage {0}
+it schermo vintage {0}
+pt ecrã vintage {0}
+
+@ allumé
+en on
+de an
+ru включён
+es encendida
+it acceso
+pt ligado
+
+@ éteint
+en off
+de aus
+ru выключен
+es apagada
+it spento
+pt desligado
+
+@ chargement 📼 par la cassette : RESET, C100R puis lecture de l'ACI en temps réel
+en 📼 loading through the tape: RESET, C100R then the ACI reads in real time
+de 📼 Laden über die Kassette: RESET, C100R, dann liest das ACI in Echtzeit
+ru 📼 загрузка с кассеты: RESET, C100R, затем чтение ACI в реальном времени
+es carga 📼 por casete: RESET, C100R y lectura del ACI en tiempo real
+it caricamento 📼 da cassetta: RESET, C100R poi lettura dell'ACI in tempo reale
+pt carregamento 📼 pela cassete: RESET, C100R e leitura do ACI em tempo real
+
+@ chargement ⚡ rapide : le programme va directement en mémoire
+en ⚡ fast loading: the program goes straight into memory
+de ⚡ schnelles Laden: Das Programm kommt direkt in den Speicher
+ru ⚡ быстрая загрузка: программа идёт прямо в память
+es carga ⚡ rápida: el programa va directamente a la memoria
+it caricamento ⚡ rapido: il programma va direttamente in memoria
+pt carregamento ⚡ rápido: o programa vai diretamente para a memória
+
+@ son de la cassette allumé (lecture 📼 et écriture ⏺, vitesse réelle)
+en tape sound on (📼 reading and ⏺ writing, real speed)
+de Kassettenton an (📼 Lesen und ⏺ Schreiben, echte Geschwindigkeit)
+ru звук кассеты включён (чтение 📼 и запись ⏺, реальная скорость)
+es sonido del casete activado (lectura 📼 y escritura ⏺, velocidad real)
+it suono della cassetta attivo (lettura 📼 e scrittura ⏺, velocità reale)
+pt som da cassete ligado (leitura 📼 e escrita ⏺, velocidade real)
+
+@ son de la cassette coupé
+en tape sound off
+de Kassettenton aus
+ru звук кассеты выключен
+es sonido del casete desactivado
+it suono della cassetta disattivato
+pt som da cassete desligado
+
+@ oscilloscope de la cassette : il s'ouvre quand la cassette avance
+en tape oscilloscope: it opens when the tape moves
+de Kassetten-Oszilloskop: Es öffnet sich, wenn die Kassette läuft
+ru осциллограф кассеты: открывается, когда кассета движется
+es osciloscopio del casete: se abre cuando el casete avanza
+it oscilloscopio della cassetta: si apre quando la cassetta scorre
+pt osciloscópio da cassete: abre-se quando a cassete avança
+
+@ oscilloscope de la cassette masqué
+en tape oscilloscope hidden
+de Kassetten-Oszilloskop ausgeblendet
+ru осциллограф кассеты скрыт
+es osciloscopio del casete oculto
+it oscilloscopio della cassetta nascosto
+pt osciloscópio da cassete oculto
+
+@ P-LAB : image CodeTank retirée
+en P-LAB: CodeTank image removed
+de P-LAB: CodeTank-Abbild entfernt
+ru P-LAB: образ CodeTank убран
+es P-LAB: imagen CodeTank retirada
+it P-LAB: immagine CodeTank rimossa
+pt P-LAB: imagem CodeTank retirada
+
+@ P-LAB : image CodeTank {0} chargée en $4000-$7FFF
+en P-LAB: CodeTank image {0} loaded at $4000-$7FFF
+de P-LAB: CodeTank-Abbild {0} bei $4000-$7FFF geladen
+ru P-LAB: образ CodeTank {0} загружен в $4000-$7FFF
+es P-LAB: imagen CodeTank {0} cargada en $4000-$7FFF
+it P-LAB: immagine CodeTank {0} caricata a $4000-$7FFF
+pt P-LAB: imagem CodeTank {0} carregada em $4000-$7FFF
+
+@ couleur
+en colour
+de Farbe
+ru цветной
+es color
+it colore
+pt cores
+
+@ monochrome
+en monochrome
+de monochrom
+ru монохромный
+es monocromo
+it monocromatico
+pt monocromático
+
+# ----- BASIC, mémoire, chargement
+
+@ {0} octets au lieu de {1}
+en {0} bytes instead of {1}
+de {0} Bytes statt {1}
+ru {0} байт вместо {1}
+es {0} bytes en lugar de {1}
+it {0} byte invece di {1}
+pt {0} bytes em vez de {1}
+
+@ c'est RDK G2 Basic, déjà intégré (mode Émulation)
+en this is RDK G2 Basic, already built in (Emulation mode)
+de das ist RDK G2 Basic, bereits eingebaut (Modus Emulation)
+ru это RDK G2 Basic, уже встроенный (режим «Эмуляция»)
+es es RDK G2 Basic, ya integrado (modo Emulación)
+it è RDK G2 Basic, già integrato (modalità Emulazione)
+pt é o RDK G2 Basic, já integrado (modo Emulação)
+
+@ ce n'est pas l'Integer BASIC de l'Apple 1 (signature absente)
+en this is not the Apple 1 Integer BASIC (signature missing)
+de das ist nicht das Integer BASIC des Apple 1 (Signatur fehlt)
+ru это не Integer BASIC Apple 1 (нет сигнатуры)
+es no es el Integer BASIC del Apple 1 (falta la firma)
+it non è l'Integer BASIC dell'Apple 1 (firma assente)
+pt não é o Integer BASIC do Apple 1 (assinatura ausente)
+
+@ image du BASIC invalide ({0} octets, il en faut 4096 commençant par JMP)
+en invalid BASIC image ({0} bytes, 4096 starting with JMP are needed)
+de ungültiges BASIC-Abbild ({0} Bytes, nötig sind 4096, beginnend mit JMP)
+ru неверный образ BASIC ({0} байт, нужно 4096, начиная с JMP)
+es imagen del BASIC no válida ({0} bytes, hacen falta 4096 que empiecen por JMP)
+it immagine del BASIC non valida ({0} byte, ne servono 4096 che inizino con JMP)
+pt imagem do BASIC inválida ({0} bytes, são precisos 4096 começando por JMP)
+
+@ pas de RAM en $E000
+en no RAM at $E000
+de kein RAM bei $E000
+ru нет ОЗУ по адресу $E000
+es no hay RAM en $E000
+it nessuna RAM a $E000
+pt sem RAM em $E000
+
+@ RAM portée à {0} Ko pour ce programme
+en RAM raised to {0} KB for this program
+de RAM für dieses Programm auf {0} KB erweitert
+ru ОЗУ увеличено до {0} КБ для этой программы
+es RAM ampliada a {0} KB para este programa
+it RAM portata a {0} KB per questo programma
+pt RAM aumentada para {0} KB para este programa
+
+@ pas de RAM pour ${0}-${1}
+en no RAM for ${0}-${1}
+de kein RAM für ${0}-${1}
+ru нет ОЗУ для ${0}-${1}
+es no hay RAM para ${0}-${1}
+it nessuna RAM per ${0}-${1}
+pt sem RAM para ${0}-${1}
+
+@ {0} erreur(s) d'assemblage ; {1}
+en {0} assembly error(s); {1}
+de {0} Assemblierfehler; {1}
+ru ошибок ассемблирования: {0}; {1}
+es {0} error(es) de ensamblado; {1}
+it {0} errore/i di assemblaggio; {1}
+pt {0} erro(s) de assemblagem; {1}
+
+@ {0} erreur(s) BASIC ; {1}
+en {0} BASIC error(s); {1}
+de {0} BASIC-Fehler; {1}
+ru ошибок BASIC: {0}; {1}
+es {0} error(es) BASIC; {1}
+it {0} errore/i BASIC; {1}
+pt {0} erro(s) BASIC; {1}
+
+@ aucune ligne BASIC numérotée
+en no numbered BASIC line
+de keine nummerierte BASIC-Zeile
+ru нет пронумерованных строк BASIC
+es ninguna línea BASIC numerada
+it nessuna riga BASIC numerata
+pt nenhuma linha BASIC numerada
+
+@ {0} : {1} ligne(s) tapée(s){2}
+en {0}: {1} line(s) typed{2}
+de {0}: {1} Zeile(n) getippt{2}
+ru {0}: набрано строк: {1}{2}
+es {0}: {1} línea(s) tecleada(s){2}
+it {0}: {1} riga/e digitata/e{2}
+pt {0}: {1} linha(s) teclada(s){2}
+
+@ {0} : rien à charger
+en {0}: nothing to load
+de {0}: nichts zu laden
+ru {0}: нечего загружать
+es {0}: nada que cargar
+it {0}: niente da caricare
+pt {0}: nada a carregar
+
+@ {0} : lecture de la cassette (C100R, {1})
+en {0}: reading the tape (C100R, {1})
+de {0}: Kassette wird gelesen (C100R, {1})
+ru {0}: чтение кассеты (C100R, {1})
+es {0}: lectura del casete (C100R, {1})
+it {0}: lettura della cassetta (C100R, {1})
+pt {0}: leitura da cassete (C100R, {1})
+
+@ {0} : l'ACI ne lit pas la cassette (tapez C100R puis la plage suivie de R)
+en {0}: the ACI is not reading the tape (type C100R then the range followed by R)
+de {0}: Das ACI liest die Kassette nicht (C100R, dann den Bereich gefolgt von R tippen)
+ru {0}: ACI не читает кассету (наберите C100R, затем диапазон и R)
+es {0}: el ACI no lee el casete (teclee C100R y luego el rango seguido de R)
+it {0}: l'ACI non legge la cassetta (digita C100R poi l'intervallo seguito da R)
+pt {0}: o ACI não lê a cassete (tecle C100R e depois o intervalo seguido de R)
+
+@ {0} : chargé par la cassette, lancé ({1})
+en {0}: loaded from the tape, started ({1})
+de {0}: von der Kassette geladen, gestartet ({1})
+ru {0}: загружено с кассеты, запущено ({1})
+es {0}: cargado por casete, ejecutado ({1})
+it {0}: caricato da cassetta, avviato ({1})
+pt {0}: carregado pela cassete, executado ({1})
+
+@ {0} : chargé par la cassette
+en {0}: loaded from the tape
+de {0}: von der Kassette geladen
+ru {0}: загружено с кассеты
+es {0}: cargado por casete
+it {0}: caricato da cassetta
+pt {0}: carregado pela cassete
+
+@ art ASCII : {0}
+en ASCII art: {0}
+de ASCII-Art: {0}
+ru ASCII-арт: {0}
+es arte ASCII: {0}
+it ASCII art: {0}
+pt arte ASCII: {0}
+
+@ art ASCII
+en ASCII art
+de ASCII-Art
+ru ASCII-арт
+es arte ASCII
+it ASCII art
+pt arte ASCII
+
+@ réglages de programs.json
+en settings from programs.json
+de Einstellungen aus programs.json
+ru настройки из programs.json
+es ajustes de programs.json
+it impostazioni di programs.json
+pt definições de programs.json
+
+@ fichier .prg trop court
+en .prg file too short
+de .prg-Datei zu kurz
+ru файл .prg слишком короткий
+es archivo .prg demasiado corto
+it file .prg troppo corto
+pt ficheiro .prg demasiado curto
+
+@ dump RDK
+en RDK dump
+de RDK-Dump
+ru дамп RDK
+es volcado RDK
+it dump RDK
+pt dump RDK
+
+@ ancien .hex au format du Woz Monitor : renommez-le en .woz (.hex = Intel HEX)
+en old .hex in Woz Monitor format: rename it to .woz (.hex = Intel HEX)
+de altes .hex im Woz-Monitor-Format: in .woz umbenennen (.hex = Intel HEX)
+ru старый .hex в формате Woz Monitor: переименуйте в .woz (.hex = Intel HEX)
+es antiguo .hex en formato del Woz Monitor: renómbrelo a .woz (.hex = Intel HEX)
+it vecchio .hex nel formato del Woz Monitor: rinominalo in .woz (.hex = Intel HEX)
+pt antigo .hex no formato do Woz Monitor: mude-lhe o nome para .woz (.hex = Intel HEX)
+
+@ {0} : fichier vide
+en {0}: empty file
+de {0}: leere Datei
+ru {0}: пустой файл
+es {0}: archivo vacío
+it {0}: file vuoto
+pt {0}: ficheiro vazio
+
+@ fichier vide
+en empty file
+de leere Datei
+ru пустой файл
+es archivo vacío
+it file vuoto
+pt ficheiro vazio
+
+@ cassette reconnue : {0}
+en recognised tape: {0}
+de erkannte Kassette: {0}
+ru распознанная кассета: {0}
+es casete reconocido: {0}
+it cassetta riconosciuta: {0}
+pt cassete reconhecida: {0}
+
+@ {0} assemblé et lancé ({1}R)
+en {0} assembled and started ({1}R)
+de {0} assembliert und gestartet ({1}R)
+ru {0} ассемблирован и запущен ({1}R)
+es {0} ensamblado y ejecutado ({1}R)
+it {0} assemblato e avviato ({1}R)
+pt {0} assemblado e executado ({1}R)
+
+@ {0} lancé
+en {0} started
+de {0} gestartet
+ru {0} запущен
+es {0} ejecutado
+it {0} avviato
+pt {0} executado
+
+@ réglages de {0} enregistrés : ils comptent au prochain Charger ou ▶
+en settings of {0} saved: they apply at the next Load or ▶
+de Einstellungen von {0} gespeichert: Sie gelten beim nächsten Laden oder ▶
+ru настройки {0} сохранены: они действуют при следующей загрузке или ▶
+es ajustes de {0} guardados: se aplican en la próxima Carga o ▶
+it impostazioni di {0} salvate: valgono al prossimo Carica o ▶
+pt definições de {0} guardadas: aplicam-se no próximo Carregar ou ▶
+
+@ point d'arrêt en ${0}
+en breakpoint at ${0}
+de Haltepunkt bei ${0}
+ru точка останова по ${0}
+es punto de interrupción en ${0}
+it punto di interruzione a ${0}
+pt ponto de paragem em ${0}
+
+@ BASIC : ligne {0}
+en BASIC: line {0}
+de BASIC: Zeile {0}
+ru BASIC: строка {0}
+es BASIC: línea {0}
+it BASIC: riga {0}
+pt BASIC: linha {0}
+
+@ 6502 bloqué (opcode JAM) en ${0}
+en 6502 jammed (JAM opcode) at ${0}
+de 6502 blockiert (Opcode JAM) bei ${0}
+ru 6502 заблокирован (опкод JAM) по ${0}
+es 6502 bloqueado (opcode JAM) en ${0}
+it 6502 bloccato (opcode JAM) a ${0}
+pt 6502 bloqueado (opcode JAM) em ${0}
+
+@ arrêt en ${0}
+en stopped at ${0}
+de angehalten bei ${0}
+ru остановка по ${0}
+es parada en ${0}
+it arresto a ${0}
+pt paragem em ${0}
+
+@ enregistrement de la sortie ACI : tapez C100R puis début.finW
+en recording the ACI output: type C100R then start.endW
+de Aufnahme des ACI-Ausgangs: C100R, dann Anfang.EndeW tippen
+ru запись выхода ACI: наберите C100R, затем начало.конецW
+es grabación de la salida ACI: teclee C100R y luego inicio.finW
+it registrazione dell'uscita ACI: digita C100R poi inizio.fineW
+pt gravação da saída ACI: tecle C100R e depois início.fimW
+
+@ cassette écrite : {0}
+en tape written: {0}
+de Kassette geschrieben: {0}
+ru кассета записана: {0}
+es casete escrito: {0}
+it cassetta scritta: {0}
+pt cassete escrita: {0}
+
+@ aucun BASIC d'origine déclaré
+en no original BASIC declared
+de kein Original-BASIC deklariert
+ru оригинальный BASIC не объявлен
+es ningún BASIC original declarado
+it nessun BASIC originale dichiarato
+pt nenhum BASIC original declarado
+
+@ Integer BASIC d'origine absent (non fourni) : copiez votre {0} dans {1} ; en attendant, RDK G2 Basic
+en Original Integer BASIC missing (not supplied): copy your {0} into {1}; meanwhile, RDK G2 Basic
+de Original Integer BASIC fehlt (nicht mitgeliefert): Kopieren Sie Ihr {0} nach {1}; bis dahin RDK G2 Basic
+ru Оригинального Integer BASIC нет (не поставляется): скопируйте свой {0} в {1}; пока — RDK G2 Basic
+es Integer BASIC original ausente (no incluido): copie su {0} en {1}; mientras tanto, RDK G2 Basic
+it Integer BASIC originale assente (non fornito): copia il tuo {0} in {1}; nel frattempo, RDK G2 Basic
+pt Integer BASIC original ausente (não fornecido): copie o seu {0} para {1}; entretanto, RDK G2 Basic
+
+@ Integer BASIC d'origine reconnu
+en Original Integer BASIC recognised
+de Original Integer BASIC erkannt
+ru Оригинальный Integer BASIC распознан
+es Integer BASIC original reconocido
+it Integer BASIC originale riconosciuto
+pt Integer BASIC original reconhecido
+
+@ ROM réelle : Integer BASIC d'origine en $E000
+en Real ROM: original Integer BASIC at $E000
+de Echtes ROM: Original Integer BASIC bei $E000
+ru Настоящее ПЗУ: оригинальный Integer BASIC в $E000
+es ROM real: Integer BASIC original en $E000
+it ROM reale: Integer BASIC originale a $E000
+pt ROM real: Integer BASIC original em $E000
+
+@ Émulation : RDK G2 Basic en $E000
+en Emulation: RDK G2 Basic at $E000
+de Emulation: RDK G2 Basic bei $E000
+ru Эмуляция: RDK G2 Basic в $E000
+es Emulación: RDK G2 Basic en $E000
+it Emulazione: RDK G2 Basic a $E000
+pt Emulação: RDK G2 Basic em $E000
+
+@ image PROM ${0}-${1} écrite en Intel HEX : {2} (programmateur d'EPROM : minipro)
+en PROM image ${0}-${1} written as Intel HEX: {2} (EPROM programmer: minipro)
+de PROM-Abbild ${0}-${1} als Intel HEX geschrieben: {2} (EPROM-Programmiergerät: minipro)
+ru образ ПЗУ ${0}-${1} записан в Intel HEX: {2} (программатор EPROM: minipro)
+es imagen PROM ${0}-${1} escrita en Intel HEX: {2} (programador de EPROM: minipro)
+it immagine PROM ${0}-${1} scritta in Intel HEX: {2} (programmatore di EPROM: minipro)
+pt imagem PROM ${0}-${1} escrita em Intel HEX: {2} (programador de EPROM: minipro)
+
+@ indiquez au moins une plage (ex. 0300.03FF)
+en give at least one range (e.g. 0300.03FF)
+de mindestens einen Bereich angeben (z. B. 0300.03FF)
+ru укажите хотя бы один диапазон (напр. 0300.03FF)
+es indique al menos un rango (p. ej. 0300.03FF)
+it indica almeno un intervallo (es. 0300.03FF)
+pt indique pelo menos um intervalo (ex. 0300.03FF)
+
+@ .{0} est lu par compatibilité, plus écrit : choisissez .woz (dump du Woz Monitor)
+en .{0} is read for compatibility, no longer written: choose .woz (Woz Monitor dump)
+de .{0} wird aus Kompatibilität gelesen, nicht mehr geschrieben: Wählen Sie .woz (Woz-Monitor-Dump)
+ru .{0} читается для совместимости, но больше не записывается: выберите .woz (дамп Woz Monitor)
+es .{0} se lee por compatibilidad, ya no se escribe: elija .woz (volcado del Woz Monitor)
+it .{0} è letto per compatibilità, non più scritto: scegli .woz (dump del Woz Monitor)
+pt .{0} é lido por compatibilidade, já não é escrito: escolha .woz (dump do Woz Monitor)
+
+@ {0} octets écrits : {1}
+en {0} bytes written: {1}
+de {0} Bytes geschrieben: {1}
+ru записано байт: {0}: {1}
+es {0} bytes escritos: {1}
+it {0} byte scritti: {1}
+pt {0} bytes escritos: {1}
+
+@ presse-papiers tapé au clavier ({0} caractères)
+en clipboard typed on the keyboard ({0} characters)
+de Zwischenablage über die Tastatur getippt ({0} Zeichen)
+ru буфер обмена набран на клавиатуре ({0} символов)
+es portapapeles tecleado ({0} caracteres)
+it appunti digitati sulla tastiera ({0} caratteri)
+pt área de transferência teclada ({0} caracteres)
+
+@ registre inconnu du 6502 : {0}
+en unknown 6502 register: {0}
+de unbekanntes 6502-Register: {0}
+ru неизвестный регистр 6502: {0}
+es registro desconocido del 6502: {0}
+it registro sconosciuto del 6502: {0}
+pt registo desconhecido do 6502: {0}
+
+@ {0} octets assemblés en ${1}, {2}
+en {0} bytes assembled at ${1}, {2}
+de {0} Bytes bei ${1} assembliert, {2}
+ru собрано байт: {0} по ${1}, {2}
+es {0} bytes ensamblados en ${1}, {2}
+it {0} byte assemblati a ${1}, {2}
+pt {0} bytes assemblados em ${1}, {2}
+
+@ l'Apple 1 lance du BASIC (.bas) ou de l'assembleur 6502 (.asm)
+en the Apple 1 runs BASIC (.bas) or 6502 assembler (.asm)
+de der Apple 1 startet BASIC (.bas) oder 6502-Assembler (.asm)
+ru Apple 1 запускает BASIC (.bas) или ассемблер 6502 (.asm)
+es el Apple 1 ejecuta BASIC (.bas) o ensamblador 6502 (.asm)
+it l'Apple 1 esegue BASIC (.bas) o assembler 6502 (.asm)
+pt o Apple 1 executa BASIC (.bas) ou assembler 6502 (.asm)
+
+@ {0} octets rangés en ${1} ; tapez {2}
+en {0} bytes stored at ${1}; type {2}
+de {0} Bytes bei ${1} abgelegt; tippen Sie {2}
+ru записано байт: {0} по ${1}; наберите {2}
+es {0} bytes guardados en ${1}; teclee {2}
+it {0} byte memorizzati a ${1}; digita {2}
+pt {0} bytes guardados em ${1}; tecle {2}
+
+@ seuls le BASIC et l'assembleur 6502 vont en mémoire
+en only BASIC and 6502 assembler go into memory
+de nur BASIC und 6502-Assembler kommen in den Speicher
+ru в память идут только BASIC и ассемблер 6502
+es solo el BASIC y el ensamblador 6502 van a la memoria
+it solo il BASIC e l'assembler 6502 vanno in memoria
+pt só o BASIC e o assembler 6502 vão para a memória
+
+@ aucun programme chargé
+en no program loaded
+de kein Programm geladen
+ru программа не загружена
+es ningún programa cargado
+it nessun programma caricato
+pt nenhum programa carregado
+
+@ cassette insérée : tapez C100R puis début.finR
+en tape inserted: type C100R then start.endR
+de Kassette eingelegt: C100R, dann Anfang.EndeR tippen
+ru кассета вставлена: наберите C100R, затем начало.конецR
+es casete insertado: teclee C100R y luego inicio.finR
+it cassetta inserita: digita C100R poi inizio.fineR
+pt cassete inserida: tecle C100R e depois início.fimR
+
+# ----- barre d'état
+
+@ ⏺ enregistrement ACI
+en ⏺ ACI recording
+de ⏺ ACI-Aufnahme
+ru ⏺ запись ACI
+es ⏺ grabación ACI
+it ⏺ registrazione ACI
+pt ⏺ gravação ACI
+
+@ RDK G2 Basic (émulation, chargé au lancement)
+en RDK G2 Basic (emulation, loaded at start)
+de RDK G2 Basic (Emulation, beim Start geladen)
+ru RDK G2 Basic (эмуляция, загружается при запуске)
+es RDK G2 Basic (emulación, cargado al ejecutar)
+it RDK G2 Basic (emulazione, caricato all'avvio)
+pt RDK G2 Basic (emulação, carregado ao executar)
+
+@ Integer BASIC d'origine (ROM réelle, chargé au lancement)
+en Original Integer BASIC (real ROM, loaded at start)
+de Original Integer BASIC (echtes ROM, beim Start geladen)
+ru Оригинальный Integer BASIC (настоящее ПЗУ, загружается при запуске)
+es Integer BASIC original (ROM real, cargado al ejecutar)
+it Integer BASIC originale (ROM reale, caricato all'avvio)
+pt Integer BASIC original (ROM real, carregado ao executar)
+
+@ {0} Ko + $E000-$FEFF
+en {0} KB + $E000-$FEFF
+de {0} KB + $E000-$FEFF
+ru {0} КБ + $E000-$FEFF
+es {0} KB + $E000-$FEFF
+it {0} KB + $E000-$FEFF
+pt {0} KB + $E000-$FEFF
+
+@ Moniteur
+en Monitor
+de Monitor
+ru Монитор
+es Monitor
+it Monitor
+pt Monitor
+
+@ {0} ({1} Hz)
+en {0} ({1} Hz)
+de {0} ({1} Hz)
+ru {0} ({1} Гц)
+es {0} ({1} Hz)
+it {0} ({1} Hz)
+pt {0} ({1} Hz)
+
+@ écran éteint
+en screen off
+de Bildschirm aus
+ru экран выключен
+es pantalla apagada
+it schermo spento
+pt ecrã desligado
+
+@ , CodeTank {0} Ko
+en , CodeTank {0} KB
+de , CodeTank {0} KB
+ru , CodeTank {0} КБ
+es , CodeTank {0} KB
+it , CodeTank {0} KB
+pt , CodeTank {0} KB
+
+@ Cassette
+en Tape
+de Kassette
+ru Кассета
+es Casete
+it Cassetta
+pt Cassete
+
+@ lecture de {0}
+en reading {0}
+de {0} wird gelesen
+ru чтение {0}
+es lectura de {0}
+it lettura di {0}
+pt leitura de {0}
+
+@ Écran
+en Screen
+de Bildschirm
+ru Экран
+es Pantalla
+it Schermo
+pt Ecrã
+
+@ vintage, phosphore {0}
+en vintage, {0} phosphor
+de Vintage, Leuchtstoff {0}
+ru винтаж, люминофор {0}
+es vintage, fósforo {0}
+it vintage, fosfori {0}
+pt vintage, fósforo {0}
+
+@ Message
+en Message
+de Meldung
+ru Сообщение
+es Mensaje
+it Messaggio
+pt Mensagem
+
+# ----- À propos
+
+@ Retro Dev Kit Apple 1 {0} (Linux), sur RDK-Interface-Commune {1}.
+en Retro Dev Kit Apple 1 {0} (Linux), on RDK-Interface-Commune {1}.
+de Retro Dev Kit Apple 1 {0} (Linux), auf RDK-Interface-Commune {1}.
+ru Retro Dev Kit Apple 1 {0} (Linux), на RDK-Interface-Commune {1}.
+es Retro Dev Kit Apple 1 {0} (Linux), sobre RDK-Interface-Commune {1}.
+it Retro Dev Kit Apple 1 {0} (Linux), su RDK-Interface-Commune {1}.
+pt Retro Dev Kit Apple 1 {0} (Linux), sobre a RDK-Interface-Commune {1}.
+
+@ Licence GPL-3.0. Machine reprise de la v1.0 « Original Sin » (crate apple1-core).
+en GPL-3.0 licence. Machine taken from v1.0 “Original Sin” (apple1-core crate).
+de Lizenz GPL-3.0. Maschine aus der v1.0 „Original Sin“ übernommen (Crate apple1-core).
+ru Лицензия GPL-3.0. Машина взята из версии 1.0 «Original Sin» (crate apple1-core).
+es Licencia GPL-3.0. Máquina tomada de la v1.0 «Original Sin» (crate apple1-core).
+it Licenza GPL-3.0. Macchina ripresa dalla v1.0 «Original Sin» (crate apple1-core).
+pt Licença GPL-3.0. Máquina retomada da v1.0 «Original Sin» (crate apple1-core).
+
+@ ROM fournies : Woz Monitor, ACI (Steve Wozniak, 1976) et générateur de caractères 2513, comme en v1.0.
+en ROMs supplied: Woz Monitor, ACI (Steve Wozniak, 1976) and 2513 character generator, as in v1.0.
+de Mitgelieferte ROMs: Woz Monitor, ACI (Steve Wozniak, 1976) und Zeichengenerator 2513, wie in v1.0.
+ru Поставляемые ПЗУ: Woz Monitor, ACI (Стив Возняк, 1976) и знакогенератор 2513, как в версии 1.0.
+es ROM incluidas: Woz Monitor, ACI (Steve Wozniak, 1976) y generador de caracteres 2513, como en la v1.0.
+it ROM fornite: Woz Monitor, ACI (Steve Wozniak, 1976) e generatore di caratteri 2513, come nella v1.0.
+pt ROM fornecidas: Woz Monitor, ACI (Steve Wozniak, 1976) e gerador de caracteres 2513, como na v1.0.
+
+@ BASIC : RDK G2 Basic intégré (clone « salle blanche » du kit, licence MIT), mode « Émulation », comme en v1.0. Le BASIC d'origine n'est pas fourni : posez votre copie integer_basic.bin dans RDK librairies/Apple 1/ROM/ pour le mode « ROM réelle ».
+en BASIC: built-in RDK G2 Basic (the kit's “clean room” clone, MIT licence), “Emulation” mode, as in v1.0. The original BASIC is not supplied: put your copy integer_basic.bin in RDK librairies/Apple 1/ROM/ for the “Real ROM” mode.
+de BASIC: eingebautes RDK G2 Basic („Clean-Room“-Klon des Kits, MIT-Lizenz), Modus „Emulation“, wie in v1.0. Das Original-BASIC wird nicht mitgeliefert: Legen Sie Ihre Kopie integer_basic.bin in RDK librairies/Apple 1/ROM/ für den Modus „Echtes ROM“.
+ru BASIC: встроенный RDK G2 Basic («чистый» клон набора, лицензия MIT), режим «Эмуляция», как в версии 1.0. Оригинальный BASIC не поставляется: положите свою копию integer_basic.bin в RDK librairies/Apple 1/ROM/ для режима «Настоящее ПЗУ».
+es BASIC: RDK G2 Basic integrado (clon «sala limpia» del kit, licencia MIT), modo «Emulación», como en la v1.0. El BASIC original no se incluye: deposite su copia integer_basic.bin en RDK librairies/Apple 1/ROM/ para el modo «ROM real».
+it BASIC: RDK G2 Basic integrato (clone «camera bianca» del kit, licenza MIT), modalità «Emulazione», come nella v1.0. Il BASIC originale non è fornito: metti la tua copia integer_basic.bin in RDK librairies/Apple 1/ROM/ per la modalità «ROM reale».
+pt BASIC: RDK G2 Basic integrado (clone «sala limpa» do kit, licença MIT), modo «Emulação», como na v1.0. O BASIC original não é fornecido: coloque a sua cópia integer_basic.bin em RDK librairies/Apple 1/ROM/ para o modo «ROM real».
+
+@ Cartes de la v1.0 : couleur GEN2 (Uncle Bernie) et graphique P-LAB (TMS9918A, CodeTank).
+en v1.0 cards: GEN2 colour (Uncle Bernie) and P-LAB graphics (TMS9918A, CodeTank).
+de Karten der v1.0: Farbe GEN2 (Uncle Bernie) und Grafik P-LAB (TMS9918A, CodeTank).
+ru Карты версии 1.0: цветная GEN2 (Uncle Bernie) и графическая P-LAB (TMS9918A, CodeTank).
+es Tarjetas de la v1.0: color GEN2 (Uncle Bernie) y gráfica P-LAB (TMS9918A, CodeTank).
+it Schede della v1.0: colore GEN2 (Uncle Bernie) e grafica P-LAB (TMS9918A, CodeTank).
+pt Placas da v1.0: cor GEN2 (Uncle Bernie) e gráfica P-LAB (TMS9918A, CodeTank).
+
+# ----- boutons Périphériques
+
+@ Sortie ACI
+en ACI output
+de ACI-Ausgang
+ru Выход ACI
+es Salida ACI
+it Uscita ACI
+pt Saída ACI
+
+@ Enregistre la sortie cassette de l'ACI (C100R puis début.finW) ; au second clic, le fichier WAV est écrit dans le dossier Cassettes de la bibliothèque.
+en Records the ACI tape output (C100R then start.endW); on the second click, the WAV file is written to the library's Cassettes folder.
+de Nimmt den Kassettenausgang des ACI auf (C100R, dann Anfang.EndeW); beim zweiten Klick wird die WAV-Datei in den Ordner Cassettes der Bibliothek geschrieben.
+ru Записывает кассетный выход ACI (C100R, затем начало.конецW); по второму щелчку файл WAV записывается в папку Cassettes библиотеки.
+es Graba la salida de casete del ACI (C100R y luego inicio.finW); con el segundo clic, el archivo WAV se escribe en la carpeta Cassettes de la biblioteca.
+it Registra l'uscita cassetta dell'ACI (C100R poi inizio.fineW); al secondo clic, il file WAV è scritto nella cartella Cassettes della libreria.
+pt Grava a saída de cassete do ACI (C100R e depois início.fimW); ao segundo clique, o ficheiro WAV é escrito na pasta Cassettes da biblioteca.
+
+@ Temps réel
+en Real time
+de Echtzeit
+ru Реальное время
+es Tiempo real
+it Tempo reale
+pt Tempo real
+
+@ Allumé : Charger et ▶ de la bibliothèque passent par la cassette, comme sur la vraie machine (RESET, C100R, lecture de l'ACI en temps réel). Éteint : chargement ⚡ rapide, directement en mémoire.
+en On: Load and ▶ of the library go through the tape, as on the real machine (RESET, C100R, the ACI reads in real time). Off: ⚡ fast loading, straight into memory.
+de An: Laden und ▶ der Bibliothek laufen über die Kassette, wie bei der echten Maschine (RESET, C100R, ACI liest in Echtzeit). Aus: ⚡ schnelles Laden, direkt in den Speicher.
+ru Вкл.: «Загрузить» и ▶ библиотеки идут через кассету, как на настоящей машине (RESET, C100R, чтение ACI в реальном времени). Выкл.: ⚡ быстрая загрузка прямо в память.
+es Activado: Cargar y ▶ de la biblioteca pasan por el casete, como en la máquina real (RESET, C100R, lectura del ACI en tiempo real). Desactivado: carga ⚡ rápida, directamente en memoria.
+it Acceso: Carica e ▶ della libreria passano dalla cassetta, come sulla macchina vera (RESET, C100R, lettura dell'ACI in tempo reale). Spento: caricamento ⚡ rapido, direttamente in memoria.
+pt Ligado: Carregar e ▶ da biblioteca passam pela cassete, como na máquina real (RESET, C100R, leitura do ACI em tempo real). Desligado: carregamento ⚡ rápido, diretamente na memória.
+
+@ Sauver
+en Save
+de Sichern
+ru Сохранить
+es Guardar
+it Salva
+pt Guardar
+
+@ Sauver une ou plusieurs plages de la mémoire : .woz (dump du Woz Monitor), cassette .wav / .aiff, .bin, .prg, Intel .hex ou .dump.
+en Save one or more memory ranges: .woz (Woz Monitor dump), .wav / .aiff tape, .bin, .prg, Intel .hex or .dump.
+de Einen oder mehrere Speicherbereiche sichern: .woz (Woz-Monitor-Dump), Kassette .wav / .aiff, .bin, .prg, Intel .hex oder .dump.
+ru Сохранить один или несколько диапазонов памяти: .woz (дамп Woz Monitor), кассета .wav / .aiff, .bin, .prg, Intel .hex или .dump.
+es Guardar uno o varios rangos de memoria: .woz (volcado del Woz Monitor), casete .wav / .aiff, .bin, .prg, Intel .hex o .dump.
+it Salva uno o più intervalli di memoria: .woz (dump del Woz Monitor), cassetta .wav / .aiff, .bin, .prg, Intel .hex o .dump.
+pt Guardar um ou vários intervalos de memória: .woz (dump do Woz Monitor), cassete .wav / .aiff, .bin, .prg, Intel .hex ou .dump.
+
+@ Carte couleur GEN2 d'Uncle Bernie : LORES, HIRES, TEXTE et MIXED (commutateurs $C250-$C257), RAM $0000-$BFFF ; son image va au moniteur couleur.
+en Uncle Bernie's GEN2 colour card: LORES, HIRES, TEXT and MIXED (switches $C250-$C257), RAM $0000-$BFFF; its picture goes to the colour monitor.
+de GEN2-Farbkarte von Uncle Bernie: LORES, HIRES, TEXT und MIXED (Schalter $C250-$C257), RAM $0000-$BFFF; ihr Bild geht an den Farbmonitor.
+ru Цветная карта GEN2 от Uncle Bernie: LORES, HIRES, TEXT и MIXED (переключатели $C250-$C257), ОЗУ $0000-$BFFF; её изображение идёт на цветной монитор.
+es Tarjeta de color GEN2 de Uncle Bernie: LORES, HIRES, TEXTO y MIXED (conmutadores $C250-$C257), RAM $0000-$BFFF; su imagen va al monitor en color.
+it Scheda colore GEN2 di Uncle Bernie: LORES, HIRES, TESTO e MIXED (commutatori $C250-$C257), RAM $0000-$BFFF; la sua immagine va al monitor a colori.
+pt Placa de cor GEN2 do Uncle Bernie: LORES, HIRES, TEXTO e MIXED (comutadores $C250-$C257), RAM $0000-$BFFF; a sua imagem vai para o monitor a cores.
+
+@ GEN2 : balayage 50 Hz (PAL) au lieu de 60 Hz (NTSC).
+en GEN2: 50 Hz (PAL) scan instead of 60 Hz (NTSC).
+de GEN2: 50-Hz-Abtastung (PAL) statt 60 Hz (NTSC).
+ru GEN2: развёртка 50 Гц (PAL) вместо 60 Гц (NTSC).
+es GEN2: barrido a 50 Hz (PAL) en lugar de 60 Hz (NTSC).
+it GEN2: scansione a 50 Hz (PAL) invece di 60 Hz (NTSC).
+pt GEN2: varrimento a 50 Hz (PAL) em vez de 60 Hz (NTSC).
+
+@ Accolades grasses
+en Bold braces
+de Fette Klammern
+ru Жирные скобки
+es Llaves gruesas
+it Graffe spesse
+pt Chavetas grossas
+
+@ GEN2 : dessin des accolades du générateur de caractères (grasses par défaut, ou fines).
+en GEN2: how the character generator draws braces (bold by default, or thin).
+de GEN2: Darstellung der geschweiften Klammern des Zeichengenerators (standardmäßig fett, oder dünn).
+ru GEN2: начертание фигурных скобок знакогенератора (по умолчанию жирные или тонкие).
+es GEN2: dibujo de las llaves del generador de caracteres (gruesas por defecto, o finas).
+it GEN2: disegno delle graffe del generatore di caratteri (spesse per default, o sottili).
+pt GEN2: desenho das chavetas do gerador de caracteres (grossas por defeito, ou finas).
+
+@ Carte graphique P-LAB : TMS9918A en $CC00-$CC01 (Graphics I et II, Multicolor, Text, sprites) ; son image va au moniteur couleur.
+en P-LAB graphics card: TMS9918A at $CC00-$CC01 (Graphics I and II, Multicolor, Text, sprites); its picture goes to the colour monitor.
+de Grafikkarte P-LAB: TMS9918A bei $CC00-$CC01 (Graphics I und II, Multicolor, Text, Sprites); ihr Bild geht an den Farbmonitor.
+ru Графическая карта P-LAB: TMS9918A по $CC00-$CC01 (Graphics I и II, Multicolor, Text, спрайты); её изображение идёт на цветной монитор.
+es Tarjeta gráfica P-LAB: TMS9918A en $CC00-$CC01 (Graphics I y II, Multicolor, Text, sprites); su imagen va al monitor en color.
+it Scheda grafica P-LAB: TMS9918A a $CC00-$CC01 (Graphics I e II, Multicolor, Text, sprite); la sua immagine va al monitor a colori.
+pt Placa gráfica P-LAB: TMS9918A em $CC00-$CC01 (Graphics I e II, Multicolor, Text, sprites); a sua imagem vai para o monitor a cores.
+
+@ P-LAB : cavalier NMI (interruption du VDP à chaque image).
+en P-LAB: NMI jumper (VDP interrupt on each frame).
+de P-LAB: NMI-Jumper (VDP-Interrupt bei jedem Bild).
+ru P-LAB: перемычка NMI (прерывание VDP на каждом кадре).
+es P-LAB: puente NMI (interrupción del VDP en cada imagen).
+it P-LAB: ponticello NMI (interrupt del VDP a ogni immagine).
+pt P-LAB: jumper NMI (interrupção do VDP em cada imagem).
+
+@ P-LAB : EEPROM CodeTank en $4000-$7FFF, lue dans le dossier P-LAB de la bibliothèque (votre image .bin ou .rom, 16 Ko au plus) ; second clic : la retirer.
+en P-LAB: CodeTank EEPROM at $4000-$7FFF, read from the library's P-LAB folder (your .bin or .rom image, 16 KB at most); second click: remove it.
+de P-LAB: CodeTank-EEPROM bei $4000-$7FFF, aus dem Ordner P-LAB der Bibliothek gelesen (Ihr .bin- oder .rom-Abbild, höchstens 16 KB); zweiter Klick: entfernen.
+ru P-LAB: EEPROM CodeTank в $4000-$7FFF, читается из папки P-LAB библиотеки (ваш образ .bin или .rom, не больше 16 КБ); второй щелчок — убрать.
+es P-LAB: EEPROM CodeTank en $4000-$7FFF, leída de la carpeta P-LAB de la biblioteca (su imagen .bin o .rom, 16 KB como máximo); segundo clic: retirarla.
+it P-LAB: EEPROM CodeTank a $4000-$7FFF, letta dalla cartella P-LAB della libreria (la tua immagine .bin o .rom, al massimo 16 KB); secondo clic: toglierla.
+pt P-LAB: EEPROM CodeTank em $4000-$7FFF, lida da pasta P-LAB da biblioteca (a sua imagem .bin ou .rom, 16 KB no máximo); segundo clique: retirá-la.
+
+@ Écran P-LAB
+en P-LAB screen
+de P-LAB-Bild
+ru Экран P-LAB
+es Pantalla P-LAB
+it Schermo P-LAB
+pt Ecrã P-LAB
+
+@ Les deux cartes sont branchées : le moniteur couleur montre la P-LAB (allumé) ou la GEN2 (éteint).
+en Both cards are connected: the colour monitor shows the P-LAB (on) or the GEN2 (off).
+de Beide Karten sind angeschlossen: Der Farbmonitor zeigt die P-LAB (an) oder die GEN2 (aus).
+ru Подключены обе карты: цветной монитор показывает P-LAB (вкл.) или GEN2 (выкл.).
+es Las dos tarjetas están conectadas: el monitor en color muestra la P-LAB (activado) o la GEN2 (desactivado).
+it Le due schede sono collegate: il monitor a colori mostra la P-LAB (acceso) o la GEN2 (spento).
+pt As duas placas estão ligadas: o monitor a cores mostra a P-LAB (ligado) ou a GEN2 (desligado).
+
+@ Écran vintage : imitation d'un moniteur à tube des années 1970 (v1.0 « screening ») : lignes de balayage, rémanence, halo, tube bombé.
+en Vintage screen: imitation of a 1970s tube monitor (v1.0 “screening”): scan lines, persistence, glow, curved tube.
+de Vintage-Bildschirm: Nachahmung eines Röhrenmonitors der 1970er (v1.0 „Screening“): Abtastzeilen, Nachleuchten, Halo, gewölbte Röhre.
+ru Винтажный экран: имитация лампового монитора 1970-х (v1.0 «screening»): строки развёртки, послесвечение, ореол, выпуклый кинескоп.
+es Pantalla vintage: imitación de un monitor de tubo de los años 1970 (v1.0 «screening»): líneas de barrido, persistencia, halo, tubo curvado.
+it Schermo vintage: imitazione di un monitor a tubo degli anni '70 (v1.0 «screening»): linee di scansione, persistenza, alone, tubo curvo.
+pt Ecrã vintage: imitação de um monitor de tubo dos anos 1970 (v1.0 «screening»): linhas de varrimento, persistência, halo, tubo curvo.
+
+@ Phosphore du moniteur (vert, blanc, ambre) et réglages de l'écran vintage.
+en Monitor phosphor (green, white, amber) and vintage screen settings.
+de Leuchtstoff des Monitors (grün, weiß, bernstein) und Einstellungen des Vintage-Bildschirms.
+ru Люминофор монитора (зелёный, белый, янтарный) и настройки винтажного экрана.
+es Fósforo del monitor (verde, blanco, ámbar) y ajustes de la pantalla vintage.
+it Fosfori del monitor (verde, bianco, ambra) e impostazioni dello schermo vintage.
+pt Fósforo do monitor (verde, branco, âmbar) e definições do ecrã vintage.
+
+@ Photo → ASCII : une photo (jpg, png) devient un art ASCII de 40 × 24 caractères, puis un programme BASIC ou 6502, une cassette ou un .txt du dossier Art ASCII.
+en Photo → ASCII: a photo (jpg, png) becomes 40 × 24 character ASCII art, then a BASIC or 6502 program, a tape or a .txt in the Art ASCII folder.
+de Foto → ASCII: Ein Foto (jpg, png) wird zu ASCII-Art mit 40 × 24 Zeichen, dann zu einem BASIC- oder 6502-Programm, einer Kassette oder einer .txt im Ordner Art ASCII.
+ru Фото → ASCII: фото (jpg, png) превращается в ASCII-арт 40 × 24 символа, затем в программу на BASIC или 6502, кассету или .txt в папке Art ASCII.
+es Foto → ASCII: una foto (jpg, png) se convierte en arte ASCII de 40 × 24 caracteres, luego en un programa BASIC o 6502, un casete o un .txt de la carpeta Art ASCII.
+it Foto → ASCII: una foto (jpg, png) diventa un'ASCII art di 40 × 24 caratteri, poi un programma BASIC o 6502, una cassetta o un .txt della cartella Art ASCII.
+pt Foto → ASCII: uma foto (jpg, png) torna-se arte ASCII de 40 × 24 caracteres, depois um programa BASIC ou 6502, uma cassete ou um .txt da pasta Art ASCII.
+
+@ Son
+en Sound
+de Ton
+ru Звук
+es Sonido
+it Suono
+pt Som
+
+@ Son de la cassette pendant la lecture 📼 ou l'écriture ⏺ (vitesse réelle), par la carte son (ALSA), comme en v1.0.
+en Tape sound while reading 📼 or writing ⏺ (real speed), through the sound card (ALSA), as in v1.0.
+de Kassettenton beim Lesen 📼 oder Schreiben ⏺ (echte Geschwindigkeit), über die Soundkarte (ALSA), wie in v1.0.
+ru Звук кассеты при чтении 📼 или записи ⏺ (реальная скорость) через звуковую карту (ALSA), как в версии 1.0.
+es Sonido del casete durante la lectura 📼 o la escritura ⏺ (velocidad real), por la tarjeta de sonido (ALSA), como en la v1.0.
+it Suono della cassetta durante la lettura 📼 o la scrittura ⏺ (velocità reale), dalla scheda audio (ALSA), come nella v1.0.
+pt Som da cassete durante a leitura 📼 ou a escrita ⏺ (velocidade real), pela placa de som (ALSA), como na v1.0.
+
+@ Oscilloscope
+en Oscilloscope
+de Oszilloskop
+ru Осциллограф
+es Osciloscopio
+it Oscilloscopio
+pt Osciloscópio
+
+@ Oscilloscope de la cassette : le signal sous la tête, pendant la lecture ou l'écriture.
+en Tape oscilloscope: the signal under the head, while reading or writing.
+de Kassetten-Oszilloskop: das Signal unter dem Tonkopf, beim Lesen oder Schreiben.
+ru Осциллограф кассеты: сигнал под головкой при чтении или записи.
+es Osciloscopio del casete: la señal bajo el cabezal, durante la lectura o la escritura.
+it Oscilloscopio della cassetta: il segnale sotto la testina, durante la lettura o la scrittura.
+pt Osciloscópio da cassete: o sinal sob a cabeça, durante a leitura ou a escrita.
+
+@ Réglages
+en Settings
+de Einstellungen
+ru Настройки
+es Ajustes
+it Impostazioni
+pt Definições
+
+@ Réglages par programme (v1.0) : plages, adresses, commande de lancement et BASIC du dernier programme de la bibliothèque, ou d'un autre ; rangés dans programs.json.
+en Per-program settings (v1.0): ranges, addresses, run command and BASIC of the library's last program, or of another; stored in programs.json.
+de Einstellungen pro Programm (v1.0): Bereiche, Adressen, Startbefehl und BASIC des letzten Programms der Bibliothek oder eines anderen; in programs.json gespeichert.
+ru Настройки программы (v1.0): диапазоны, адреса, команда запуска и BASIC последней программы библиотеки или другой; хранятся в programs.json.
+es Ajustes por programa (v1.0): rangos, direcciones, orden de ejecución y BASIC del último programa de la biblioteca, o de otro; guardados en programs.json.
+it Impostazioni per programma (v1.0): intervalli, indirizzi, comando di avvio e BASIC dell'ultimo programma della libreria, o di un altro; salvate in programs.json.
+pt Definições por programa (v1.0): intervalos, endereços, comando de execução e BASIC do último programa da biblioteca, ou de outro; guardadas em programs.json.
+
+@ Projets GitHub : téléchargés dans le dossier GitHub de la bibliothèque, mis à jour, et « ▶ Tester le dernier build ».
+en GitHub projects: downloaded into the library's GitHub folder, updated, and “▶ Test the latest build”.
+de GitHub-Projekte: in den Ordner GitHub der Bibliothek geladen, aktualisiert, und „▶ Neuesten Build testen“.
+ru Проекты GitHub: загружаются в папку GitHub библиотеки, обновляются, и «▶ Проверить последнюю сборку».
+es Proyectos GitHub: descargados en la carpeta GitHub de la biblioteca, actualizados, y «▶ Probar la última compilación».
+it Progetti GitHub: scaricati nella cartella GitHub della libreria, aggiornati, e «▶ Prova l'ultima build».
+pt Projetos GitHub: transferidos para a pasta GitHub da biblioteca, atualizados, e «▶ Testar a última compilação».
+
+@ Exemples
+en Examples
+de Beispiele
+ru Примеры
+es Ejemplos
+it Esempi
+pt Exemplos
+
+@ Copie les exemples du kit (BASIC, assembleur, GEN2, P-LAB, art ASCII, cassette) dans votre bibliothèque, sans rien remplacer.
+en Copies the kit's examples (BASIC, assembler, GEN2, P-LAB, ASCII art, tape) into your library, replacing nothing.
+de Kopiert die Beispiele des Kits (BASIC, Assembler, GEN2, P-LAB, ASCII-Art, Kassette) in Ihre Bibliothek, ohne etwas zu ersetzen.
+ru Копирует примеры набора (BASIC, ассемблер, GEN2, P-LAB, ASCII-арт, кассета) в вашу библиотеку, ничего не заменяя.
+es Copia los ejemplos del kit (BASIC, ensamblador, GEN2, P-LAB, arte ASCII, casete) en su biblioteca, sin reemplazar nada.
+it Copia gli esempi del kit (BASIC, assembler, GEN2, P-LAB, ASCII art, cassetta) nella tua libreria, senza sostituire nulla.
+pt Copia os exemplos do kit (BASIC, assembler, GEN2, P-LAB, arte ASCII, cassete) para a sua biblioteca, sem substituir nada.
+
+# ----- manifeste : ROM, formats, périphériques, configurations, assistant
+
+@ Integer BASIC d'origine (votre copie)
+en Original Integer BASIC (your copy)
+de Original Integer BASIC (Ihre Kopie)
+ru Оригинальный Integer BASIC (ваша копия)
+es Integer BASIC original (su copia)
+it Integer BASIC originale (la tua copia)
+pt Integer BASIC original (a sua cópia)
+
+@ Integer BASIC de l'Apple 1 ($E000-$EFFF)
+en Apple 1 Integer BASIC ($E000-$EFFF)
+de Integer BASIC des Apple 1 ($E000-$EFFF)
+ru Integer BASIC Apple 1 ($E000-$EFFF)
+es Integer BASIC del Apple 1 ($E000-$EFFF)
+it Integer BASIC dell'Apple 1 ($E000-$EFFF)
+pt Integer BASIC do Apple 1 ($E000-$EFFF)
+
+@ Dump du Woz Monitor (Apple 1, « 0300: A9 01 … »)
+en Woz Monitor dump (Apple 1, “0300: A9 01 …”)
+de Woz-Monitor-Dump (Apple 1, „0300: A9 01 …“)
+ru Дамп Woz Monitor (Apple 1, «0300: A9 01 …»)
+es Volcado del Woz Monitor (Apple 1, «0300: A9 01 …»)
+it Dump del Woz Monitor (Apple 1, «0300: A9 01 …»)
+pt Dump do Woz Monitor (Apple 1, «0300: A9 01 …»)
+
+@ Ancien dump Woz ou art ASCII (v1.0)
+en Old Woz dump or ASCII art (v1.0)
+de Alter Woz-Dump oder ASCII-Art (v1.0)
+ru Старый дамп Woz или ASCII-арт (v1.0)
+es Antiguo volcado Woz o arte ASCII (v1.0)
+it Vecchio dump Woz o ASCII art (v1.0)
+pt Antigo dump Woz ou arte ASCII (v1.0)
+
+@ Ancien dump Woz (v1.0)
+en Old Woz dump (v1.0)
+de Alter Woz-Dump (v1.0)
+ru Старый дамп Woz (v1.0)
+es Antiguo volcado Woz (v1.0)
+it Vecchio dump Woz (v1.0)
+pt Antigo dump Woz (v1.0)
+
+@ Programme Apple 1 au format du Woz Monitor
+en Apple 1 program in Woz Monitor format
+de Apple-1-Programm im Woz-Monitor-Format
+ru Программа Apple 1 в формате Woz Monitor
+es Programa Apple 1 en formato del Woz Monitor
+it Programma Apple 1 nel formato del Woz Monitor
+pt Programa Apple 1 no formato do Woz Monitor
+
+@ Image binaire (BASIC d'origine en ROM/, CodeTank en P-LAB/)
+en Binary image (original BASIC in ROM/, CodeTank in P-LAB/)
+de Binärabbild (Original-BASIC in ROM/, CodeTank in P-LAB/)
+ru Двоичный образ (оригинальный BASIC в ROM/, CodeTank в P-LAB/)
+es Imagen binaria (BASIC original en ROM/, CodeTank en P-LAB/)
+it Immagine binaria (BASIC originale in ROM/, CodeTank in P-LAB/)
+pt Imagem binária (BASIC original em ROM/, CodeTank em P-LAB/)
+
+@ Binaire avec son adresse de chargement
+en Binary with its load address
+de Binärdatei mit Ladeadresse
+ru Двоичный файл с адресом загрузки
+es Binario con su dirección de carga
+it Binario con il suo indirizzo di caricamento
+pt Binário com o seu endereço de carregamento
+
+@ Moniteur vert (terminal 40 × 24)
+en Green monitor (40 × 24 terminal)
+de Grüner Monitor (Terminal 40 × 24)
+ru Зелёный монитор (терминал 40 × 24)
+es Monitor verde (terminal 40 × 24)
+it Monitor verde (terminale 40 × 24)
+pt Monitor verde (terminal 40 × 24)
+
+@ Moniteur couleur (GEN2 ou P-LAB)
+en Colour monitor (GEN2 or P-LAB)
+de Farbmonitor (GEN2 oder P-LAB)
+ru Цветной монитор (GEN2 или P-LAB)
+es Monitor en color (GEN2 o P-LAB)
+it Monitor a colori (GEN2 o P-LAB)
+pt Monitor a cores (GEN2 ou P-LAB)
+
+@ Carte couleur GEN2
+en GEN2 colour card
+de GEN2-Farbkarte
+ru Цветная карта GEN2
+es Tarjeta de color GEN2
+it Scheda colore GEN2
+pt Placa de cor GEN2
+
+@ Carte graphique P-LAB
+en P-LAB graphics card
+de Grafikkarte P-LAB
+ru Графическая карта P-LAB
+es Tarjeta gráfica P-LAB
+it Scheda grafica P-LAB
+pt Placa gráfica P-LAB
+
+@ Cassette (ACI)
+en Tape (ACI)
+de Kassette (ACI)
+ru Кассета (ACI)
+es Casete (ACI)
+it Cassetta (ACI)
+pt Cassete (ACI)
+
+@ configuration « {0} »
+en configuration “{0}”
+de Konfiguration „{0}“
+ru конфигурация «{0}»
+es configuración «{0}»
+it configurazione «{0}»
+pt configuração «{0}»
+
+@ Bienvenue dans le Retro Dev Kit Apple 1
+en Welcome to the Retro Dev Kit Apple 1
+de Willkommen im Retro Dev Kit Apple 1
+ru Добро пожаловать в Retro Dev Kit Apple 1
+es Bienvenido al Retro Dev Kit Apple 1
+it Benvenuto nel Retro Dev Kit Apple 1
+pt Bem-vindo ao Retro Dev Kit Apple 1
+
+@ Version 2.0, sur l'interface commune des Retro Dev Kits
+en Version 2.0, on the common interface of the Retro Dev Kits
+de Version 2.0, auf der gemeinsamen Oberfläche der Retro Dev Kits
+ru Версия 2.0, на общем интерфейсе Retro Dev Kits
+es Versión 2.0, sobre la interfaz común de los Retro Dev Kits
+it Versione 2.0, sull'interfaccia comune dei Retro Dev Kit
+pt Versão 2.0, sobre a interface comum dos Retro Dev Kits
+
+@ L'Apple 1 (1976) : un 6502 à 1 MHz, 8 Ko de RAM (plus $E000-$FEFF pour le BASIC), un terminal de 40 × 24 caractères en majuscules, et le Woz Monitor en ROM.
+en The Apple 1 (1976): a 1 MHz 6502, 8 KB of RAM (plus $E000-$FEFF for BASIC), a 40 × 24 upper-case terminal, and the Woz Monitor in ROM.
+de Der Apple 1 (1976): ein 6502 mit 1 MHz, 8 KB RAM (plus $E000-$FEFF für das BASIC), ein Terminal mit 40 × 24 Großbuchstaben und der Woz Monitor im ROM.
+ru Apple 1 (1976): 6502 на 1 МГц, 8 КБ ОЗУ (плюс $E000-$FEFF для BASIC), терминал 40 × 24 символа заглавными буквами и Woz Monitor в ПЗУ.
+es El Apple 1 (1976): un 6502 a 1 MHz, 8 KB de RAM (más $E000-$FEFF para el BASIC), un terminal de 40 × 24 caracteres en mayúsculas y el Woz Monitor en ROM.
+it L'Apple 1 (1976): un 6502 a 1 MHz, 8 KB di RAM (più $E000-$FEFF per il BASIC), un terminale di 40 × 24 caratteri maiuscoli e il Woz Monitor in ROM.
+pt O Apple 1 (1976): um 6502 a 1 MHz, 8 KB de RAM (mais $E000-$FEFF para o BASIC), um terminal de 40 × 24 caracteres em maiúsculas e o Woz Monitor em ROM.
+
+@ Au démarrage, le Woz Monitor affiche « \ ». Tapez une adresse (FF00), une plage (FF00.FF0F), une écriture (300: A9 01) ou un lancement (300R).
+en At start-up, the Woz Monitor shows “\”. Type an address (FF00), a range (FF00.FF0F), a write (300: A9 01) or a run (300R).
+de Beim Start zeigt der Woz Monitor „\“. Tippen Sie eine Adresse (FF00), einen Bereich (FF00.FF0F), einen Schreibbefehl (300: A9 01) oder einen Start (300R).
+ru При запуске Woz Monitor выводит «\». Наберите адрес (FF00), диапазон (FF00.FF0F), запись (300: A9 01) или запуск (300R).
+es Al arrancar, el Woz Monitor muestra «\». Teclee una dirección (FF00), un rango (FF00.FF0F), una escritura (300: A9 01) o una ejecución (300R).
+it All'avvio, il Woz Monitor mostra «\». Digita un indirizzo (FF00), un intervallo (FF00.FF0F), una scrittura (300: A9 01) o un avvio (300R).
+pt No arranque, o Woz Monitor mostra «\». Tecle um endereço (FF00), um intervalo (FF00.FF0F), uma escrita (300: A9 01) ou uma execução (300R).
+
+@ Écrivez en BASIC ou en assembleur 6502 dans l'éditeur, puis ▶ Lancer ; suivez le programme dans le débogueur, le Dump et le désassemblage.
+en Write BASIC or 6502 assembler in the editor, then ▶ Run; follow the program in the debugger, the Dump and the disassembly.
+de Schreiben Sie BASIC oder 6502-Assembler im Editor, dann ▶ Starten; verfolgen Sie das Programm im Debugger, im Dump und im Disassembler.
+ru Пишите на BASIC или ассемблере 6502 в редакторе, затем ▶ Запуск; следите за программой в отладчике, дампе и дизассемблере.
+es Escriba en BASIC o en ensamblador 6502 en el editor y luego ▶ Ejecutar; siga el programa en el depurador, el Dump y el desensamblado.
+it Scrivi in BASIC o in assembler 6502 nell'editor, poi ▶ Esegui; segui il programma nel debugger, nel Dump e nel disassemblato.
+pt Escreva em BASIC ou em assembler 6502 no editor e depois ▶ Executar; siga o programa no depurador, no Dump e na desassemblagem.
+
+@ Avant de commencer
+en Before you start
+de Bevor Sie beginnen
+ru Перед началом
+es Antes de empezar
+it Prima di iniziare
+pt Antes de começar
+
+@ ROM, BASIC, cartes et cassette
+en ROMs, BASIC, cards and tape
+de ROMs, BASIC, Karten und Kassette
+ru ПЗУ, BASIC, карты и кассета
+es ROM, BASIC, tarjetas y casete
+it ROM, BASIC, schede e cassetta
+pt ROM, BASIC, placas e cassete
+
+@ Le Woz Monitor, la ROM de l'ACI et le générateur de caractères 2513 sont fournis.
+en The Woz Monitor, the ACI ROM and the 2513 character generator are supplied.
+de Der Woz Monitor, das ROM des ACI und der Zeichengenerator 2513 werden mitgeliefert.
+ru Woz Monitor, ПЗУ ACI и знакогенератор 2513 входят в комплект.
+es El Woz Monitor, la ROM del ACI y el generador de caracteres 2513 están incluidos.
+it Il Woz Monitor, la ROM dell'ACI e il generatore di caratteri 2513 sono forniti.
+pt O Woz Monitor, a ROM do ACI e o gerador de caracteres 2513 são fornecidos.
+
+@ BASIC : RDK G2 Basic, le clone de l'Integer BASIC du kit, est intégré et chargé en $E000 au premier lancement d'un programme BASIC (mode « Émulation »). Pour le BASIC d'origine (non fourni), copiez votre integer_basic.bin dans RDK librairies/Apple 1/ROM/ : reconnu, il libère le bouton « ROM réelle ».
+en BASIC: RDK G2 Basic, the kit's Integer BASIC clone, is built in and loaded at $E000 when a BASIC program is first run (“Emulation” mode). For the original BASIC (not supplied), copy your integer_basic.bin into RDK librairies/Apple 1/ROM/: once recognised, it unlocks the “Real ROM” button.
+de BASIC: RDK G2 Basic, der Integer-BASIC-Klon des Kits, ist eingebaut und wird beim ersten Start eines BASIC-Programms bei $E000 geladen (Modus „Emulation“). Für das Original-BASIC (nicht mitgeliefert) kopieren Sie Ihr integer_basic.bin nach RDK librairies/Apple 1/ROM/: Erkannt, gibt es die Schaltfläche „Echtes ROM“ frei.
+ru BASIC: RDK G2 Basic, клон Integer BASIC из набора, встроен и загружается в $E000 при первом запуске программы на BASIC (режим «Эмуляция»). Для оригинального BASIC (не поставляется) скопируйте свой integer_basic.bin в RDK librairies/Apple 1/ROM/: после распознавания станет доступна кнопка «Настоящее ПЗУ».
+es BASIC: RDK G2 Basic, el clon del Integer BASIC del kit, está integrado y se carga en $E000 al ejecutar por primera vez un programa BASIC (modo «Emulación»). Para el BASIC original (no incluido), copie su integer_basic.bin en RDK librairies/Apple 1/ROM/: reconocido, desbloquea el botón «ROM real».
+it BASIC: RDK G2 Basic, il clone dell'Integer BASIC del kit, è integrato e caricato a $E000 al primo avvio di un programma BASIC (modalità «Emulazione»). Per il BASIC originale (non fornito), copia il tuo integer_basic.bin in RDK librairies/Apple 1/ROM/: riconosciuto, sblocca il pulsante «ROM reale».
+pt BASIC: o RDK G2 Basic, o clone do Integer BASIC do kit, está integrado e é carregado em $E000 na primeira execução de um programa BASIC (modo «Emulação»). Para o BASIC original (não fornecido), copie o seu integer_basic.bin para RDK librairies/Apple 1/ROM/: reconhecido, desbloqueia o botão «ROM real».
+
+@ Configurations : « Apple 1 moniteur vert » (défaut), « Apple 1 moniteur vert + couleur GEN2 » (carte couleur d'Uncle Bernie) et « Apple 1 + P-LAB » (TMS9918A, NMI, CodeTank), dans la liste des configurations. Leur image va au moniteur couleur ; le terminal reste sur le moniteur vert.
+en Configurations: “Apple 1 moniteur vert” (default), “Apple 1 moniteur vert + couleur GEN2” (Uncle Bernie's colour card) and “Apple 1 + P-LAB” (TMS9918A, NMI, CodeTank), in the configuration list. Their picture goes to the colour monitor; the terminal stays on the green monitor.
+de Konfigurationen: „Apple 1 moniteur vert“ (Standard), „Apple 1 moniteur vert + couleur GEN2“ (Farbkarte von Uncle Bernie) und „Apple 1 + P-LAB“ (TMS9918A, NMI, CodeTank) in der Konfigurationsliste. Ihr Bild geht an den Farbmonitor; das Terminal bleibt auf dem grünen Monitor.
+ru Конфигурации: «Apple 1 moniteur vert» (по умолчанию), «Apple 1 moniteur vert + couleur GEN2» (цветная карта Uncle Bernie) и «Apple 1 + P-LAB» (TMS9918A, NMI, CodeTank) в списке конфигураций. Их изображение идёт на цветной монитор; терминал остаётся на зелёном мониторе.
+es Configuraciones: «Apple 1 moniteur vert» (predeterminada), «Apple 1 moniteur vert + couleur GEN2» (tarjeta de color de Uncle Bernie) y «Apple 1 + P-LAB» (TMS9918A, NMI, CodeTank), en la lista de configuraciones. Su imagen va al monitor en color; el terminal sigue en el monitor verde.
+it Configurazioni: «Apple 1 moniteur vert» (predefinita), «Apple 1 moniteur vert + couleur GEN2» (scheda colore di Uncle Bernie) e «Apple 1 + P-LAB» (TMS9918A, NMI, CodeTank), nell'elenco delle configurazioni. La loro immagine va al monitor a colori; il terminale resta sul monitor verde.
+pt Configurações: «Apple 1 moniteur vert» (padrão), «Apple 1 moniteur vert + couleur GEN2» (placa de cor do Uncle Bernie) e «Apple 1 + P-LAB» (TMS9918A, NMI, CodeTank), na lista de configurações. A sua imagem vai para o monitor a cores; o terminal fica no monitor verde.
+
+@ Cassette : la bibliothèque lit les fichiers WAV de l'ACI (⚡ rapide ou 📼 en temps réel) ; le bouton ⏺ Sortie ACI enregistre ce que la machine écrit (C100R puis début.finW).
+en Tape: the library reads ACI WAV files (⚡ fast or 📼 in real time); the ⏺ ACI output button records what the machine writes (C100R then start.endW).
+de Kassette: Die Bibliothek liest WAV-Dateien des ACI (⚡ schnell oder 📼 in Echtzeit); die Schaltfläche ⏺ ACI-Ausgang nimmt auf, was die Maschine schreibt (C100R, dann Anfang.EndeW).
+ru Кассета: библиотека читает WAV-файлы ACI (⚡ быстро или 📼 в реальном времени); кнопка ⏺ Выход ACI записывает то, что пишет машина (C100R, затем начало.конецW).
+es Casete: la biblioteca lee los archivos WAV del ACI (⚡ rápido o 📼 en tiempo real); el botón ⏺ Salida ACI graba lo que escribe la máquina (C100R y luego inicio.finW).
+it Cassetta: la libreria legge i file WAV dell'ACI (⚡ rapido o 📼 in tempo reale); il pulsante ⏺ Uscita ACI registra ciò che la macchina scrive (C100R poi inizio.fineW).
+pt Cassete: a biblioteca lê os ficheiros WAV do ACI (⚡ rápido ou 📼 em tempo real); o botão ⏺ Saída ACI grava o que a máquina escreve (C100R e depois início.fimW).
+
+@ Comme en v1.0 : 🎚 Écran (phosphore vert, blanc ou ambre ; 📺 écran vintage), 🎨 Photo → ASCII, 💾 Sauver (.woz, .wav, Intel .hex…), programmateur d'EPROM (PROM), 📥 Exemples pour remplir votre bibliothèque.
+en As in v1.0: 🎚 Screen (green, white or amber phosphor; 📺 vintage screen), 🎨 Photo → ASCII, 💾 Save (.woz, .wav, Intel .hex…), EPROM programmer (PROM), 📥 Examples to fill your library.
+de Wie in v1.0: 🎚 Bildschirm (Leuchtstoff grün, weiß oder bernstein; 📺 Vintage-Bildschirm), 🎨 Foto → ASCII, 💾 Sichern (.woz, .wav, Intel .hex…), EPROM-Programmiergerät (PROM), 📥 Beispiele für Ihre Bibliothek.
+ru Как в версии 1.0: 🎚 Экран (зелёный, белый или янтарный люминофор; 📺 винтажный экран), 🎨 Фото → ASCII, 💾 Сохранить (.woz, .wav, Intel .hex…), программатор EPROM (PROM), 📥 Примеры для вашей библиотеки.
+es Como en la v1.0: 🎚 Pantalla (fósforo verde, blanco o ámbar; 📺 pantalla vintage), 🎨 Foto → ASCII, 💾 Guardar (.woz, .wav, Intel .hex…), programador de EPROM (PROM), 📥 Ejemplos para llenar su biblioteca.
+it Come nella v1.0: 🎚 Schermo (fosfori verdi, bianchi o ambra; 📺 schermo vintage), 🎨 Foto → ASCII, 💾 Salva (.woz, .wav, Intel .hex…), programmatore di EPROM (PROM), 📥 Esempi per riempire la tua libreria.
+pt Como na v1.0: 🎚 Ecrã (fósforo verde, branco ou âmbar; 📺 ecrã vintage), 🎨 Foto → ASCII, 💾 Guardar (.woz, .wav, Intel .hex…), programador de EPROM (PROM), 📥 Exemplos para encher a sua biblioteca.
+
+@ Cliquez sur l'écran pour envoyer le clavier de l'ordinateur à la machine, ou utilisez la fenêtre Clavier (QWERTY).
+en Click the screen to send the computer's keyboard to the machine, or use the Keyboard window (QWERTY).
+de Klicken Sie auf den Bildschirm, um die Tastatur des Computers an die Maschine zu senden, oder verwenden Sie das Fenster Tastatur (QWERTY).
+ru Щёлкните по экрану, чтобы передать клавиатуру компьютера машине, или используйте окно «Клавиатура» (QWERTY).
+es Haga clic en la pantalla para enviar el teclado del ordenador a la máquina, o use la ventana Teclado (QWERTY).
+it Fai clic sullo schermo per inviare la tastiera del computer alla macchina, o usa la finestra Tastiera (QWERTY).
+pt Clique no ecrã para enviar o teclado do computador para a máquina, ou use a janela Teclado (QWERTY).
+
+# ----- état de la machine
+
+@ état illisible : {0}
+en unreadable state: {0}
+de Zustand nicht lesbar: {0}
+ru состояние не читается: {0}
+es estado ilegible: {0}
+it stato illeggibile: {0}
+pt estado ilegível: {0}
+
+@ état « {0} » chargé (PC ${1})
+en state “{0}” loaded (PC ${1})
+de Zustand „{0}“ geladen (PC ${1})
+ru состояние «{0}» загружено (PC ${1})
+es estado «{0}» cargado (PC ${1})
+it stato «{0}» caricato (PC ${1})
+pt estado «{0}» carregado (PC ${1})
+
+# ----- ⚙ réglages du programme
+
+@ chemin sans dossier
+en path without a folder
+de Pfad ohne Ordner
+ru путь без папки
+es ruta sin carpeta
+it percorso senza cartella
+pt caminho sem pasta
+
+@ chemin sans nom de fichier
+en path without a file name
+de Pfad ohne Dateinamen
+ru путь без имени файла
+es ruta sin nombre de archivo
+it percorso senza nome di file
+pt caminho sem nome de ficheiro
+
+@ ⚙ Réglages du programme
+en ⚙ Program settings
+de ⚙ Programmeinstellungen
+ru ⚙ Настройки программы
+es ⚙ Ajustes del programa
+it ⚙ Impostazioni del programma
+pt ⚙ Definições do programa
+
+@ Choisissez un programme de la bibliothèque (le dernier chargé est proposé). Les réglages sont rangés dans programs.json, dans son dossier, comme en v1.0.
+en Choose a program of the library (the last one loaded is offered). Settings are stored in programs.json, in its folder, as in v1.0.
+de Wählen Sie ein Programm der Bibliothek (das zuletzt geladene wird vorgeschlagen). Die Einstellungen stehen in programs.json in seinem Ordner, wie in v1.0.
+ru Выберите программу из библиотеки (предлагается последняя загруженная). Настройки хранятся в programs.json в её папке, как в версии 1.0.
+es Elija un programa de la biblioteca (se propone el último cargado). Los ajustes se guardan en programs.json, en su carpeta, como en la v1.0.
+it Scegli un programma della libreria (è proposto l'ultimo caricato). Le impostazioni sono salvate in programs.json, nella sua cartella, come nella v1.0.
+pt Escolha um programa da biblioteca (é proposto o último carregado). As definições ficam em programs.json, na sua pasta, como na v1.0.
+
+@ 🎮 Jeux
+en 🎮 Games
+de 🎮 Spiele
+ru 🎮 Игры
+es 🎮 Juegos
+it 🎮 Giochi
+pt 🎮 Jogos
+
+@ 📼 Cassettes
+en 📼 Tapes
+de 📼 Kassetten
+ru 📼 Кассеты
+es 📼 Casetes
+it 📼 Cassette
+pt 📼 Cassetes
+
+@ 📂 Choisir un fichier
+en 📂 Choose a file
+de 📂 Datei wählen
+ru 📂 Выбрать файл
+es 📂 Elegir un archivo
+it 📂 Scegli un file
+pt 📂 Escolher um ficheiro
+
+@ Afficher
+en Show
+de Anzeigen
+ru Показать
+es Mostrar
+it Mostra
+pt Mostrar
+
+@ Aucun programme choisi.
+en No program chosen.
+de Kein Programm gewählt.
+ru Программа не выбрана.
+es Ningún programa elegido.
+it Nessun programma scelto.
+pt Nenhum programa escolhido.
+
+@ 🗑 Oublier les réglages
+en 🗑 Forget the settings
+de 🗑 Einstellungen vergessen
+ru 🗑 Забыть настройки
+es 🗑 Olvidar los ajustes
+it 🗑 Dimentica le impostazioni
+pt 🗑 Esquecer as definições
+
+@ Retire ce programme de programs.json : les réglages sont de nouveau lus dans le fichier.
+en Removes this program from programs.json: settings are read from the file again.
+de Entfernt dieses Programm aus programs.json: Die Einstellungen werden wieder aus der Datei gelesen.
+ru Убирает программу из programs.json: настройки снова читаются из файла.
+es Quita este programa de programs.json: los ajustes vuelven a leerse en el archivo.
+it Toglie questo programma da programs.json: le impostazioni sono di nuovo lette nel file.
+pt Retira este programa de programs.json: as definições voltam a ser lidas no ficheiro.
+
+@ Réglages de « {0} » oubliés
+en Settings of “{0}” forgotten
+de Einstellungen von „{0}“ vergessen
+ru Настройки «{0}» забыты
+es Ajustes de «{0}» olvidados
+it Impostazioni di «{0}» dimenticate
+pt Definições de «{0}» esquecidas
+
+# ----- projets GitHub
+
+@ 🐙 Projets GitHub
+en 🐙 GitHub projects
+de 🐙 GitHub-Projekte
+ru 🐙 Проекты GitHub
+es 🐙 Proyectos GitHub
+it 🐙 Progetti GitHub
+pt 🐙 Projetos GitHub
+
+@ Les fichiers sont téléchargés dans {0} : ils apparaissent dans la bibliothèque.
+en Files are downloaded into {0}: they appear in the library.
+de Die Dateien werden nach {0} geladen: Sie erscheinen in der Bibliothek.
+ru Файлы загружаются в {0}: они появляются в библиотеке.
+es Los archivos se descargan en {0}: aparecen en la biblioteca.
+it I file sono scaricati in {0}: compaiono nella libreria.
+pt Os ficheiros são transferidos para {0}: aparecem na biblioteca.
+
+@ Aucun projet.
+en No project.
+de Kein Projekt.
+ru Нет проектов.
+es Ningún proyecto.
+it Nessun progetto.
+pt Nenhum projeto.
+
+@ pas encore téléchargé
+en not downloaded yet
+de noch nicht geladen
+ru ещё не загружен
+es aún no descargado
+it non ancora scaricato
+pt ainda não transferido
+
+@ Dernière Release, sinon dernier artefact Actions (jeton), sinon un source du dépôt, construit et lancé.
+en Latest Release, else latest Actions artifact (token), else a source of the repository, built and run.
+de Neueste Release, sonst neuestes Actions-Artefakt (Token), sonst ein Quelltext des Repositorys, gebaut und gestartet.
+ru Последний Release, иначе последний артефакт Actions (токен), иначе исходник репозитория, собранный и запущенный.
+es Última Release, si no último artefacto de Actions (token), si no un fuente del repositorio, compilado y ejecutado.
+it Ultima Release, altrimenti ultimo artefatto Actions (token), altrimenti un sorgente del repository, compilato ed eseguito.
+pt Última Release, senão último artefacto Actions (token), senão um código-fonte do repositório, compilado e executado.
+
+@  (les fichiers restent dans {0})
+en  (the files stay in {0})
+de  (die Dateien bleiben in {0})
+ru  (файлы остаются в {0})
+es  (los archivos permanecen en {0})
+it  (i file restano in {0})
+pt  (os ficheiros ficam em {0})
+
+@ Seulement pour les dépôts privés et les artefacts Actions. Gardé pour cette session seulement, jamais écrit ni affiché.
+en Only for private repositories and Actions artifacts. Kept for this session only, never written nor shown.
+de Nur für private Repositorys und Actions-Artefakte. Nur für diese Sitzung behalten, nie geschrieben oder angezeigt.
+ru Только для приватных репозиториев и артефактов Actions. Хранится только в этом сеансе, никогда не записывается и не показывается.
+es Solo para repositorios privados y artefactos de Actions. Guardado solo para esta sesión, nunca escrito ni mostrado.
+it Solo per repository privati e artefatti Actions. Tenuto solo per questa sessione, mai scritto né mostrato.
+pt Só para repositórios privados e artefactos Actions. Guardado só para esta sessão, nunca escrito nem mostrado.
+
+# ----- programmateur d'EPROM
+
+@ Photo → ASCII
+en Photo → ASCII
+de Foto → ASCII
+ru Фото → ASCII
+es Foto → ASCII
+it Foto → ASCII
+pt Foto → ASCII
+
+@ {0} ({1} Ko)
+en {0} ({1} KB)
+de {0} ({1} KB)
+ru {0} ({1} КБ)
+es {0} ({1} KB)
+it {0} ({1} KB)
+pt {0} ({1} KB)
+
+@ Plage de mémoire invalide : {0}–{1}
+en Invalid memory range: {0}–{1}
+de Ungültiger Speicherbereich: {0}–{1}
+ru Неверный диапазон памяти: {0}–{1}
+es Rango de memoria no válido: {0}–{1}
+it Intervallo di memoria non valido: {0}–{1}
+pt Intervalo de memória inválido: {0}–{1}
+
+@ Choisissez un fichier.
+en Choose a file.
+de Wählen Sie eine Datei.
+ru Выберите файл.
+es Elija un archivo.
+it Scegli un file.
+pt Escolha um ficheiro.
+
+@ {0} : lecture de la puce…
+en {0}: reading the chip…
+de {0}: Chip wird gelesen…
+ru {0}: чтение микросхемы…
+es {0}: lectura del chip…
+it {0}: lettura del chip…
+pt {0}: leitura do chip…
+
+@ {0} : lecture de {1} octets terminée.
+en {0}: reading of {1} bytes done.
+de {0}: Lesen von {1} Bytes beendet.
+ru {0}: чтение {1} байт завершено.
+es {0}: lectura de {1} bytes terminada.
+it {0}: lettura di {1} byte terminata.
+pt {0}: leitura de {1} bytes concluída.
+
+@ Contenu enregistré dans {0}
+en Contents saved in {0}
+de Inhalt gespeichert in {0}
+ru Содержимое сохранено в {0}
+es Contenido guardado en {0}
+it Contenuto salvato in {0}
+pt Conteúdo guardado em {0}
+
+@ Comparaison avec les données choisies : {0} octets, {1} différence(s).
+en Comparison with the chosen data: {0} bytes, {1} difference(s).
+de Vergleich mit den gewählten Daten: {0} Bytes, {1} Unterschied(e).
+ru Сравнение с выбранными данными: {0} байт, различий: {1}.
+es Comparación con los datos elegidos: {0} bytes, {1} diferencia(s).
+it Confronto con i dati scelti: {0} byte, {1} differenza/e.
+pt Comparação com os dados escolhidos: {0} bytes, {1} diferença(s).
+
+@   ${0} : puce ${1}, données ${2}
+en   ${0}: chip ${1}, data ${2}
+de   ${0}: Chip ${1}, Daten ${2}
+ru   ${0}: микросхема ${1}, данные ${2}
+es   ${0}: chip ${1}, datos ${2}
+it   ${0}: chip ${1}, dati ${2}
+pt   ${0}: chip ${1}, dados ${2}
+
+@ Écriture de la puce {0} ({1} octets)…
+en Writing the {0} chip ({1} bytes)…
+de Chip {0} wird geschrieben ({1} Bytes)…
+ru Запись микросхемы {0} ({1} байт)…
+es Escritura del chip {0} ({1} bytes)…
+it Scrittura del chip {0} ({1} byte)…
+pt Escrita do chip {0} ({1} bytes)…
+
+@ Écriture terminée : {0}
+en Writing done: {0}
+de Schreiben beendet: {0}
+ru Запись завершена: {0}
+es Escritura terminada: {0}
+it Scrittura terminata: {0}
+pt Escrita concluída: {0}
+
+@ Vérification de {0}…
+en Verifying {0}…
+de {0} wird geprüft…
+ru Проверка {0}…
+es Verificación de {0}…
+it Verifica di {0}…
+pt Verificação de {0}…
+
+@ Vérification réussie : {0} octets identiques.
+en Verification passed: {0} identical bytes.
+de Prüfung erfolgreich: {0} identische Bytes.
+ru Проверка пройдена: {0} одинаковых байт.
+es Verificación correcta: {0} bytes idénticos.
+it Verifica riuscita: {0} byte identici.
+pt Verificação bem-sucedida: {0} bytes idênticos.
+
+@ Vérification ÉCHOUÉE : {0} différence(s) sur {1} octets.
+en Verification FAILED: {0} difference(s) in {1} bytes.
+de Prüfung FEHLGESCHLAGEN: {0} Unterschied(e) bei {1} Bytes.
+ru Проверка НЕ ПРОЙДЕНА: различий: {0} на {1} байт.
+es Verificación FALLIDA: {0} diferencia(s) en {1} bytes.
+it Verifica FALLITA: {0} differenza/e su {1} byte.
+pt Verificação FALHADA: {0} diferença(s) em {1} bytes.
+
+@ Erreur : {0}
+en Error: {0}
+de Fehler: {0}
+ru Ошибка: {0}
+es Error: {0}
+it Errore: {0}
+pt Erro: {0}
+
+@ Programmateur :
+en Programmer:
+de Programmiergerät:
+ru Программатор:
+es Programador:
+it Programmatore:
+pt Programador:
+
+@ × « minipro » est introuvable
+en × “minipro” cannot be found
+de × „minipro“ nicht gefunden
+ru × «minipro» не найден
+es × no se encuentra «minipro»
+it × «minipro» non trovato
+pt × «minipro» não encontrado
+
+@ minipro pilote les programmateurs XGecu TL866II+, T48 et T56. Sous Debian / Ubuntu / Mint : « sudo apt install minipro », puis branchez le programmateur et appuyez sur « Détecter ».
+en minipro drives the XGecu TL866II+, T48 and T56 programmers. On Debian / Ubuntu / Mint: “sudo apt install minipro”, then plug in the programmer and press “Detect”.
+de minipro steuert die Programmiergeräte XGecu TL866II+, T48 und T56. Unter Debian / Ubuntu / Mint: „sudo apt install minipro“, dann das Programmiergerät anschließen und „Erkennen“ drücken.
+ru minipro управляет программаторами XGecu TL866II+, T48 и T56. В Debian / Ubuntu / Mint: «sudo apt install minipro», затем подключите программатор и нажмите «Определить».
+es minipro maneja los programadores XGecu TL866II+, T48 y T56. En Debian / Ubuntu / Mint: «sudo apt install minipro», luego conecte el programador y pulse «Detectar».
+it minipro pilota i programmatori XGecu TL866II+, T48 e T56. Su Debian / Ubuntu / Mint: «sudo apt install minipro», poi collega il programmatore e premi «Rileva».
+pt O minipro controla os programadores XGecu TL866II+, T48 e T56. Em Debian / Ubuntu / Mint: «sudo apt install minipro», depois ligue o programador e carregue em «Detetar».
+
+@ Détecter
+en Detect
+de Erkennen
+ru Определить
+es Detectar
+it Rileva
+pt Detetar
+
+@ Puce :
+en Chip:
+de Chip:
+ru Микросхема:
+es Chip:
+it Chip:
+pt Chip:
+
+@ Données :
+en Data:
+de Daten:
+ru Данные:
+es Datos:
+it Dati:
+pt Dados:
+
+@ Mémoire de l'Apple 1
+en Apple 1 memory
+de Speicher des Apple 1
+ru Память Apple 1
+es Memoria del Apple 1
+it Memoria dell'Apple 1
+pt Memória do Apple 1
+
+@ Fichier (Intel .hex, .bin, .dump, .woz, cassette…)
+en File (Intel .hex, .bin, .dump, .woz, tape…)
+de Datei (Intel .hex, .bin, .dump, .woz, Kassette…)
+ru Файл (Intel .hex, .bin, .dump, .woz, кассета…)
+es Archivo (Intel .hex, .bin, .dump, .woz, casete…)
+it File (Intel .hex, .bin, .dump, .woz, cassetta…)
+pt Ficheiro (Intel .hex, .bin, .dump, .woz, cassete…)
+
+@ Choisir le fichier (en lecture : fichier où enregistrer le contenu de la puce, Intel HEX si .hex)
+en Choose the file (when reading: file where the chip's contents are saved, Intel HEX if .hex)
+de Datei wählen (beim Lesen: Datei, in die der Chipinhalt gespeichert wird, Intel HEX bei .hex)
+ru Выберите файл (при чтении — файл для содержимого микросхемы, Intel HEX для .hex)
+es Elegir el archivo (en lectura: archivo donde guardar el contenido del chip, Intel HEX si .hex)
+it Scegli il file (in lettura: file dove salvare il contenuto del chip, Intel HEX se .hex)
+pt Escolher o ficheiro (em leitura: ficheiro onde guardar o conteúdo do chip, Intel HEX se .hex)
+
+@ Lire la puce
+en Read the chip
+de Chip lesen
+ru Прочитать микросхему
+es Leer el chip
+it Leggi il chip
+pt Ler o chip
+
+@ Lire le contenu de la puce. Avec la mémoire ou un fichier existant : le comparer. Avec un nouveau nom de fichier : l'enregistrer (Intel HEX pour .hex)
+en Read the chip's contents. With memory or an existing file: compare them. With a new file name: save them (Intel HEX for .hex)
+de Chipinhalt lesen. Mit dem Speicher oder einer vorhandenen Datei: vergleichen. Mit einem neuen Dateinamen: speichern (Intel HEX bei .hex)
+ru Прочитать содержимое микросхемы. С памятью или существующим файлом — сравнить. С новым именем файла — сохранить (Intel HEX для .hex)
+es Leer el contenido del chip. Con la memoria o un archivo existente: compararlo. Con un nuevo nombre de archivo: guardarlo (Intel HEX para .hex)
+it Leggi il contenuto del chip. Con la memoria o un file esistente: confrontarlo. Con un nuovo nome di file: salvarlo (Intel HEX per .hex)
+pt Ler o conteúdo do chip. Com a memória ou um ficheiro existente: compará-lo. Com um novo nome de ficheiro: guardá-lo (Intel HEX para .hex)
+
+@ Écrire la puce
+en Write the chip
+de Chip schreiben
+ru Записать микросхему
+es Escribir el chip
+it Scrivi il chip
+pt Escrever o chip
+
+@ Cette puce est une mémoire morte à masque : lecture seule.
+en This chip is a mask ROM: read only.
+de Dieser Chip ist ein maskenprogrammiertes ROM: nur lesbar.
+ru Эта микросхема — масочное ПЗУ: только чтение.
+es Este chip es una ROM de máscara: solo lectura.
+it Questo chip è una ROM a maschera: sola lettura.
+pt Este chip é uma ROM de máscara: só leitura.
+
+@ Programmer la puce avec les données choisies (la puce doit être vide ou effaçable)
+en Program the chip with the chosen data (the chip must be blank or erasable)
+de Chip mit den gewählten Daten programmieren (der Chip muss leer oder löschbar sein)
+ru Записать в микросхему выбранные данные (микросхема должна быть чистой или стираемой)
+es Programar el chip con los datos elegidos (el chip debe estar vacío o ser borrable)
+it Programma il chip con i dati scelti (il chip deve essere vuoto o cancellabile)
+pt Programar o chip com os dados escolhidos (o chip deve estar vazio ou ser apagável)
+
+@ Vérifier
+en Verify
+de Prüfen
+ru Проверить
+es Verificar
+it Verifica
+pt Verificar
+
+@ Comparer la puce avec les données choisies
+en Compare the chip with the chosen data
+de Chip mit den gewählten Daten vergleichen
+ru Сравнить микросхему с выбранными данными
+es Comparar el chip con los datos elegidos
+it Confronta il chip con i dati scelti
+pt Comparar o chip com os dados escolhidos
+
+@ 💾 Image Intel HEX
+en 💾 Intel HEX image
+de 💾 Intel-HEX-Abbild
+ru 💾 Образ Intel HEX
+es 💾 Imagen Intel HEX
+it 💾 Immagine Intel HEX
+pt 💾 Imagem Intel HEX
+
+@ Écrire la plage de la mémoire en Intel HEX dans le dossier PROM de la bibliothèque (sans programmateur)
+en Write the memory range as Intel HEX into the library's PROM folder (without a programmer)
+de Speicherbereich als Intel HEX in den Ordner PROM der Bibliothek schreiben (ohne Programmiergerät)
+ru Записать диапазон памяти в Intel HEX в папку PROM библиотеки (без программатора)
+es Escribir el rango de memoria en Intel HEX en la carpeta PROM de la biblioteca (sin programador)
+it Scrivi l'intervallo di memoria in Intel HEX nella cartella PROM della libreria (senza programmatore)
+pt Escrever o intervalo de memória em Intel HEX na pasta PROM da biblioteca (sem programador)
+
+@ En cours…
+en In progress…
+de Läuft…
+ru Выполняется…
+es En curso…
+it In corso…
+pt Em curso…
+
+@ Prêt
+en Ready
+de Bereit
+ru Готово
+es Listo
+it Pronto
+pt Pronto
+
+@ Vintage
+en Vintage
+de Vintage
+ru Винтаж
+es Vintage
+it Vintage
+pt Vintage
+
+# ----- clavier dessiné (les noms envoyés à la machine restent en français)
+
+@ Clavier QWERTY générique (sans pavé numérique) — Apple 1
+en Generic QWERTY keyboard (no numeric keypad) — Apple 1
+de Generische QWERTY-Tastatur (ohne Ziffernblock) — Apple 1
+ru Обычная клавиатура QWERTY (без цифрового блока) — Apple 1
+es Teclado QWERTY genérico (sin teclado numérico) — Apple 1
+it Tastiera QWERTY generica (senza tastierino numerico) — Apple 1
+pt Teclado QWERTY genérico (sem teclado numérico) — Apple 1
+
+@ ⌫ Retour
+en ⌫ Backspace
+de ⌫ Rücktaste
+ru ⌫ Забой
+es ⌫ Retroceso
+it ⌫ Backspace
+pt ⌫ Retrocesso
+
+@ Verr. Maj
+en Caps Lock
+de Feststell
+ru Caps Lock
+es Bloq Mayús
+it Bloc Maiusc
+pt Caps Lock
+
+@ Entrée ⏎
+en Enter ⏎
+de Eingabe ⏎
+ru Ввод ⏎
+es Intro ⏎
+it Invio ⏎
+pt Enter ⏎
+
+@ ⇧ Maj
+en ⇧ Shift
+de ⇧ Umschalt
+ru ⇧ Shift
+es ⇧ Mayús
+it ⇧ Maiusc
+pt ⇧ Shift
+
+@ Espace
+en Space
+de Leertaste
+ru Пробел
+es Espacio
+it Spazio
+pt Espaço
+
+@ Échap
+en Esc
+de Esc
+ru Esc
+es Esc
+it Esc
+pt Esc

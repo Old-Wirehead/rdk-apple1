@@ -12,7 +12,9 @@
 
 use crate::ascii_outil::OutilAscii;
 use crate::crt::Phosphore;
+use crate::i18n::tr;
 use crate::prom::FenetreProm;
+use crate::trf;
 use crate::MachineApple1;
 use eframe::egui;
 use rdk_interface::outils::selecteur::{self, Raccourci};
@@ -25,6 +27,10 @@ pub struct Fenetres {
     /// Fenêtre « Écran » ouverte.
     pub ecran: bool,
     pub sauver: FenetreSauver,
+    /// v1.0 : ⚙ réglages par programme.
+    pub reglages: crate::programmes::FenetreReglages,
+    /// v1.0 : projets GitHub.
+    pub github: crate::projets_github::FenetreGithub,
 }
 
 impl Fenetres {
@@ -35,6 +41,11 @@ impl Fenetres {
         if self.ecran {
             self.ecran = fenetre_ecran(ctx, m);
         }
+        if let Some(f) = self.reglages.dessiner(ctx, &m.bibliotheque()) {
+            m.reglages_changes(&f);
+        }
+        m.dessiner_github(ctx, &mut self.github);
+        m.dessiner_oscilloscope(ctx);
     }
 }
 
@@ -45,36 +56,33 @@ fn fenetre_ecran(ctx: &egui::Context, m: &mut MachineApple1) -> bool {
     egui::Window::new("Écran de l'Apple 1").id(egui::Id::new("apple1-fenetre-ecran")).open(&mut ouvert).collapsible(false).resizable(false).default_width(420.0).show(ctx, |ui| {
         let o = m.options_mut();
         ui.horizontal(|ui| {
-            ui.label("Phosphore du moniteur :");
+            ui.label(tr("Phosphore du moniteur :"));
             for p in Phosphore::TOUS {
                 change |= ui.selectable_value(&mut o.phosphore, p, p.nom()).changed();
             }
         });
         ui.separator();
         let r = &mut o.ecran;
-        change |= ui.checkbox(&mut r.actif, "Écran vintage (screening)").on_hover_text("Imitation d'un moniteur à tube des années 1970, comme la photo d'un vrai Apple 1.").changed();
+        change |= ui.checkbox(&mut r.actif, tr("Écran vintage (screening)")).on_hover_text(tr("Imitation d'un moniteur à tube des années 1970, comme la photo d'un vrai Apple 1.")).changed();
         ui.add_enabled_ui(r.actif, |ui| {
-            change |= ui.add(egui::Slider::new(&mut r.intensite, 0.0..=1.0).text("Intensité")).changed();
-            change |= ui.checkbox(&mut r.lignes, "Séparation des lignes de balayage").on_hover_text("Une fine ligne sombre sous chaque ligne de points (l'effet principal).").changed();
-            change |= ui.checkbox(&mut r.adoucir, "Points adoucis (horizontalement)").changed();
-            change |= ui.checkbox(&mut r.halo, "Halo lumineux").changed();
-            change |= ui
-                .add(egui::Slider::new(&mut r.remanence, 0.0..=1.0).text("Rémanence du phosphore"))
-                .on_hover_text("Durée pendant laquelle les points s'éteignent (à gauche : aucune). Plus courte en blanc, moyenne en vert, plus longue en ambre.")
-                .changed();
-            change |= ui.checkbox(&mut r.bombe, "Tube bombé et coins assombris").changed();
+            change |= ui.add(egui::Slider::new(&mut r.intensite, 0.0..=1.0).text(tr("Intensité"))).changed();
+            change |= ui.checkbox(&mut r.lignes, tr("Séparation des lignes de balayage")).on_hover_text(tr("Une fine ligne sombre sous chaque ligne de points (l'effet principal).")).changed();
+            change |= ui.checkbox(&mut r.adoucir, tr("Points adoucis (horizontalement)")).changed();
+            change |= ui.checkbox(&mut r.halo, tr("Halo lumineux")).changed();
+            change |= ui.add(egui::Slider::new(&mut r.remanence, 0.0..=1.0).text(tr("Rémanence du phosphore"))).on_hover_text(tr("Durée pendant laquelle les points s'éteignent (à gauche : aucune). Plus courte en blanc, moyenne en vert, plus longue en ambre.")).changed();
+            change |= ui.checkbox(&mut r.bombe, tr("Tube bombé et coins assombris")).changed();
             ui.add_enabled_ui(r.bombe, |ui| {
-                change |= ui.add(egui::Slider::new(&mut r.courbure, 0.0..=1.0).text("Courbure")).changed();
+                change |= ui.add(egui::Slider::new(&mut r.courbure, 0.0..=1.0).text(tr("Courbure"))).changed();
             });
-            change |= ui.checkbox(&mut r.scintillement, "Scintillement").changed();
-            change |= ui.checkbox(&mut r.masque_rvb, "Masque de phosphores RVB (moniteur couleur)").changed();
+            change |= ui.checkbox(&mut r.scintillement, tr("Scintillement")).changed();
+            change |= ui.checkbox(&mut r.masque_rvb, tr("Masque de phosphores RVB (moniteur couleur)")).changed();
         });
-        if ui.button("↺ Réglages par défaut").clicked() {
+        if ui.button(tr("↺ Réglages par défaut")).clicked() {
             o.ecran = crate::crt::ReglagesEcran::default();
             o.phosphore = Phosphore::Vert;
             change = true;
         }
-        ui.weak("Avec l'écran vintage, l'image des moniteurs est calculée à 3 fois la résolution de l'Apple 1 (zoom ×1 = zoom 3 de la v1.0) ; sans lui, image native de 280 × 192 points.");
+        ui.weak(tr("Avec l'écran vintage, l'image des moniteurs est calculée à 3 fois la résolution de l'Apple 1 (zoom ×1 = zoom 3 de la v1.0) ; sans lui, image native de 280 × 192 points."));
     });
     if change {
         m.enregistrer_reglages();
@@ -135,15 +143,14 @@ impl FenetreSauver {
         let mut ouvert = true;
         egui::Window::new("💾 Sauver la mémoire").id(egui::Id::new("apple1-fenetre-sauver")).open(&mut ouvert).collapsible(false).resizable(true).default_width(560.0).show(ctx, |ui| {
             egui::Grid::new("apple1-sauver").num_columns(2).spacing([10.0, 8.0]).show(ui, |ui| {
-                ui.label("Plages :");
-                ui.add(egui::TextEdit::singleline(&mut self.plages).desired_width(320.0).font(egui::TextStyle::Monospace))
-                    .on_hover_text("Comme pour l'ACI : 0300.03FF, ou 004A.00FF 0800.0FFF pour un programme BASIC (page zéro puis programme)");
+                ui.label(tr("Plages :"));
+                ui.add(egui::TextEdit::singleline(&mut self.plages).desired_width(320.0).font(egui::TextStyle::Monospace)).on_hover_text(tr("Comme pour l'ACI : 0300.03FF, ou 004A.00FF 0800.0FFF pour un programme BASIC (page zéro puis programme)"));
                 ui.end_row();
-                ui.label("Format :");
+                ui.label(tr("Format :"));
                 let avant = self.format;
-                egui::ComboBox::from_id_salt("apple1-sauver-format").selected_text(FORMATS_SAUVER[self.format].1).width(320.0).show_ui(ui, |ui| {
+                egui::ComboBox::from_id_salt("apple1-sauver-format").selected_text(tr(FORMATS_SAUVER[self.format].1)).width(320.0).show_ui(ui, |ui| {
                     for (i, f) in FORMATS_SAUVER.iter().enumerate() {
-                        ui.selectable_value(&mut self.format, i, f.1);
+                        ui.selectable_value(&mut self.format, i, tr(f.1));
                     }
                 });
                 if avant != self.format || self.chemin.is_empty() {
@@ -151,7 +158,7 @@ impl FenetreSauver {
                     self.chemin = dossier_format(&biblio, ext).join(format!("{}.{ext}", self.nom)).display().to_string();
                 }
                 ui.end_row();
-                ui.label("Fichier :");
+                ui.label(tr("Fichier :"));
                 ui.horizontal(|ui| {
                     ui.add(egui::TextEdit::singleline(&mut self.chemin).desired_width(380.0));
                     if ui.button("…").clicked() {
@@ -161,22 +168,17 @@ impl FenetreSauver {
                 ui.end_row();
             });
             if self.parcourir {
-                let r = vec![
-                    Raccourci { libelle: "🖥 Apple 1".into(), chemin: biblio.clone() },
-                    Raccourci { libelle: "Cassettes".into(), chemin: biblio.join("Cassettes") },
-                    Raccourci { libelle: "PROM".into(), chemin: biblio.join(crate::prom::DOSSIER) },
-                    Raccourci { libelle: "Jeux".into(), chemin: biblio.join("Jeux") },
-                ];
+                let r = vec![Raccourci { libelle: "🖥 Apple 1".into(), chemin: biblio.clone() }, Raccourci { libelle: "Cassettes".into(), chemin: biblio.join("Cassettes") }, Raccourci { libelle: "PROM".into(), chemin: biblio.join(crate::prom::DOSSIER) }, Raccourci { libelle: "Jeux".into(), chemin: biblio.join("Jeux") }];
                 if let Some(f) = selecteur::panneau(ui, &mut self.chemin, &r, true) {
                     self.chemin = f.display().to_string();
                     self.parcourir = false;
                 }
             }
             ui.horizontal(|ui| {
-                if ui.button("💾 Enregistrer").clicked() {
+                if ui.button(tr("💾 Enregistrer")).clicked() {
                     let c = PathBuf::from(self.chemin.trim());
                     let existe = c.exists();
-                    let r = if existe { Err(format!("{} existe déjà : changez de nom", c.display())) } else { m.sauver(&c, &self.plages) };
+                    let r = if existe { Err(trf!("{0} existe déjà : changez de nom", c.display())) } else { m.sauver(&c, &self.plages) };
                     match r {
                         Ok(t) => {
                             m.informer(t.clone(), false);
@@ -185,7 +187,7 @@ impl FenetreSauver {
                         Err(e) => self.message = Some((e, true)),
                     }
                 }
-                if ui.button("Fermer").clicked() {
+                if ui.button(tr("Fermer")).clicked() {
                     self.ouvert = false;
                 }
             });
@@ -254,7 +256,7 @@ pub const EXEMPLES_ART: [(&str, &str); 12] = [
 /// C'est un clic de l'utilisateur : la bibliothèque est créée s'il le faut.
 pub fn installer_exemples(kit: &Path, biblio: &Path) -> Result<String, String> {
     if biblio.as_os_str().is_empty() {
-        return Err("dossier de la bibliothèque inconnu".into());
+        return Err(tr("dossier de la bibliothèque inconnu").into());
     }
     let mut n = 0usize;
     let source = kit.join("Biblio");
@@ -262,22 +264,26 @@ pub fn installer_exemples(kit: &Path, biblio: &Path) -> Result<String, String> {
         n += copier_sans_remplacer(&source, biblio)?;
     }
     let art = biblio.join(crate::art::DOSSIER);
-    std::fs::create_dir_all(&art).map_err(|e| format!("{} : {e}", art.display()))?;
+    std::fs::create_dir_all(&art).map_err(|e| trf!("{0} : {1}", art.display(), e))?;
     for (nom, texte) in EXEMPLES_ART {
         let p = art.join(nom);
         if !p.exists() {
-            std::fs::write(&p, texte).map_err(|e| format!("{} : {e}", p.display()))?;
+            std::fs::write(&p, texte).map_err(|e| trf!("{0} : {1}", p.display(), e))?;
             n += 1;
         }
     }
-    Ok(format!("{n} exemple(s) copié(s) dans {}", biblio.display()))
+    Ok(trf!(
+        "{0} exemple(s) copié(s) dans {1}",
+        n,
+        biblio.display()
+    ))
 }
 
 fn copier_sans_remplacer(de: &Path, vers: &Path) -> Result<usize, String> {
-    std::fs::create_dir_all(vers).map_err(|e| format!("{} : {e}", vers.display()))?;
+    std::fs::create_dir_all(vers).map_err(|e| trf!("{0} : {1}", vers.display(), e))?;
     let mut n = 0;
     for e in std::fs::read_dir(de)
-        .map_err(|e| format!("{} : {e}", de.display()))?
+        .map_err(|e| trf!("{0} : {1}", de.display(), e))?
         .flatten()
     {
         let p = e.path();
@@ -285,7 +291,7 @@ fn copier_sans_remplacer(de: &Path, vers: &Path) -> Result<usize, String> {
         if p.is_dir() {
             n += copier_sans_remplacer(&p, &cible)?;
         } else if !cible.exists() {
-            std::fs::copy(&p, &cible).map_err(|e| format!("{} : {e}", cible.display()))?;
+            std::fs::copy(&p, &cible).map_err(|e| trf!("{0} : {1}", cible.display(), e))?;
             n += 1;
         }
     }

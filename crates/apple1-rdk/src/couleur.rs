@@ -3,6 +3,7 @@
 //! (TMS9918A du cœur), vues par le pilote `video_numerique` + l'option
 //! `video_couleur` de l'interface commune.
 
+use crate::trf;
 use apple1_core::Machine as Apple1;
 use rdk_pilotes::{CouleurPalette, ImageVideo};
 
@@ -81,7 +82,7 @@ pub fn palette() -> Vec<CouleurPalette> {
                 numero: i,
                 nom: NOMS[i as usize].to_string(),
                 rvb: [r, g, b],
-                nom_monochrome: format!("gris {gris}"),
+                nom_monochrome: trf!("gris {0}", gris),
                 gris,
             }
         })

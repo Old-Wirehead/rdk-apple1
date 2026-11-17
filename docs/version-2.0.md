@@ -1,6 +1,6 @@
 # Retro Dev Kit Apple 1 — version 2.0 (Linux)
 
-La 2.0 reconstruit le kit Apple 1 sur **RDK-Interface-Commune 0.1.6**, comme le ZX Spectrum 0.2.x, et reprend les fonctions de la v1.0. Demandes de Wirehead du 17/11/2026.
+La 2.0 reconstruit le kit Apple 1 sur **RDK-Interface-Commune 0.1.8**, comme le ZX Spectrum 0.2.x, et reprend les fonctions de la v1.0. Demandes de Wirehead du 17/11/2026.
 
 ![Retro Dev Kit Apple 1 2.0 : Woz Monitor, moniteur vert, clavier QWERTY sans pavé numérique](captures/rdk-apple1-2.0-wozmon-clavier.png)
 
@@ -9,7 +9,7 @@ La 2.0 reconstruit le kit Apple 1 sur **RDK-Interface-Commune 0.1.6**, comme le 
 - Programme `retro-dev-kit-apple1` (paquet `crates/apple1-rdk`) : l'interface commune (fenêtres, barre d'icônes, éditeur, moniteurs, Dump, débogueur, désassemblage, bibliothèque, assistant, préférences, barre d'état) avec l'Apple 1.
 - La machine est **celle de la v1.0** (`crates/apple1-core`, inchangé) ; seule la liaison par les pilotes est nouvelle. Le manifeste est [`manifest-apple1.md`](../manifest-apple1.md).
 - `crates/apple1-rdk` est un **espace de travail à part** (exclu de celui de la v1.0) : la v1.0 et sa construction Windows ne dépendent pas du dépôt privé de l'interface commune.
-- Interface commune épinglée sur le commit `837e367b88fe0fef05c00e489dfd3a4417536fd8` (fusion de la 0.1.6, PR n° 9, étiquette `v0.1.6`).
+- Interface commune épinglée sur le commit `fbd1dcc1a3692c614af3bf4b6720a9b701a01c3d` (fusion de la 0.1.8, PR n° 11 ; la 0.1.7 est la PR n° 10).
 - **Linux seulement.** Les fichiers Windows de la v1.0 sont gardés tels quels, sans travail 2.0.
 
 ## Interface commune 0.1.5 et 0.1.6
@@ -51,12 +51,28 @@ packaging/linux-2.0/construire-paquet.sh   # dist/retro-dev-kit-apple1-2.0-linux
 cd dist/retro-dev-kit-apple1-2.0-linux && ./run.sh
 ```
 
+## Interface commune 0.1.7 et 0.1.8
+
+- **7 langues** : français, anglais, allemand, russe, espagnol, italien, portugais, comme la v1.0. Choix dans ⚙ Préférences → Interface → Langue ou sur le premier écran de l'assistant (défaut : langue du système). Toute l'interface suit : partie commune, boutons et fenêtres de l'Apple 1, messages ; les textes repris de la v1.0 gardent ses traductions.
+- **Zoom « ⛶ Ajuster »** des moniteurs : l'image remplit le panneau, proportions gardées (corrigé en 0.1.8).
+- **📸 État** : Enregistrer l'état… / Charger un état… (fichiers `.a1state` de la v1.0, dans `États/` de la bibliothèque).
+- 0.1.8 : la barre d'icônes passe en icônes seules quand elle ne tient pas dans la fenêtre.
+
+## Repris de la v1.0 en plus
+
+Le code de la v1.0 est lu dans ses sources (`crates/apple1-gui`, intouché) par `build.rs`, comme l'écran GEN2 et la table des cassettes :
+
+- **🔊 Son** de la cassette (ALSA, ouvert au lancement, sans lien de compilation ; coupé en vitesse accélérée) et **📈 oscilloscope** (signal sous la tête, réglage du volume).
+- **⚙ Réglages du programme** : plages, adresse de chargement d'un `.bin`, adresse et commande de lancement, BASIC nécessaire, notes ; `programs.json` dans le dossier du programme (même fichier que la v1.0). Appliqués par Charger, ▶ Play et le double-clic. Un `.bin` sans réglages se charge en `$0300`, comme en v1.0.
+- **🐙 Projets GitHub** : ajouter un dépôt (`propriétaire/dépôt` ou adresse, sous-dossier possible), ⟳ Mettre à jour, ▶ Tester le dernier build (Release, sinon artefact Actions avec jeton, sinon source construit : ca65 / ld65 ou assembleur intégré, `apple1.toml`). Les fichiers vont dans `GitHub/` de la bibliothèque.
+
+![Retro Dev Kit Apple 1 2.0 en anglais](captures/rdk-apple1-2.0-anglais.png)
+
 ## Pas encore repris de la v1.0
 
-- Paramètres par programme (⚙, `programs.json`) : l'interface commune ne donne pas encore à la machine le fichier choisi dans la bibliothèque.
-- Son (ALSA), oscilloscope de la cassette, projets GitHub et « tester le dernier build », 7 langues, sauvegarde de l'état de la machine.
 - Les boutons cassette de l'interface commune (Insérer, Lecture…) : la bibliothèque, ⏺ Sortie ACI et 📼 Temps réel les remplacent.
-- Zoom « Ajuster » de la v1.0 : le moniteur commun a un zoom entier (avec l'écran vintage, ×1 = zoom 3 de la v1.0).
+- Pages d'aide et manuels traduits : la 2.0 n'a encore que les pages d'aide communes, en français.
 - Version Windows de la 2.0.
 
 Rusty Sr IA
+Claude (compléments du 17/11/2026)

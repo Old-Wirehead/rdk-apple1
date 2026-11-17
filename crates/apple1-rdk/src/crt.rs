@@ -15,6 +15,7 @@
 //! le zoom ×1 de l'interface commune correspond au zoom 3 de la v1.0. Sans
 //! lui, l'image native (280 × 192) est agrandie par le zoom commun.
 
+use crate::i18n::tr;
 use rdk_pilotes::ImageVideo;
 use std::time::Instant;
 
@@ -85,9 +86,9 @@ impl Phosphore {
     pub const TOUS: [Phosphore; 3] = [Phosphore::Vert, Phosphore::Blanc, Phosphore::Ambre];
     pub fn nom(self) -> &'static str {
         match self {
-            Phosphore::Vert => "Vert",
-            Phosphore::Blanc => "Blanc",
-            Phosphore::Ambre => "Ambre",
+            Phosphore::Vert => tr("Vert"),
+            Phosphore::Blanc => tr("Blanc"),
+            Phosphore::Ambre => tr("Ambre"),
         }
     }
     pub fn cle(self) -> &'static str {

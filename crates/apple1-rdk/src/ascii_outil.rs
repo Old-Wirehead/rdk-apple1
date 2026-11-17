@@ -5,6 +5,8 @@
 //! machine, enregistré dans la bibliothèque (`BASIC/`, `Assembleur/`),
 //! une cassette (`Cassettes/`) ou un `.txt` du dossier `Art ASCII/`.
 
+use crate::i18n::tr;
+use crate::trf;
 use crate::MachineApple1;
 use apple1_core::asciiart::{self, Art, Grey, Params};
 use apple1_core::display::{COLS, ROWS};
@@ -110,7 +112,7 @@ pub struct OutilAscii {
 
 /// Photo décodée en niveaux de gris et vignette (360 px au plus).
 pub fn decoder(chemin: &Path) -> Result<(Grey, ColorImage), String> {
-    let img = image::open(chemin).map_err(|e| format!("{} : {e}", chemin.display()))?;
+    let img = image::open(chemin).map_err(|e| trf!("{0} : {1}", chemin.display(), e))?;
     let rgba = img.to_rgba8();
     let gris = Grey::from_rgba(
         rgba.width() as usize,
@@ -209,17 +211,17 @@ impl OutilAscii {
             self.art_texte = None;
             self.fait_pour = None;
             self.nom = souche(chemin);
-            Ok(format!("Photo « {} » chargée ({w} × {h}).", self.nom))
+            Ok(trf!("Photo « {0} » chargée ({1} × {2}).", self.nom, w, h))
         } else {
             let t = std::fs::read_to_string(chemin)
-                .map_err(|e| format!("{} : {e}", chemin.display()))?;
+                .map_err(|e| trf!("{0} : {1}", chemin.display(), e))?;
             let a = Art::from_text(&t);
             self.photo = None;
             self.art = a.clone();
             self.art_texte = Some(a);
             self.fait_pour = None;
             self.nom = souche(chemin);
-            Ok(format!("Art ASCII « {} » chargé.", self.nom))
+            Ok(trf!("Art ASCII « {0} » chargé.", self.nom))
         }
     }
 
@@ -239,10 +241,10 @@ impl OutilAscii {
 
     fn ecrire(chemin: &Path, contenu: &str) -> Result<String, String> {
         if let Some(d) = chemin.parent() {
-            std::fs::create_dir_all(d).map_err(|e| format!("{} : {e}", d.display()))?;
+            std::fs::create_dir_all(d).map_err(|e| trf!("{0} : {1}", d.display(), e))?;
         }
-        std::fs::write(chemin, contenu).map_err(|e| format!("{} : {e}", chemin.display()))?;
-        Ok(format!("Enregistré : {}", chemin.display()))
+        std::fs::write(chemin, contenu).map_err(|e| trf!("{0} : {1}", chemin.display(), e))?;
+        Ok(trf!("Enregistré : {0}", chemin.display()))
     }
 
     fn nom_fichier(&self) -> String {
@@ -294,8 +296,10 @@ impl OutilAscii {
     ) {
         ui.horizontal_wrapped(|ui| {
             if ui
-                .button("📂 Ouvrir une image…")
-                .on_hover_text("Une photo (jpg, png) ou un dessin .txt du dossier Art ASCII")
+                .button(tr("📂 Ouvrir une image…"))
+                .on_hover_text(tr(
+                    "Une photo (jpg, png) ou un dessin .txt du dossier Art ASCII",
+                ))
                 .clicked()
             {
                 self.parcourir = !self.parcourir;
@@ -307,9 +311,9 @@ impl OutilAscii {
                     );
                 }
             }
-            ui.label("Nom :");
+            ui.label(tr("Nom :"));
             ui.add(egui::TextEdit::singleline(&mut self.nom).desired_width(160.0))
-                .on_hover_text("Titre du programme et nom des fichiers");
+                .on_hover_text(tr("Titre du programme et nom des fichiers"));
         });
         if self.parcourir {
             let mut r = vec![Raccourci {
@@ -339,7 +343,7 @@ impl OutilAscii {
             }
         }
         if self.photo.is_none() && self.art_texte.is_none() {
-            ui.label(RichText::new("Ouvrez une photo (jpg, png) ou un dessin .txt : il devient 40 × 24 caractères de l'Apple 1.").weak());
+            ui.label(RichText::new(tr("Ouvrez une photo (jpg, png) ou un dessin .txt : il devient 40 × 24 caractères de l'Apple 1.")).weak());
         }
         let art = self.art().clone();
         let avant = self.reglages.clone();
@@ -367,7 +371,7 @@ impl OutilAscii {
                             rg.zoom = (rg.zoom * (1.0 + s / 400.0)).clamp(1.0, 8.0);
                         }
                     }
-                    resp.on_hover_text("Glisser : déplacer la partie gardée ; molette : zoom");
+                    resp.on_hover_text(tr("Glisser : déplacer la partie gardée ; molette : zoom"));
                 }
                 // aperçu avec la police du 2513
                 let perime = self.apercu.as_ref().map(|(_, a, p)| a != &art || *p != ph).unwrap_or(true);
@@ -387,46 +391,46 @@ impl OutilAscii {
                     ui.add(egui::Image::new((t.id(), egui::vec2(w, w * 0.75))));
                 }
             });
-            ui.label(RichText::new(format!("{} × {} caractères", art.lines.iter().map(|l| l.len()).max().unwrap_or(0), art.rows())).small().weak());
+            ui.label(RichText::new(trf!("{0} × {1} caractères", art.lines.iter().map(|l| l.len()).max().unwrap_or(0), art.rows())).small().weak());
             ui.separator();
             let photo = self.photo.is_some();
             let rg = &mut self.reglages;
             ui.add_enabled_ui(photo, |ui| {
                 egui::Grid::new("apple1-ascii-reglages").num_columns(4).spacing([10.0, 4.0]).show(ui, |ui| {
-                    ui.label("Colonnes");
+                    ui.label(tr("Colonnes"));
                     ui.add(egui::Slider::new(&mut rg.colonnes, 1..=40));
-                    ui.label("Lignes");
+                    ui.label(tr("Lignes"));
                     ui.horizontal(|ui| {
                         ui.add(egui::Slider::new(&mut rg.lignes, 1..=24));
-                        if ui.selectable_label(rg.lignes == 23, "23").on_hover_text("23 lignes : l'invite du programme ne fait pas défiler le dessin").clicked() {
+                        if ui.selectable_label(rg.lignes == 23, "23").on_hover_text(tr("23 lignes : l'invite du programme ne fait pas défiler le dessin")).clicked() {
                             rg.lignes = if rg.lignes == 23 { 24 } else { 23 };
                         }
                     });
                     ui.end_row();
-                    ui.label("Zoom");
+                    ui.label(tr("Zoom"));
                     ui.add(egui::Slider::new(&mut rg.zoom, 1.0..=8.0).logarithmic(true));
-                    ui.label("Centre");
+                    ui.label(tr("Centre"));
                     ui.horizontal(|ui| {
-                        ui.add(egui::DragValue::new(&mut rg.cx).range(0.0..=1.0).speed(0.005).prefix("x "));
-                        ui.add(egui::DragValue::new(&mut rg.cy).range(0.0..=1.0).speed(0.005).prefix("y "));
+                        ui.add(egui::DragValue::new(&mut rg.cx).range(0.0..=1.0).speed(0.005).prefix(tr("x ")));
+                        ui.add(egui::DragValue::new(&mut rg.cy).range(0.0..=1.0).speed(0.005).prefix(tr("y ")));
                     });
                     ui.end_row();
-                    ui.label("Luminosité");
+                    ui.label(tr("Luminosité"));
                     ui.add(egui::Slider::new(&mut rg.luminosite, -1.0..=1.0));
-                    ui.label("Contraste");
+                    ui.label(tr("Contraste"));
                     ui.add(egui::Slider::new(&mut rg.contraste, 0.2..=4.0).logarithmic(true));
                     ui.end_row();
-                    ui.label("Gamma");
+                    ui.label(tr("Gamma"));
                     ui.add(egui::Slider::new(&mut rg.gamma, 0.2..=5.0).logarithmic(true));
                     ui.label("");
                     ui.horizontal_wrapped(|ui| {
-                        ui.checkbox(&mut rg.inverser, "Inverser");
-                        ui.checkbox(&mut rg.niveaux_auto, "Niveaux automatiques");
-                        ui.checkbox(&mut rg.tramage, "Tramage");
+                        ui.checkbox(&mut rg.inverser, tr("Inverser"));
+                        ui.checkbox(&mut rg.niveaux_auto, tr("Niveaux automatiques"));
+                        ui.checkbox(&mut rg.tramage, tr("Tramage"));
                     });
                     ui.end_row();
-                    ui.label("Caractères");
-                    let noms = ["Complète", "Simple", "Apple1-Slideshow", "Personnalisée"];
+                    ui.label(tr("Caractères"));
+                    let noms = [tr("Complète"), tr("Simple"), tr("Apple1-Slideshow"), tr("Personnalisée")];
                     egui::ComboBox::from_id_salt("apple1-ascii-rampe").selected_text(noms[rg.rampe.min(3)]).show_ui(ui, |ui| {
                         for (i, n) in noms.iter().enumerate() {
                             ui.selectable_value(&mut rg.rampe, i, *n);
@@ -440,15 +444,15 @@ impl OutilAscii {
                     }
                     ui.end_row();
                 });
-                if ui.button("↺ Réglages par défaut").clicked() {
+                if ui.button(tr("↺ Réglages par défaut")).clicked() {
                     *rg = Reglages { asm: rg.asm, rampe_perso: rg.rampe_perso.clone(), ..Reglages::default() };
                 }
             });
             ui.separator();
             ui.horizontal_wrapped(|ui| {
-                ui.label("Programme :");
-                ui.selectable_value(&mut self.reglages.asm, false, "Integer BASIC");
-                ui.selectable_value(&mut self.reglages.asm, true, "Assembleur 6502 (300R)");
+                ui.label(tr("Programme :"));
+                ui.selectable_value(&mut self.reglages.asm, false, tr("Integer BASIC"));
+                ui.selectable_value(&mut self.reglages.asm, true, tr("Assembleur 6502 (300R)"));
             });
             let a = !art.lines.is_empty();
             let asm = self.reglages.asm;
@@ -456,37 +460,37 @@ impl OutilAscii {
             let fichier = self.nom_fichier();
             ui.add_enabled_ui(a, |ui| {
                 ui.horizontal_wrapped(|ui| {
-                    if ui.button(RichText::new("▶ Lancer").strong()).on_hover_text("Taper le programme dans l'Apple 1 et le lancer").clicked() {
+                    if ui.button(RichText::new(tr("▶ Lancer")).strong()).on_hover_text(tr("Taper le programme dans l'Apple 1 et le lancer")).clicked() {
                         let l = if asm { Langage::Assembleur } else { Langage::Basic };
                         self.message = Some(match m.lancer_source(l, &code(&art, &nom, asm)) {
                             Ok(t) => (t, false),
                             Err(e) => (e.to_string(), true),
                         });
                     }
-                    if ui.button("💾 Programme").on_hover_text("Enregistrer le programme dans BASIC/ ou Assembleur/ de la bibliothèque").clicked() {
+                    if ui.button(tr("💾 Programme")).on_hover_text(tr("Enregistrer le programme dans BASIC/ ou Assembleur/ de la bibliothèque")).clicked() {
                         let (d, ext) = if asm { ("Assembleur", "s") } else { ("BASIC", "bas") };
                         let c = biblio.join(d).join(format!("{fichier}.{ext}"));
                         self.message = Some(Self::ecrire(&c, &code(&art, &nom, asm)).map(|t| (t, false)).unwrap_or_else(|e| (e, true)));
                     }
-                    if ui.button("📼 Cassette").on_hover_text("Écrire le programme en cassette ACI (.wav) dans Cassettes/").clicked() {
+                    if ui.button(tr("📼 Cassette")).on_hover_text(tr("Écrire le programme en cassette ACI (.wav) dans Cassettes/")).clicked() {
                         let c = biblio.join("Cassettes").join(format!("{fichier}.wav"));
                         let r = programme(&art, &nom, asm).and_then(|p| {
                             if let Some(d) = c.parent() {
                                 std::fs::create_dir_all(d).map_err(|e| e.to_string())?;
                             }
                             program::save_file(&c, &p, &Default::default())?;
-                            Ok(format!("cassette écrite : {} (pour la relire : C100R puis {})", c.display(), p.aci_read_command()))
+                            Ok(trf!("cassette écrite : {0} (pour la relire : C100R puis {1})", c.display(), p.aci_read_command()))
                         });
                         self.message = Some(r.map(|t| (t, false)).unwrap_or_else(|e| (e, true)));
                     }
-                    if ui.button("💾 Art .txt").on_hover_text("Enregistrer le dessin dans le dossier Art ASCII de la bibliothèque").clicked() {
+                    if ui.button(tr("💾 Art .txt")).on_hover_text(tr("Enregistrer le dessin dans le dossier Art ASCII de la bibliothèque")).clicked() {
                         let c = biblio.join(crate::art::DOSSIER).join(format!("{fichier}.txt"));
                         self.message = Some(Self::ecrire(&c, &art.text()).map(|t| (t, false)).unwrap_or_else(|e| (e, true)));
                     }
-                    if ui.button("📋 Copier").clicked() {
+                    if ui.button(tr("📋 Copier")).clicked() {
                         ui.ctx().copy_text(art.text());
                     }
-                    ui.toggle_value(&mut self.voir_code, "Voir le code");
+                    ui.toggle_value(&mut self.voir_code, tr("Voir le code"));
                 });
             });
             if let Some((t, err)) = &self.message {

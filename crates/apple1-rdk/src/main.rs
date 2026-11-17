@@ -1,4 +1,4 @@
-//! Retro Dev Kit Apple 1 2.0 : RDK-Interface-Commune 0.1.6 avec l'Apple 1.
+//! Retro Dev Kit Apple 1 2.0 : RDK-Interface-Commune 0.1.8 avec l'Apple 1.
 //!
 //! Le dossier courant est le « dossier du kit » : préférences
 //! `./preferences.json`, exemples du paquet `./Biblio`. La bibliothèque de
@@ -9,7 +9,7 @@
 //!
 //! La machine reçoit le contexte egui au lancement (`preparer`) : elle y
 //! dessine ses fenêtres de la v1.0 (programmateur d'EPROM, Photo → ASCII,
-//! Écran, Sauver).
+//! Écran, Sauver, ⚙ Réglages du programme, 🐙 Projets GitHub, oscilloscope).
 
 use apple1_rdk::MachineApple1;
 use rdk_interface::preferences::{dossier_kit, FichiersJson};

@@ -1,8 +1,8 @@
 # Manifeste — RDK Apple 1 (spécificités)
 
-> Rempli à partir du modèle de RDK-Interface-Commune 0.1.4 (`modeles/manifest-modele.md`), mis à jour pour la 0.1.6 (épinglée : `837e367`, étiquette `v0.1.6`). Ne décrit que ce qui diffère des défauts de l'interface commune. Code : `crates/apple1-rdk`.
+> Rempli à partir du modèle de RDK-Interface-Commune 0.1.4 (`modeles/manifest-modele.md`), mis à jour pour la 0.1.8 (épinglée : `fbd1dcc`, fusion de la PR n° 11 ; 0.1.7 : PR n° 10). Ne décrit que ce qui diffère des défauts de l'interface commune. Code : `crates/apple1-rdk`.
 >
-> Rédigé le : 17/11/2026 · Auteur : Rusty Sr IA · Statut : brouillon, à valider par Wirehead
+> Rédigé le : 17/11/2026 · Auteur : Rusty Sr IA, complété par Claude (langues, son, oscilloscope, réglages par programme, GitHub, état, zoom) · Statut : brouillon, à valider par Wirehead
 > Mentions : **fixé** (décidé par Wirehead), **proposé, à valider**.
 
 ## 0. Règle générale
@@ -82,6 +82,10 @@ Désassemblage : départ `$FF00`, puis l'adresse du dernier programme assemblé 
 | `reglages-ecran` | 🎚 | Écran | fenêtre : phosphore et réglages CRT |
 | `photo-ascii` | 🎨 | Photo → ASCII | fenêtre de la v1.0 : photo ou `.txt` → art ASCII → BASIC / 6502, cassette, `.txt` |
 | `exemples` | 📥 | Exemples | copie les exemples du paquet et l'art ASCII de la v1.0 dans la bibliothèque (sans rien remplacer) |
+| `son-cassette` | 🔊 | Son | son de la cassette (lecture 📼 et écriture ⏺, vitesse réelle) par ALSA, comme la v1.0 ; volume dans l'oscilloscope |
+| `oscilloscope` | 📈 | Oscilloscope | fenêtre de la v1.0 : le signal sous la tête, ouverte quand la cassette avance |
+| `reglages-programme` | ⚙ | Réglages | réglages par programme de la v1.0 (`programs.json` du dossier du programme : plages, adresses, commande de lancement, BASIC) ; s'ouvre sur le dernier programme chargé, sélecteur pour un autre |
+| `github` | 🐙 | GitHub | projets GitHub de la v1.0 : téléchargés dans `GitHub/` de la bibliothèque, ⟳ Mettre à jour, ▶ Tester le dernier build ; jeton : `GITHUB_TOKEN` ou saisi pour la session (jamais écrit) |
 
 Programmateur de PROM : **oui**. Fenêtre de la v1.0 (minipro : lire, écrire, vérifier ; puce ; mémoire ou fichier), fichiers en **Intel HEX** dans `PROM/` ; sans fenêtre : image `$E000-$EFFF` en `PROM/prom-E000-EFFF.hex`. Les fenêtres de la machine sont dessinées par la machine (contexte egui reçu par `OptionsLancement::preparer`).
 
@@ -164,8 +168,15 @@ PC, RAM, BASIC (en mémoire / absent), Moniteur, Cassette (nom, position), Messa
 
 ## 18. Points à préciser
 
-1. Paramètres par programme (⚙, `programs.json` de la v1.0) : l'interface commune ne donne pas le fichier choisi dans la bibliothèque.
-2. Son (ALSA) et oscilloscope de la cassette, projets GitHub, 7 langues, sauvegarde de l'état de la machine : non repris en 2.0.
+1. Réglages par programme : l'interface commune ne dit pas quel fichier est choisi dans la bibliothèque ; la fenêtre ⚙ s'ouvre sur le **dernier programme chargé ou lancé** (**proposé, à valider**).
+2. Projets GitHub rangés dans la bibliothèque (`GitHub/<propriétaire>/<dépôt>/<commit>/`) au lieu du cache de la v1.0 ; le jeton n'est plus enregistré (**proposé, à valider**).
+3. Pages d'aide (`aide/`) et manuels : en français seulement.
+
+## 18 bis. Langues, état, zoom (interface commune 0.1.7 et 0.1.8)
+
+- **7 langues** (fr, en, de, ru, es, it, pt) : langue choisie dans ⚙ Préférences → Interface ou l'assistant (langue du système par défaut). Textes de l'Apple 1 : `crates/apple1-rdk/traductions/apple1.txt` ; textes repris de la v1.0 : sa table `i18n/strings.txt`, lue sans copie. Les noms de touches envoyés à la machine, de dossiers et de configurations restent en français.
+- **État de la machine** (menu 📸 État commun) : fichiers `.a1state` de la v1.0 (même format), dans `États/` de la bibliothèque ; les boutons des cartes suivent l'état chargé.
+- **Zoom « Ajuster »** des moniteurs : commun (0.1.7, corrigé en 0.1.8), facteur fractionnaire.
 
 ## 19. Restrictions
 

@@ -44,6 +44,15 @@ pub struct Options {
     /// lecture de l'ACI, en temps réel) au lieu de ⚡ rapide (v1.0 : mode
     /// du double-clic).
     pub cassette: bool,
+    /// Son de la cassette pendant la lecture ou l'écriture (v1.0 : oui).
+    pub son_cassette: bool,
+    /// Volume du son de la cassette (0 à 1, bas par défaut comme en v1.0).
+    pub volume_cassette: f32,
+    /// Oscilloscope de la cassette (v1.0 : oui).
+    pub oscilloscope: bool,
+    /// Projets GitHub de la bibliothèque (`propriétaire/dépôt`, éventuellement
+    /// `/tree/branche/sous/dossier`), comme `github` de la v1.0.
+    pub github: Vec<String>,
 }
 
 impl Default for Options {
@@ -60,6 +69,10 @@ impl Default for Options {
             phosphore: Phosphore::Vert,
             ecran: ReglagesEcran::default(),
             cassette: false,
+            son_cassette: true,
+            volume_cassette: 0.06,
+            oscilloscope: true,
+            github: Vec::new(),
         }
     }
 }
@@ -122,6 +135,15 @@ impl Options {
                 "ecran_scintillement" => o.ecran.scintillement = oui(v),
                 "ecran_masque_rvb" => o.ecran.masque_rvb = oui(v),
                 "chargement" => o.cassette = v.trim() == "cassette",
+                "son_cassette" => o.son_cassette = oui(v),
+                "volume_cassette" => o.volume_cassette = nombre(v, o.volume_cassette),
+                "oscilloscope" => o.oscilloscope = oui(v),
+                "github" => {
+                    let p = v.trim();
+                    if !p.is_empty() && !o.github.iter().any(|g| g == p) {
+                        o.github.push(p.to_string());
+                    }
+                }
                 _ => {}
             }
         }
@@ -133,7 +155,8 @@ impl Options {
             "# Retro Dev Kit Apple 1 2.0 : réglages de la machine (boutons Périphériques)\n\
              gen2={}\ngen2_50hz={}\naccolades_grasses={}\nplab={}\nplab_nmi={}\ncodetank={}\nsource_couleur={}\nphosphore={}\n\
              ecran_vintage={}\necran_intensite={:.2}\necran_lignes={}\necran_adoucir={}\necran_halo={}\necran_remanence={:.2}\n\
-             ecran_bombe={}\necran_courbure={:.2}\necran_scintillement={}\necran_masque_rvb={}\nchargement={}\n",
+             ecran_bombe={}\necran_courbure={:.2}\necran_scintillement={}\necran_masque_rvb={}\nchargement={}\n\
+             son_cassette={}\nvolume_cassette={:.2}\noscilloscope={}\n{}",
             texte(self.gen2),
             texte(self.gen2_50hz),
             texte(self.accolades_grasses),
@@ -153,6 +176,10 @@ impl Options {
             texte(self.ecran.scintillement),
             texte(self.ecran.masque_rvb),
             if self.cassette { "cassette" } else { "rapide" },
+            texte(self.son_cassette),
+            self.volume_cassette,
+            texte(self.oscilloscope),
+            self.github.iter().map(|g| format!("github={g}\n")).collect::<String>(),
         )
     }
 
@@ -187,6 +214,10 @@ mod tests {
                 ..ReglagesEcran::default()
             },
             cassette: true,
+            son_cassette: false,
+            volume_cassette: 0.5,
+            oscilloscope: false,
+            github: vec!["Old-Wirehead/rdk-apple1".into(), "a/b/tree/dev/src".into()],
         };
         o.ecrire(&d).unwrap();
         assert_eq!(Options::lire(&d), o);

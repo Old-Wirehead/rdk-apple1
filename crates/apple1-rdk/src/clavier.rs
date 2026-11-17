@@ -9,6 +9,7 @@
 //!   français ; [`code_apple1`] les traduit en codes ASCII 7 bits de
 //!   l'Apple 1 (majuscules seulement, Retour arrière = `_` du Woz Monitor).
 
+use crate::i18n::tr;
 use rdk_pilotes::{DessinClavier, ToucheHote, ToucheVirtuelle};
 
 /// Titre affiché au-dessus du clavier dessiné.
@@ -26,21 +27,29 @@ fn car(s: &str) -> Vec<ToucheVirtuelle> {
 /// Le dessin du clavier : 6 rangées, aucune touche de pavé numérique.
 pub fn dessin() -> DessinClavier {
     let mut r1 = car("`1234567890-=");
-    r1.push(ToucheVirtuelle::commande("⌫ Retour", "Retour arrière", 2.0));
+    r1.push(ToucheVirtuelle::commande(
+        tr("⌫ Retour"),
+        "Retour arrière",
+        2.0,
+    ));
     let mut r2 = vec![ToucheVirtuelle::commande("Tab", "Tab", 1.5)];
     r2.extend(car("QWERTYUIOP[]"));
     r2.push(ToucheVirtuelle {
         largeur: 1.5,
         ..ToucheVirtuelle::caractere('\\')
     });
-    let mut r3 = vec![ToucheVirtuelle::commande("Verr. Maj", "Verr. Maj", 1.75)];
+    let mut r3 = vec![ToucheVirtuelle::commande(
+        tr("Verr. Maj"),
+        "Verr. Maj",
+        1.75,
+    )];
     r3.extend(car("ASDFGHJKL;'"));
-    r3.push(ToucheVirtuelle::commande("Entrée ⏎", "Entrée", 2.25));
-    let mut r4 = vec![ToucheVirtuelle::commande("⇧ Maj", MAJ, 2.25)];
+    r3.push(ToucheVirtuelle::commande(tr("Entrée ⏎"), "Entrée", 2.25));
+    let mut r4 = vec![ToucheVirtuelle::commande(tr("⇧ Maj"), MAJ, 2.25)];
     r4.extend(car("ZXCVBNM,./"));
-    r4.push(ToucheVirtuelle::commande("⇧ Maj", MAJ, 2.75));
+    r4.push(ToucheVirtuelle::commande(tr("⇧ Maj"), MAJ, 2.75));
     let mut espace = ToucheVirtuelle::caractere(' ');
-    espace.libelle = "Espace".to_string();
+    espace.libelle = tr("Espace").to_string();
     espace.largeur = 7.0;
     espace.touche.nom = "Espace".to_string();
     let r5 = vec![
@@ -51,9 +60,9 @@ pub fn dessin() -> DessinClavier {
         ToucheVirtuelle::commande("Ctrl", CTRL, 1.5),
     ];
     DessinClavier {
-        titre: TITRE.to_string(),
+        titre: tr(TITRE).to_string(),
         rangees: vec![
-            vec![ToucheVirtuelle::commande("Échap", "Échap", 1.25)],
+            vec![ToucheVirtuelle::commande(tr("Échap"), "Échap", 1.25)],
             r1,
             r2,
             r3,

@@ -9,6 +9,8 @@
 //! Le programmateur tourne dans un fil à part ; ses messages remplissent le
 //! journal de la fenêtre.
 
+use crate::i18n::tr;
+use crate::trf;
 use crate::MachineApple1;
 use apple1_core::eprom::{self, Chip, CHIPS};
 use eframe::egui::{self, Color32, RichText};
@@ -24,7 +26,7 @@ pub const DOSSIER: &str = "PROM";
 /// (et sans extension), dump RDK pour `.dump`, image brute sinon.
 pub fn ecrire_fichier(chemin: &Path, base: u32, octets: &[u8]) -> Result<(), String> {
     if let Some(d) = chemin.parent() {
-        std::fs::create_dir_all(d).map_err(|e| format!("{} : {e}", d.display()))?;
+        std::fs::create_dir_all(d).map_err(|e| trf!("{0} : {1}", d.display(), e))?;
     }
     let ext = chemin
         .extension()
@@ -40,7 +42,7 @@ pub fn ecrire_fichier(chemin: &Path, base: u32, octets: &[u8]) -> Result<(), Str
         "dump" => formats::ecrire_dump(&blocs).into_bytes(),
         _ => octets.to_vec(),
     };
-    std::fs::write(chemin, contenu).map_err(|e| format!("{} : {e}", chemin.display()))
+    std::fs::write(chemin, contenu).map_err(|e| trf!("{0} : {1}", chemin.display(), e))
 }
 
 /// Les octets d'un fichier tels qu'écrits sur la puce : image brute (`.bin`,
@@ -52,16 +54,16 @@ pub fn image_fichier(chemin: &Path) -> Result<Vec<u8>, String> {
         .map(|e| e.to_string_lossy().to_lowercase())
         .unwrap_or_default();
     if ext == "bin" || ext == "rom" {
-        return std::fs::read(chemin).map_err(|e| format!("{} : {e}", chemin.display()));
+        return std::fs::read(chemin).map_err(|e| trf!("{0} : {1}", chemin.display(), e));
     }
     let blocs: Vec<(usize, Vec<u8>)> = if ext == formats::EXT_HEX || ext == formats::EXT_DUMP {
-        let octets = std::fs::read(chemin).map_err(|e| format!("{} : {e}", chemin.display()))?;
+        let octets = std::fs::read(chemin).map_err(|e| trf!("{0} : {1}", chemin.display(), e))?;
         match formats::lire_format_commun(&ext, &octets) {
             Some(Ok(b)) => b
                 .into_iter()
                 .map(|b| (b.adresse as usize, b.octets))
                 .collect(),
-            Some(Err(e)) => return Err(format!("{} : {e}", chemin.display())),
+            Some(Err(e)) => return Err(trf!("{0} : {1}", chemin.display(), e)),
             None => Vec::new(),
         }
     } else {
@@ -71,7 +73,7 @@ pub fn image_fichier(chemin: &Path) -> Result<Vec<u8>, String> {
             .map(|(a, o)| (a as usize, o))
             .collect()
     };
-    let bas = blocs.iter().map(|b| b.0).min().ok_or("fichier vide")?;
+    let bas = blocs.iter().map(|b| b.0).min().ok_or(tr("fichier vide"))?;
     let haut = blocs.iter().map(|b| b.0 + b.1.len()).max().unwrap_or(bas);
     let mut img = vec![0xFFu8; haut - bas];
     for (a, d) in &blocs {
@@ -131,8 +133,8 @@ impl Default for FenetreProm {
 }
 
 fn libelle_puce(c: &Chip) -> String {
-    format!(
-        "{} ({} Ko)",
+    trf!(
+        "{0} ({1} Ko)",
         c.name
             .replace("mask ROM, read only", "ROM à masque, lecture seule"),
         c.size / 1024
@@ -150,7 +152,7 @@ impl FenetreProm {
     }
 
     fn plage(&self) -> Result<(u16, u16), String> {
-        let err = || format!("Plage de mémoire invalide : {}–{}", self.de, self.a);
+        let err = || trf!("Plage de mémoire invalide : {0}–{1}", self.de, self.a);
         let a = apple1_core::program::parse_addr(&self.de).map_err(|_| err())?;
         let b = apple1_core::program::parse_addr(&self.a).map_err(|_| err())?;
         if b < a {
@@ -165,7 +167,7 @@ impl FenetreProm {
             Ok((a..=b).map(|x| m.lire(x)).collect())
         } else {
             if self.fichier.trim().is_empty() {
-                return Err("Choisissez un fichier.".into());
+                return Err(tr("Choisissez un fichier.").into());
             }
             image_fichier(Path::new(self.fichier.trim()))
         }
@@ -189,7 +191,7 @@ impl FenetreProm {
             return Ok((Some(self.donnees(m)?), None));
         }
         if self.fichier.trim().is_empty() {
-            return Err("Choisissez un fichier.".into());
+            return Err(tr("Choisissez un fichier.").into());
         }
         let p = PathBuf::from(self.fichier.trim());
         if p.exists() {
@@ -217,68 +219,74 @@ impl FenetreProm {
             let faire = || -> Result<(), String> {
                 match &travail {
                     Travail::Lire { enregistrer } => {
-                        dire(format!("{} : lecture de la puce…", puce.name));
+                        dire(trf!("{0} : lecture de la puce…", puce.name));
                         let lu = p.read(puce)?;
-                        dire(format!(
-                            "{} : lecture de {} octets terminée.",
+                        dire(trf!(
+                            "{0} : lecture de {1} octets terminée.",
                             puce.name,
                             lu.len()
                         ));
                         if let Some(f) = enregistrer {
                             ecrire_fichier(f, 0, &lu)?;
-                            dire(format!("Contenu enregistré dans {}", f.display()));
+                            dire(trf!("Contenu enregistré dans {0}", f.display()));
                         }
                         if let Some(d) = donnees {
                             let n = d.len().min(lu.len());
                             let v = eprom::compare(&d[..n], &lu[..n]);
-                            dire(format!("Comparaison avec les données choisies : {} octets, {} différence(s).", v.compared, v.different));
+                            dire(trf!("Comparaison avec les données choisies : {0} octets, {1} différence(s).", v.compared, v.different));
                             for (i, a, b) in v.first.iter().take(8) {
-                                dire(format!(
-                                    "  ${:04X} : puce ${b:02X}, données ${a:02X}",
-                                    base + i
+                                dire(trf!(
+                                    "  ${0} : puce ${1}, données ${2}",
+                                    format!("{:04X}", base + i),
+                                    format!("{:02X}", b),
+                                    format!("{:02X}", a)
                                 ));
                             }
                         }
                     }
                     Travail::Ecrire => {
                         let d = donnees.unwrap_or_default();
-                        dire(format!(
-                            "Écriture de la puce {} ({} octets)…",
+                        dire(trf!(
+                            "Écriture de la puce {0} ({1} octets)…",
                             puce.name,
                             d.len()
                         ));
                         let r = p.write(puce, &d)?;
-                        dire(format!("Écriture terminée : {r}"));
-                        dire(format!("Vérification de {}…", puce.name));
+                        dire(trf!("Écriture terminée : {0}", r));
+                        dire(trf!("Vérification de {0}…", puce.name));
                         let mut tout = d;
                         tout.resize(puce.size, 0xFF);
                         let v = p.verify(puce, &tout)?;
                         dire(if v.ok() {
-                            format!("Vérification réussie : {} octets identiques.", v.compared)
+                            trf!("Vérification réussie : {0} octets identiques.", v.compared)
                         } else {
-                            format!(
-                                "Vérification ÉCHOUÉE : {} différence(s) sur {} octets.",
-                                v.different, v.compared
+                            trf!(
+                                "Vérification ÉCHOUÉE : {0} différence(s) sur {1} octets.",
+                                v.different,
+                                v.compared
                             )
                         });
                     }
                     Travail::Verifier => {
-                        dire(format!("Vérification de {}…", puce.name));
+                        dire(trf!("Vérification de {0}…", puce.name));
                         let mut tout = donnees.unwrap_or_default();
                         tout.resize(puce.size, 0xFF);
                         let v = p.verify(puce, &tout)?;
                         dire(if v.ok() {
-                            format!("Vérification réussie : {} octets identiques.", v.compared)
+                            trf!("Vérification réussie : {0} octets identiques.", v.compared)
                         } else {
-                            format!(
-                                "Vérification ÉCHOUÉE : {} différence(s) sur {} octets.",
-                                v.different, v.compared
+                            trf!(
+                                "Vérification ÉCHOUÉE : {0} différence(s) sur {1} octets.",
+                                v.different,
+                                v.compared
                             )
                         });
                         for (i, a, b) in v.first.iter().take(8) {
-                            dire(format!(
-                                "  ${:04X} : puce ${b:02X}, données ${a:02X}",
-                                base + i
+                            dire(trf!(
+                                "  ${0} : puce ${1}, données ${2}",
+                                format!("{:04X}", base + i),
+                                format!("{:02X}", b),
+                                format!("{:02X}", a)
                             ));
                         }
                     }
@@ -286,7 +294,7 @@ impl FenetreProm {
                 Ok(())
             };
             if let Err(e) = faire() {
-                dire(format!("Erreur : {e}"));
+                dire(trf!("Erreur : {0}", e));
             }
             let _ = tx.send(Msg::Fini);
             ctx.request_repaint();
@@ -320,7 +328,7 @@ impl FenetreProm {
         let mut ouvert = self.ouvert;
         egui::Window::new("Programmateur d'EPROM").id(egui::Id::new("apple1-fenetre-eprom")).open(&mut ouvert).collapsible(false).resizable(true).default_width(640.0).show(ctx, |ui| {
             egui::Grid::new("apple1-eprom-grille").num_columns(2).spacing([10.0, 8.0]).show(ui, |ui| {
-                ui.label("Programmateur :");
+                ui.label(tr("Programmateur :"));
                 ui.vertical(|ui| {
                     let nom = progs.get(self.prog).map(|p| p.name()).unwrap_or("?");
                     egui::ComboBox::from_id_salt("apple1-eprom-prog").selected_text(nom).width(330.0).show_ui(ui, |ui| {
@@ -332,12 +340,12 @@ impl FenetreProm {
                     });
                     match &self.detection {
                         Some(Ok(d)) => {
-                            ui.colored_label(Color32::from_rgb(90, 210, 110), format!("✔ {d}"));
+                            ui.colored_label(Color32::from_rgb(90, 210, 110), trf!("✔ {0}", d));
                         }
                         _ => {
-                            ui.colored_label(Color32::from_rgb(235, 90, 90), "× « minipro » est introuvable");
-                            ui.label(RichText::new("minipro pilote les programmateurs XGecu TL866II+, T48 et T56. Sous Debian / Ubuntu / Mint : « sudo apt install minipro », puis branchez le programmateur et appuyez sur « Détecter ».").small().weak());
-                            if ui.button("Détecter").clicked() {
+                            ui.colored_label(Color32::from_rgb(235, 90, 90), tr("× « minipro » est introuvable"));
+                            ui.label(RichText::new(tr("minipro pilote les programmateurs XGecu TL866II+, T48 et T56. Sous Debian / Ubuntu / Mint : « sudo apt install minipro », puis branchez le programmateur et appuyez sur « Détecter ».")).small().weak());
+                            if ui.button(tr("Détecter")).clicked() {
                                 self.detection = None;
                             }
                         }
@@ -345,7 +353,7 @@ impl FenetreProm {
                 });
                 ui.end_row();
 
-                ui.label("Puce :");
+                ui.label(tr("Puce :"));
                 egui::ComboBox::from_id_salt("apple1-eprom-puce").selected_text(libelle_puce(&CHIPS[self.puce])).show_ui(ui, |ui| {
                     for (i, c) in CHIPS.iter().enumerate() {
                         ui.selectable_value(&mut self.puce, i, libelle_puce(c));
@@ -353,10 +361,10 @@ impl FenetreProm {
                 });
                 ui.end_row();
 
-                ui.label("Données :");
+                ui.label(tr("Données :"));
                 ui.vertical(|ui| {
                     ui.horizontal(|ui| {
-                        ui.radio_value(&mut self.depuis_memoire, true, "Mémoire de l'Apple 1");
+                        ui.radio_value(&mut self.depuis_memoire, true, tr("Mémoire de l'Apple 1"));
                         ui.add_enabled_ui(self.depuis_memoire, |ui| {
                             ui.label("$");
                             ui.add(egui::TextEdit::singleline(&mut self.de).desired_width(48.0).font(egui::TextStyle::Monospace));
@@ -364,14 +372,14 @@ impl FenetreProm {
                             ui.add(egui::TextEdit::singleline(&mut self.a).desired_width(48.0).font(egui::TextStyle::Monospace));
                         });
                     });
-                    ui.radio_value(&mut self.depuis_memoire, false, "Fichier (Intel .hex, .bin, .dump, .woz, cassette…)");
+                    ui.radio_value(&mut self.depuis_memoire, false, tr("Fichier (Intel .hex, .bin, .dump, .woz, cassette…)"));
                     ui.horizontal(|ui| {
                         ui.add_enabled_ui(!self.depuis_memoire, |ui| {
                             if self.fichier.is_empty() {
                                 self.fichier = format!("{}{}", biblio.join(DOSSIER).display(), std::path::MAIN_SEPARATOR);
                             }
                             ui.add(egui::TextEdit::singleline(&mut self.fichier).desired_width(380.0));
-                            if ui.button("…").on_hover_text("Choisir le fichier (en lecture : fichier où enregistrer le contenu de la puce, Intel HEX si .hex)").clicked() {
+                            if ui.button("…").on_hover_text(tr("Choisir le fichier (en lecture : fichier où enregistrer le contenu de la puce, Intel HEX si .hex)")).clicked() {
                                 self.parcourir = !self.parcourir;
                             }
                         });
@@ -390,41 +398,39 @@ impl FenetreProm {
             let lecture_seule = CHIPS[self.puce].name.contains("read only");
             ui.horizontal(|ui| {
                 ui.add_enabled_ui(pret && !occupe, |ui| {
-                    if ui.button("Lire la puce").on_hover_text("Lire le contenu de la puce. Avec la mémoire ou un fichier existant : le comparer. Avec un nouveau nom de fichier : l'enregistrer (Intel HEX pour .hex)").clicked() {
+                    if ui.button(tr("Lire la puce")).on_hover_text(tr("Lire le contenu de la puce. Avec la mémoire ou un fichier existant : le comparer. Avec un nouveau nom de fichier : l'enregistrer (Intel HEX pour .hex)")).clicked() {
                         match self.entrees_lecture(m) {
                             Ok((d, f)) => self.lancer(ctx, Travail::Lire { enregistrer: f }, d),
-                            Err(e) => self.journal.push(format!("Erreur : {e}")),
+                            Err(e) => self.journal.push(trf!("Erreur : {0}", e)),
                         }
                     }
-                    let w = ui
-                        .add_enabled(!lecture_seule, egui::Button::new(RichText::new("Écrire la puce").strong()).fill(Color32::from_rgb(40, 100, 190)))
-                        .on_hover_text(if lecture_seule { "Cette puce est une mémoire morte à masque : lecture seule." } else { "Programmer la puce avec les données choisies (la puce doit être vide ou effaçable)" });
+                    let w = ui.add_enabled(!lecture_seule, egui::Button::new(RichText::new(tr("Écrire la puce")).strong()).fill(Color32::from_rgb(40, 100, 190))).on_hover_text(if lecture_seule { tr("Cette puce est une mémoire morte à masque : lecture seule.") } else { tr("Programmer la puce avec les données choisies (la puce doit être vide ou effaçable)") });
                     if w.clicked() {
                         match self.donnees(m) {
                             Ok(d) => self.lancer(ctx, Travail::Ecrire, Some(d)),
-                            Err(e) => self.journal.push(format!("Erreur : {e}")),
+                            Err(e) => self.journal.push(trf!("Erreur : {0}", e)),
                         }
                     }
-                    if ui.button("Vérifier").on_hover_text("Comparer la puce avec les données choisies").clicked() {
+                    if ui.button(tr("Vérifier")).on_hover_text(tr("Comparer la puce avec les données choisies")).clicked() {
                         match self.donnees(m) {
                             Ok(d) => self.lancer(ctx, Travail::Verifier, Some(d)),
-                            Err(e) => self.journal.push(format!("Erreur : {e}")),
+                            Err(e) => self.journal.push(trf!("Erreur : {0}", e)),
                         }
                     }
                 });
-                if ui.add_enabled(self.depuis_memoire, egui::Button::new("💾 Image Intel HEX")).on_hover_text("Écrire la plage de la mémoire en Intel HEX dans le dossier PROM de la bibliothèque (sans programmateur)").clicked() {
+                if ui.add_enabled(self.depuis_memoire, egui::Button::new(tr("💾 Image Intel HEX"))).on_hover_text(tr("Écrire la plage de la mémoire en Intel HEX dans le dossier PROM de la bibliothèque (sans programmateur)")).clicked() {
                     match self.plage().and_then(|(a, b)| m.exporter_prom(a, b)) {
                         Ok(t) => self.journal.push(t),
-                        Err(e) => self.journal.push(format!("Erreur : {e}")),
+                        Err(e) => self.journal.push(trf!("Erreur : {0}", e)),
                     }
                 }
-                if ui.add_enabled(!occupe, egui::Button::new("Fermer")).clicked() {
+                if ui.add_enabled(!occupe, egui::Button::new(tr("Fermer"))).clicked() {
                     self.ouvert = false;
                 }
             });
             ui.add_space(4.0);
             let frac = if occupe { ((ctx.input(|i| i.time) * 0.8) % 1.0) as f32 } else { 0.0 };
-            ui.add(egui::ProgressBar::new(frac).desired_width(ui.available_width()).text(if occupe { "En cours…" } else { "Prêt" }));
+            ui.add(egui::ProgressBar::new(frac).desired_width(ui.available_width()).text(if occupe { tr("En cours…") } else { tr("Prêt") }));
             if occupe {
                 ctx.request_repaint();
             }
@@ -435,7 +441,7 @@ impl FenetreProm {
                         ui.label(RichText::new(l).monospace().size(12.0));
                     }
                     if lecture_seule {
-                        ui.label(RichText::new("Cette puce est une mémoire morte à masque : lecture seule.").small().weak());
+                        ui.label(RichText::new(tr("Cette puce est une mémoire morte à masque : lecture seule.")).small().weak());
                     }
                 });
             });

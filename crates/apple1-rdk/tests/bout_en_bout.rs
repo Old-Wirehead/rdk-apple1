@@ -765,3 +765,108 @@ fn bouton_exemples_remplit_la_bibliotheque() {
     assert!(biblio.join("Art ASCII").join("pomme.txt").is_file());
     assert_eq!(m.bibliotheque(), biblio);
 }
+
+/// v1.0 : état de la machine enregistré puis rechargé (menu 📸 État, .a1state).
+#[test]
+fn etat_de_la_machine_aller_retour() {
+    let mut m = machine();
+    assert_eq!(m.etat_extension().as_deref(), Some("a1state"));
+    m.dump_ecrire(0x0300, 0x42).unwrap();
+    taper(&mut m, "300\n");
+    let o = m.etat_enregistrer("essai").unwrap();
+    // l'état est celui de la v1.0 : lisible par apple1-core
+    assert_eq!(apple1_core::state::peek_info(&o).unwrap().title, "essai");
+    let mut n = machine();
+    assert_eq!(n.dump_lire(0x0300), Some(0x00));
+    let msg = n.etat_charger(&o).unwrap();
+    assert!(msg.contains("essai"), "{msg}");
+    assert_eq!(n.dump_lire(0x0300), Some(0x42));
+    assert!(n.texte_ecran().contains("0300: 42"), "{}", n.texte_ecran());
+    assert!(n.etat_charger(b"pas un etat").is_err());
+}
+
+/// v1.0 : réglages par programme (programs.json) appliqués par ▶ Play.
+#[test]
+fn reglages_par_programme_appliques() {
+    use apple1_rdk::programmes;
+    use apple1_rdk::v1::params::ProgParams;
+    let d = dossier_neuf();
+    let f = d.join("bonjour.bin");
+    // LDA #'A' ; JSR ECHO ; JMP WOZMON
+    let octets = vec![0xA9, 0xC1, 0x20, 0xEF, 0xFF, 0x4C, 0x1F, 0xFF];
+    std::fs::write(&f, &octets).unwrap();
+    // sans réglages : .bin en $0300
+    let mut m = machine();
+    let p = Programme {
+        nom: "bonjour.bin".into(),
+        chemin: Some(f.clone()),
+        octets: octets.clone(),
+    };
+    m.charger(&p).unwrap();
+    assert_eq!(m.dump_lire(0x0300), Some(0xA9));
+    assert_eq!(m.dernier_chemin(), Some(f.as_path()));
+    // réglages : chargé et lancé en $0800
+    let r = ProgParams {
+        ranges: "800.807".into(),
+        load_addr: "800".into(),
+        run_addr: "800".into(),
+        run_cmd: "800R".into(),
+        ..ProgParams::default()
+    };
+    programmes::enregistrer(&f, r).unwrap();
+    let mut m = machine();
+    m.jouer(&p).unwrap();
+    assert_eq!(m.dump_lire(0x0800), Some(0xA9));
+    assert!(m.jusqua_attente(5_000_000));
+    assert!(m.texte_ecran().contains("800R"), "{}", m.texte_ecran());
+    let _ = std::fs::remove_dir_all(&d);
+}
+
+/// v1.0 : « Tester le dernier build » lance un source assembleur du dépôt.
+#[test]
+fn lancer_un_source_assembleur() {
+    let d = dossier_neuf();
+    let f = d.join("essai.s");
+    std::fs::write(
+        &f,
+        "        .org $0280\nDEBUT:  LDA #$C2\n        JSR $FFEF\n        JMP $FF1F\n",
+    )
+    .unwrap();
+    let mut m = machine();
+    let msg = m.lancer_fichier(&f).unwrap();
+    assert!(msg.contains("280R"), "{msg}");
+    assert_eq!(m.dump_lire(0x0280), Some(0xA9));
+    assert!(m.jusqua_attente(5_000_000));
+    assert!(m.texte_ecran().contains("280R"), "{}", m.texte_ecran());
+    let _ = std::fs::remove_dir_all(&d);
+}
+
+/// 0.1.7 : les textes de la machine ont leur traduction (la langue
+/// courante est globale : l'essai lit la table sans la changer, pour ne pas
+/// gêner les essais qui tournent en même temps).
+#[test]
+fn textes_de_la_machine_traduits() {
+    let m = machine();
+    let t = apple1_rdk::i18n::table();
+    let libelles: Vec<String> = m
+        .manifeste_boutons_peripheriques()
+        .into_iter()
+        .map(|b| b.libelle)
+        .collect();
+    assert!(libelles.contains(&"Réglages".to_string()), "{libelles:?}");
+    assert_eq!(t.dans(Langue::En, "Réglages"), "Settings");
+    assert_eq!(t.dans(Langue::De, "Oscilloscope"), "Oszilloskop");
+    for b in m.manifeste_boutons_peripheriques() {
+        for l in rdk_pilotes::langue::TOUTES {
+            // sigles et noms propres (GEN2, P-LAB, NMI, ASCII, 50 Hz, CodeTank, GitHub) : identiques
+            let nom_propre = !b.libelle.chars().any(|c| c.is_lowercase())
+                || ["50 Hz", "CodeTank", "GitHub"].contains(&b.libelle.as_str());
+            assert!(
+                t.traduit(l, &b.libelle) || nom_propre,
+                "{:?} : {}",
+                l,
+                b.libelle
+            );
+        }
+    }
+}
