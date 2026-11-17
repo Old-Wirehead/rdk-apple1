@@ -2115,7 +2115,7 @@ checksum = "20675572f6f24e9e76ef639bc5552774ed45f1c30e2951e1e99c59888861c539"
 [[package]]
 name = "rdk-interface"
 version = "0.1.8"
-source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=8b6c2b16b198141d09ecec79cf787cfa2c836567#8b6c2b16b198141d09ecec79cf787cfa2c836567"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=1d40aaaffc6503b97e96300a05241358a44e2ac8#1d40aaaffc6503b97e96300a05241358a44e2ac8"
 dependencies = [
  "dirs",
  "eframe",
@@ -2129,7 +2129,7 @@ dependencies = [
 [[package]]
 name = "rdk-machine-factice"
 version = "0.1.8"
-source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=8b6c2b16b198141d09ecec79cf787cfa2c836567#8b6c2b16b198141d09ecec79cf787cfa2c836567"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=1d40aaaffc6503b97e96300a05241358a44e2ac8#1d40aaaffc6503b97e96300a05241358a44e2ac8"
 dependencies = [
  "rdk-pilotes",
 ]
@@ -2137,7 +2137,7 @@ dependencies = [
 [[package]]
 name = "rdk-pilotes"
 version = "0.1.8"
-source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=8b6c2b16b198141d09ecec79cf787cfa2c836567#8b6c2b16b198141d09ecec79cf787cfa2c836567"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=1d40aaaffc6503b97e96300a05241358a44e2ac8#1d40aaaffc6503b97e96300a05241358a44e2ac8"
 
 [[package]]
 name = "read-fonts"
