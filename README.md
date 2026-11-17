@@ -10,6 +10,21 @@ Dépôt : <https://github.com/Old-Wirehead/rdk-apple1>.
 l'ancienne version de test 7.9.3 et à ses corrections (demande de fusion #56) ;
 les numéros 7.x désignaient les versions de test, quand le dépôt était privé.
 
+## Version 2.0 (en préparation, Linux) — sur l'interface commune
+
+La **2.0** reconstruit le kit sur **RDK-Interface-Commune 0.1.4**, comme le
+ZX Spectrum 0.2 : programme `retro-dev-kit-apple1` (paquet
+`crates/apple1-rdk`), même machine que la v1.0 (`apple1-core`), branchée par
+les pilotes communs et décrite par [`manifest-apple1.md`](manifest-apple1.md).
+Moniteur monochrome, clavier QWERTY générique sans pavé numérique, Woz
+Monitor, ACI, BASIC (votre copie de `integer_basic.bin`, non fournie),
+assembleur 6502, débogueur, Dump, désassemblage, bibliothèque. Linux
+seulement. Détails : [docs/version-2.0.md](docs/version-2.0.md).
+
+La **v1.0** reste disponible, inchangée :
+<https://github.com/Old-Wirehead/rdk-apple1/releases/tag/v1.0>. Le reste de
+ce document décrit la v1.0.
+
 
 Émulateur de l'Apple-1 de Steve Wozniak, écrit en Rust, qui tourne dans une
 **fenêtre graphique** (`apple1-emu-gui`, zoom, boutons, bibliothèque de

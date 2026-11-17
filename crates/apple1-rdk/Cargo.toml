@@ -1,0 +1,30 @@
+[package]
+name = "apple1-rdk"
+description = "Retro Dev Kit Apple 1 2.0 : l'Apple 1 (6502, PIA 6820, Woz Monitor, ACI) branché sur RDK-Interface-Commune 0.1.4 (pilotes), programme retro-dev-kit-apple1."
+version = "2.0.0"
+rust-version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+name = "apple1_rdk"
+path = "src/lib.rs"
+
+# Le binaire de la v1.0 s'appelle `apple1-emu-gui` (paquet apple1-gui) : il
+# reste intact. Celui de la 2.0 s'appelle `retro-dev-kit-apple1`.
+[[bin]]
+name = "retro-dev-kit-apple1"
+path = "src/main.rs"
+
+# La machine vient du noyau de la v1.0 (apple1-core, dans ce dépôt) ;
+# l'interface vient de RDK-Interface-Commune, épinglée sur le commit de
+# fusion de la version 0.1.4 (PR n° 7, étiquette `v0.1.4`). Changer de
+# version de l'interface commune = changer ces deux révisions, ensemble.
+[dependencies]
+apple1-core = { path = "../apple1-core" }
+rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "add001d33416986ec2bcc2c68242ead806abb9d1" }
+rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "add001d33416986ec2bcc2c68242ead806abb9d1" }
+# Même version que celle utilisée par rdk-interface (type de retour de `main`).
+eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }

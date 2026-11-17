@@ -166,6 +166,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "apple1-rdk"
+version = "2.0.0"
+dependencies = [
+ "apple1-core",
+ "eframe",
+ "rdk-interface",
+ "rdk-pilotes",
+]
+
+[[package]]
 name = "arbitrary"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2447,6 +2457,32 @@ dependencies = [
  "objc2-foundation 0.3.2",
  "objc2-quartz-core 0.3.2",
 ]
+
+[[package]]
+name = "rdk-interface"
+version = "0.1.4"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=add001d33416986ec2bcc2c68242ead806abb9d1#add001d33416986ec2bcc2c68242ead806abb9d1"
+dependencies = [
+ "eframe",
+ "egui_dock",
+ "rdk-machine-factice",
+ "rdk-pilotes",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "rdk-machine-factice"
+version = "0.1.4"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=add001d33416986ec2bcc2c68242ead806abb9d1#add001d33416986ec2bcc2c68242ead806abb9d1"
+dependencies = [
+ "rdk-pilotes",
+]
+
+[[package]]
+name = "rdk-pilotes"
+version = "0.1.4"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=add001d33416986ec2bcc2c68242ead806abb9d1#add001d33416986ec2bcc2c68242ead806abb9d1"
 
 [[package]]
 name = "read-fonts"
