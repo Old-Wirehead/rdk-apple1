@@ -3,8 +3,8 @@
 //! Version **2.0** du Retro Dev Kit Apple 1 (Linux). Tout ce qui est commun
 //! (fenêtre principale, barre d'icônes, éditeur, moniteur, Dump, débogueur,
 //! désassemblage, bibliothèque, assistant, préférences, barre d'état…) vient
-//! de **RDK-Interface-Commune 0.1.8** (dépendance Git épinglée sur le commit
-//! de fusion de la 0.1.8 ; 7 langues, zoom « Ajuster » et menu État depuis la 0.1.7). Ce paquet ne contient que **la liaison** entre la machine de
+//! de **RDK-Interface-Commune 0.1.9** (dépendance Git épinglée sur le commit
+//! de fusion de la 0.1.9, étiquette v0.1.9 ; 7 langues, zoom « Ajuster » et menu État depuis la 0.1.7). Ce paquet ne contient que **la liaison** entre la machine de
 //! la v1.0 (`apple1-core` : 6502 NMOS, PIA 6820/6821, Woz Monitor, ACI,
 //! terminal 40 × 24) et l'interface : [`MachineApple1`] implémente le trait
 //! [`rdk_pilotes::Machine`] et ses pilotes, comme le demande
@@ -785,6 +785,9 @@ impl MachineApple1 {
 
     fn assembler(&mut self, doc: &DocumentEditeur) -> Resultat<asm6502::Assembly> {
         match asm6502::assemble_text(&doc.texte, doc.chemin.as_deref(), &[]) {
+            // v1.0 (`as_empty`) : rien à assembler, rien à lancer
+            // (rdk-apple1#17, point 2)
+            Ok(a) if a.bytes.is_empty() => Err(self.erreur(tr("aucune instruction à assembler"))),
             Ok(a) => {
                 self.symboles = symboles_de_base();
                 self.symboles.extend(debug::symbols_from(&a.symbols));
@@ -814,14 +817,34 @@ impl MachineApple1 {
     /// Comme la v1.0 (`run_source`) : le BASIC choisi en `$E000`, RESET, puis
     /// le listing tapé au clavier (`E000R`, les lignes en majuscules) et,
     /// après une pause au hasard (graine de RND), `RUN`.
+    /// ▶ Lancer et ⬇ RAM d'un BASIC, **comme la v1.0** (`editor_run`) : le
+    /// listing est tokenisé, LOMEM et HIMEM sont choisis d'après sa taille
+    /// (`intbasic::layout` : 8 Ko avec LOMEM $0800 ou $0300, puis 12, 16 ou
+    /// 32 Ko), la RAM est agrandie si besoin, le programme et sa page zéro
+    /// sont posés en mémoire, puis `E2B3R` (démarrage à chaud du BASIC) et,
+    /// pour Lancer, `RUN`.
+    ///
+    /// Correction de rdk-apple1#17, point 1 : la 2.0 tapait le listing au
+    /// clavier, dans la mémoire par défaut de l'Integer BASIC (LOMEM $0800,
+    /// HIMEM $1000) : `*** MEM FULL ERR` dès 2 Ko, et une minute et demie de
+    /// frappe pour 94 lignes.
     fn taper_basic(&mut self, texte: &str, lancer: bool) -> Resultat<String> {
         let n = self.verifier_basic(texte)?;
+        let l = intbasic::tokenize(texte);
+        let (lomem, himem) = intbasic::layout(l.size(), None);
+        let image = intbasic::Image::build(&l.lines, lomem, himem).map_err(|_| {
+            self.erreur(trf!(
+                "programme trop grand : {0} octets pour {1} de mémoire",
+                l.size(),
+                himem - lomem
+            ))
+        })?;
+        self.machine_reset();
+        self.m.run_cycles(20_000);
         self.assurer_basic()?;
-        self.reset_et_taper(&touches_basic(texte));
-        if lancer {
-            self.m.type_pause();
-            self.m.type_text("RUN\r");
-        }
+        self.ranger(&image.blocks())?;
+        self.m
+            .type_text(if lancer { "E2B3R\rRUN\r" } else { "E2B3R\r" });
         self.erreurs.clear();
         let basic = if self.g2_present() {
             tr("RDK G2 Basic")
@@ -829,13 +852,17 @@ impl MachineApple1 {
             tr("Integer BASIC")
         };
         Ok(trf!(
-            "{0} : {1} ligne(s) tapée(s){2}",
+            "{0} : {1} ligne(s), {2} octets, LOMEM ${3}, HIMEM ${4} ({5} Ko) ; E2B3R{6}",
             basic,
             n,
+            l.size(),
+            format!("{:04X}", image.lomem),
+            format!("{:04X}", image.himem),
+            image.ram_kb(),
             if lancer {
-                ", puis RUN"
+                tr(" puis RUN")
             } else {
-                " ; tapez RUN ou LIST"
+                tr(" ; tapez RUN ou LIST")
             }
         ))
     }
@@ -1368,6 +1395,17 @@ impl RomMachine for MachineApple1 {
             let ou = self
                 .bibliotheque()
                 .join(rdk_pilotes::pilotes::rom_machine::DOSSIER_ROM);
+            // une copie sous un autre nom (« apple1basic.bin »…) est
+            // reconnue à sa signature : on dit comment la renommer
+            // (rdk-apple1#17, point 3 ; rien n'est renommé sans l'utilisateur)
+            if let Some(autre) = basic_sous_un_autre_nom(&ou) {
+                return VerdictRom::non_reconnues(trf!(
+                    "{0} est votre Integer BASIC d'origine, mais sous un autre nom : renommez-le en {1} (dans {2}), puis redémarrez le kit",
+                    autre,
+                    FICHIER_BASIC,
+                    ou.display()
+                ));
+            }
             return VerdictRom::non_reconnues(trf!("Integer BASIC d'origine absent (non fourni) : copiez votre {0} dans {1} ; en attendant, RDK G2 Basic", FICHIER_BASIC, ou.display()));
         }
         match Self::reconnaitre_basic(&r.octets) {
@@ -1665,6 +1703,16 @@ impl DumpMemoire for MachineApple1 {
     fn dump_plage(&self) -> RangeInclusive<Adresse> {
         0..=0xFFFF
     }
+    /// v1.0 : raccourcis ZP, $0200 (tampon du clavier), $0300 (programmes),
+    /// $E000 (BASIC) ; le bouton PC est ajouté par l'interface commune.
+    fn dump_signets(&self) -> Vec<(String, Adresse)> {
+        vec![
+            ("ZP".to_string(), 0x0000),
+            ("$0200".to_string(), 0x0200),
+            ("$0300".to_string(), 0x0300),
+            ("$E000".to_string(), 0xE000),
+        ]
+    }
     fn dump_lire(&self, adresse: Adresse) -> Option<u8> {
         (adresse <= 0xFFFF).then(|| self.m.board.peek(adresse as u16))
     }
@@ -1793,6 +1841,15 @@ impl DesassembleurMemoire for MachineApple1 {
     fn desassembleur_lire(&self, adresse: Adresse) -> Option<u8> {
         self.dump_lire(adresse)
     }
+    /// v1.0 : « Aller » accepte une étiquette (Woz Monitor, ACI, programme
+    /// assemblé), sans tenir compte de la casse.
+    fn desassembleur_symbole(&self, nom: &str) -> Option<Adresse> {
+        let nom = nom.trim().trim_end_matches(':');
+        self.symboles
+            .iter()
+            .find(|(_, n)| n.eq_ignore_ascii_case(nom))
+            .map(|(a, _)| *a as Adresse)
+    }
     fn desassembler(&self, adresse: Adresse) -> Option<LigneDesassemblee> {
         if adresse > 0xFFFF {
             return None;
@@ -1873,7 +1930,96 @@ impl EditeurMemoire for MachineApple1 {
     }
 }
 
+/// Un fichier de 4 Ko du dossier ROM, autre que `integer_basic.bin`, qui
+/// porte la signature de l'Integer BASIC d'origine : son nom.
+pub fn basic_sous_un_autre_nom(dossier: &Path) -> Option<String> {
+    std::fs::read_dir(dossier)
+        .ok()?
+        .filter_map(Result::ok)
+        .map(|e| e.path())
+        .filter(|p| p.file_name().is_some_and(|n| n != FICHIER_BASIC))
+        .filter(|p| std::fs::metadata(p).is_ok_and(|m| m.is_file() && m.len() == 4096))
+        .find(|p| std::fs::read(p).is_ok_and(|o| MachineApple1::reconnaitre_basic(&o).is_ok()))
+        .and_then(|p| p.file_name().map(|n| n.to_string_lossy().into_owned()))
+}
+
+/// Ligne de description d'un programme de la bibliothèque (v1.0,
+/// `library::describe`) : « Source BASIC · 47 lignes · lancer : RUN »,
+/// « Woz Monitor (texte hexa) · 0300.031E · lancer : 300R »…
+pub fn description_programme(programme: &Programme) -> Option<String> {
+    let chemin = programme
+        .chemin
+        .clone()
+        .unwrap_or_else(|| PathBuf::from(&programme.nom));
+    let ext = chemin
+        .extension()
+        .and_then(|e| e.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    let texte = || String::from_utf8_lossy(&programme.octets).into_owned();
+    match Langage::depuis_extension(&ext) {
+        Langage::Basic => {
+            let n = texte().lines().filter(|l| !l.trim().is_empty()).count();
+            return Some(trf!("Source BASIC · {0} lignes · lancer : RUN", n));
+        }
+        Langage::Assembleur => {
+            return Some(match asm6502::assemble_text(&texte(), Some(&chemin), &[]) {
+                Ok(a) if !a.bytes.is_empty() => trf!(
+                    "Source assembleur 6502 · {0}.{1} · lancer : {2}",
+                    format!("{:04X}", a.origin),
+                    format!("{:04X}", a.end()),
+                    a.run_command()
+                ),
+                Ok(_) => tr("Source assembleur 6502 · vide").to_string(),
+                Err(e) => trf!("Source assembleur 6502 · {0} erreur(s)", e.len()),
+            });
+        }
+        _ => {}
+    }
+    let kind = program::kind_of(&chemin, Some(&programme.octets));
+    if kind == program::Kind::Wav {
+        let duree = apple1_core::wav::parse_audio(&programme.octets)
+            .ok()
+            .map(|a| a.best_channel().len() as f64 / a.sample_rate.max(1) as f64);
+        return Some(match duree {
+            Some(d) => trf!(
+                "Cassette ACI · {0} s · ▶ la lit et la lance",
+                format!("{d:.1}")
+            ),
+            None => tr("Cassette ACI").to_string(),
+        });
+    }
+    let nature = match kind {
+        program::Kind::Hex => tr("Woz Monitor (texte hexa)"),
+        program::Kind::Prg => tr("Programme .prg"),
+        program::Kind::Bin => return Some(trf!("Binaire · {0} octets", programme.octets.len())),
+        _ => tr("Programme"),
+    };
+    match program::load_bytes(&programme.octets, kind, None) {
+        Ok(p) => {
+            let plages: Vec<String> = p
+                .ranges()
+                .iter()
+                .map(|(a, b)| format!("{a:04X}.{b:04X}"))
+                .collect();
+            let lancer = p
+                .run
+                .or_else(|| p.blocks.first().map(|b| b.0))
+                .map(|a| trf!(" · lancer : {0}R", format!("{a:X}")))
+                .unwrap_or_default();
+            Some(format!("{nature} · {}{lancer}", plages.join(" ")))
+        }
+        Err(e) => Some(format!("{nature} · {e}")),
+    }
+}
+
 impl BiblioMemoire for MachineApple1 {
+    /// v1.0 (`library::describe`) : nature du fichier, lignes ou plages
+    /// d'adresses, commande de lancement. Les cassettes ne sont pas décodées
+    /// ici (trop long pour l'affichage) : leur durée seulement.
+    fn biblio_description(&self, programme: &Programme) -> Option<String> {
+        description_programme(programme)
+    }
     fn charger(&mut self, programme: &Programme) -> Resultat<()> {
         self.dernier_chemin = programme.chemin.clone().or(self.dernier_chemin.take());
         if let Some(l) = Self::source(programme) {
@@ -2100,6 +2246,16 @@ impl MachineEtatPilote for MachineApple1 {
 impl Machine for MachineApple1 {
     fn machine_nom(&self) -> String {
         DOSSIER_BIBLIOTHEQUE.to_string()
+    }
+    /// Identifiant **stable**, déclaré (feuille de route, contrat § 5 règle
+    /// 3) : il est enregistré dans les configurations des utilisateurs.
+    fn machine_id(&self) -> String {
+        "apple-1".to_string()
+    }
+    /// Titre de la v1.0 (rdk-apple1 PR 60, « Original Sin » dans toutes
+    /// les langues).
+    fn machine_titre_fenetre(&self) -> String {
+        "Retro Dev Kit Apple 1 — Original Sin".to_string()
     }
     fn machine_version(&self) -> String {
         VERSION.to_string()
@@ -2351,8 +2507,10 @@ impl Machine for MachineApple1 {
             peripheriques: p.iter().map(|x| x.to_string()).collect(),
             langages: self.manifeste_langages(),
         };
+        // la première est celle du premier lancement : écran vert, écran
+        // couleur (carte GEN2) et clavier, comme le veut Wirehead
+        // (rdk-apple1#17, point 4)
         vec![
-            c(CONFIG_VERT, &[ids::MONITEUR_MONOCHROME, ids::CASSETTE]),
             c(
                 CONFIG_GEN2,
                 &[
@@ -2362,6 +2520,7 @@ impl Machine for MachineApple1 {
                     ids::CASSETTE,
                 ],
             ),
+            c(CONFIG_VERT, &[ids::MONITEUR_MONOCHROME, ids::CASSETTE]),
             c(
                 CONFIG_PLAB,
                 &[

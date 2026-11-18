@@ -1,6 +1,6 @@
 # Retro Dev Kit Apple 1 — version 2.0 (Linux)
 
-La 2.0 reconstruit le kit Apple 1 sur **RDK-Interface-Commune 0.1.8**, comme le ZX Spectrum 0.2.x, et reprend les fonctions de la v1.0. Demandes de Wirehead du 17/11/2026.
+La 2.0 reconstruit le kit Apple 1 sur **RDK-Interface-Commune 0.1.9**, comme le ZX Spectrum 0.2.x, et reprend les fonctions de la v1.0. Demandes de Wirehead du 17/11/2026.
 
 ![Retro Dev Kit Apple 1 2.0 : Woz Monitor, moniteur vert, clavier QWERTY sans pavé numérique](captures/rdk-apple1-2.0-wozmon-clavier.png)
 
@@ -9,7 +9,7 @@ La 2.0 reconstruit le kit Apple 1 sur **RDK-Interface-Commune 0.1.8**, comme le 
 - Programme `retro-dev-kit-apple1` (paquet `crates/apple1-rdk`) : l'interface commune (fenêtres, barre d'icônes, éditeur, moniteurs, Dump, débogueur, désassemblage, bibliothèque, assistant, préférences, barre d'état) avec l'Apple 1.
 - La machine est **celle de la v1.0** (`crates/apple1-core`, inchangé) ; seule la liaison par les pilotes est nouvelle. Le manifeste est [`manifest-apple1.md`](../manifest-apple1.md).
 - `crates/apple1-rdk` est un **espace de travail à part** (exclu de celui de la v1.0) : la v1.0 et sa construction Windows ne dépendent pas du dépôt privé de l'interface commune.
-- Interface commune épinglée sur le commit `fbd1dcc1a3692c614af3bf4b6720a9b701a01c3d` (fusion de la 0.1.8, PR n° 11 ; la 0.1.7 est la PR n° 10).
+- Interface commune épinglée sur le commit `e098ff85bea5de4c39c3ac4dc3285b81cc55cdf1` (étiquette v0.1.9, fusion de la PR n° 21).
 - **Linux seulement.** Les fichiers Windows de la v1.0 sont gardés tels quels, sans travail 2.0.
 
 ## Interface commune 0.1.5 et 0.1.6

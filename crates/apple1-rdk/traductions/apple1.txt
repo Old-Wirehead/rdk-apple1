@@ -2343,3 +2343,141 @@ ru Esc
 es Esc
 it Esc
 pt Esc
+
+# ----- reprises de la v1.0 (rdk-apple1#17)
+
+@ aucune instruction à assembler
+en nothing to assemble
+de nichts zu assemblieren
+ru нечего ассемблировать
+es nada que ensamblar
+it niente da assemblare
+pt nada para montar
+
+@ programme trop grand : {0} octets pour {1} de mémoire
+en program too big: {0} bytes for {1} of memory
+de Programm zu groß: {0} Bytes für {1} Speicher
+ru программа слишком велика: {0} байт при памяти {1}
+es programa demasiado grande: {0} bytes para {1} de memoria
+it programma troppo grande: {0} byte per {1} di memoria
+pt programa grande demais: {0} bytes para {1} de memória
+
+@ {0} : {1} ligne(s), {2} octets, LOMEM ${3}, HIMEM ${4} ({5} Ko) ; E2B3R{6}
+en {0}: {1} line(s), {2} bytes, LOMEM ${3}, HIMEM ${4} ({5} KB); E2B3R{6}
+de {0}: {1} Zeile(n), {2} Bytes, LOMEM ${3}, HIMEM ${4} ({5} KB); E2B3R{6}
+ru {0}: строк: {1}, байт: {2}, LOMEM ${3}, HIMEM ${4} ({5} КБ); E2B3R{6}
+es {0}: {1} línea(s), {2} bytes, LOMEM ${3}, HIMEM ${4} ({5} KB); E2B3R{6}
+it {0}: {1} riga/e, {2} byte, LOMEM ${3}, HIMEM ${4} ({5} KB); E2B3R{6}
+pt {0}: {1} linha(s), {2} bytes, LOMEM ${3}, HIMEM ${4} ({5} KB); E2B3R{6}
+
+@  puis RUN
+en  then RUN
+de  dann RUN
+ru  затем RUN
+es  y luego RUN
+it  poi RUN
+pt  depois RUN
+
+@  ; tapez RUN ou LIST
+en ; type RUN or LIST
+de ; RUN oder LIST eingeben
+ru ; введите RUN или LIST
+es ; escriba RUN o LIST
+it ; digitate RUN o LIST
+pt ; digite RUN ou LIST
+
+@ {0} est votre Integer BASIC d'origine, mais sous un autre nom : renommez-le en {1} (dans {2}), puis redémarrez le kit
+en {0} is your original Integer BASIC, but under another name: rename it {1} (in {2}), then restart the kit
+de {0} ist Ihr originales Integer BASIC, aber unter anderem Namen: benennen Sie es in {1} um (in {2}) und starten Sie das Kit neu
+ru {0} — ваш оригинальный Integer BASIC, но под другим именем: переименуйте его в {1} (в {2}) и перезапустите набор
+es {0} es su Integer BASIC original, pero con otro nombre: renómbrelo a {1} (en {2}) y reinicie el kit
+it {0} è il vostro Integer BASIC originale, ma con un altro nome: rinominatelo in {1} (in {2}), poi riavviate il kit
+pt {0} é o seu Integer BASIC original, mas com outro nome: renomeie-o para {1} (em {2}) e reinicie o kit
+
+@ Source BASIC · {0} lignes · lancer : RUN
+en BASIC source · {0} lines · run: RUN
+de BASIC-Quelltext · {0} Zeilen · starten: RUN
+ru Исходник BASIC · строк: {0} · запуск: RUN
+es Fuente BASIC · {0} líneas · ejecutar: RUN
+it Sorgente BASIC · {0} righe · avvio: RUN
+pt Fonte BASIC · {0} linhas · executar: RUN
+
+@ Source assembleur 6502 · {0}.{1} · lancer : {2}
+en 6502 assembler source · {0}.{1} · run: {2}
+de 6502-Assembler-Quelltext · {0}.{1} · starten: {2}
+ru Исходник ассемблера 6502 · {0}.{1} · запуск: {2}
+es Fuente ensamblador 6502 · {0}.{1} · ejecutar: {2}
+it Sorgente assembler 6502 · {0}.{1} · avvio: {2}
+pt Fonte assembler 6502 · {0}.{1} · executar: {2}
+
+@ Source assembleur 6502 · vide
+en 6502 assembler source · empty
+de 6502-Assembler-Quelltext · leer
+ru Исходник ассемблера 6502 · пусто
+es Fuente ensamblador 6502 · vacía
+it Sorgente assembler 6502 · vuoto
+pt Fonte assembler 6502 · vazia
+
+@ Source assembleur 6502 · {0} erreur(s)
+en 6502 assembler source · {0} error(s)
+de 6502-Assembler-Quelltext · {0} Fehler
+ru Исходник ассемблера 6502 · ошибок: {0}
+es Fuente ensamblador 6502 · {0} error(es)
+it Sorgente assembler 6502 · {0} errore/i
+pt Fonte assembler 6502 · {0} erro(s)
+
+@ Cassette ACI
+en ACI tape
+de ACI-Kassette
+ru Кассета ACI
+es Casete ACI
+it Cassetta ACI
+pt Cassete ACI
+
+@ Cassette ACI · {0} s · ▶ la lit et la lance
+en ACI tape · {0} s · ▶ plays and runs it
+de ACI-Kassette · {0} s · ▶ liest und startet sie
+ru Кассета ACI · {0} с · ▶ читает и запускает её
+es Casete ACI · {0} s · ▶ la lee y la ejecuta
+it Cassetta ACI · {0} s · ▶ la legge e la avvia
+pt Cassete ACI · {0} s · ▶ lê e executa
+
+@ Woz Monitor (texte hexa)
+en Woz Monitor (hex text)
+de Woz Monitor (Hex-Text)
+ru Woz Monitor (шестнадцатеричный текст)
+es Woz Monitor (texto hexadecimal)
+it Woz Monitor (testo esadecimale)
+pt Woz Monitor (texto hexadecimal)
+
+@ Programme .prg
+en .prg program
+de .prg-Programm
+ru Программа .prg
+es Programa .prg
+it Programma .prg
+pt Programa .prg
+
+@ Programme
+en Program
+de Programm
+ru Программа
+es Programa
+it Programma
+pt Programa
+
+@ Binaire · {0} octets
+en Binary · {0} bytes
+de Binär · {0} Bytes
+ru Двоичный · {0} байт
+es Binario · {0} bytes
+it Binario · {0} byte
+pt Binário · {0} bytes
+
+@  · lancer : {0}R
+en  · run: {0}R
+de  · starten: {0}R
+ru  · запуск: {0}R
+es  · ejecutar: {0}R
+it  · avvio: {0}R
+pt  · executar: {0}R
