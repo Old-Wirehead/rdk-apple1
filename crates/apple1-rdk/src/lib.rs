@@ -62,6 +62,7 @@ pub mod art;
 pub mod ascii_outil;
 pub mod cassette;
 pub mod clavier;
+pub mod contrat_1_1;
 pub mod couleur;
 pub mod crt;
 pub mod ecran;
@@ -238,6 +239,10 @@ fn symboles_de_base() -> Symbols {
 pub struct MachineApple1 {
     m: Apple1,
     dbg: Debugger,
+    /// Contrat 1.1.0 : points d'arrêt reçus de l'interface.
+    arrets: contrat_1_1::Arrets,
+    /// Contrat 1.1.0 : (ligne du source, adresse) au dernier assemblage.
+    lignes_asm: Vec<(usize, u16)>,
     marche: Marche,
     vitesse: Vitesse,
     /// Dossier du kit (réglages, exemples du paquet `Biblio/`).
@@ -297,6 +302,8 @@ impl MachineApple1 {
         let mut a = MachineApple1 {
             m,
             dbg: Debugger::default(),
+            arrets: contrat_1_1::Arrets::default(),
+            lignes_asm: Vec::new(),
             marche: Marche::Marche,
             vitesse: Vitesse::Reelle,
             dossier,
@@ -792,6 +799,9 @@ impl MachineApple1 {
                 self.symboles = symboles_de_base();
                 self.symboles.extend(debug::symbols_from(&a.symbols));
                 self.depart = a.origin;
+                // contrat 1.1.0 : les lignes du source ont une adresse
+                self.lignes_asm = contrat_1_1::adresses_des_lignes(&a);
+                self.appliquer_arrets();
                 Ok(a)
             }
             Err(e) => {
@@ -800,6 +810,12 @@ impl MachineApple1 {
                 Err(self.erreur(trf!("{0} erreur(s) d'assemblage ; {1}", n, premiere)))
             }
         }
+    }
+
+    /// Contrat 1.1.0 : points d'arrêt posés dans le débogueur de la v1.0.
+    fn appliquer_arrets(&mut self) {
+        self.dbg.breaks = self.arrets.adresses_completes(&self.lignes_asm);
+        self.dbg.basic_breaks = self.arrets.basic.clone();
     }
 
     /// Contrôle du listing (même analyse que le pilote `syntaxe-basic`).
@@ -1641,6 +1657,15 @@ impl VideoNumerique for MachineApple1 {
             }
         }
     }
+    /// Contrat 1.1.0 : cases « vintage » dans les fenêtres d'écran.
+    fn reglages_ecran(&self, moniteur: Moniteur) -> Vec<rdk_pilotes::ReglageEcran> {
+        contrat_1_1::reglages(moniteur, &self.opts.ecran, self.opts.phosphore)
+    }
+    fn regler_ecran(&mut self, _moniteur: Moniteur, id: &str, valeur: &rdk_pilotes::ValeurReglage) {
+        if contrat_1_1::regler(&mut self.opts.ecran, &mut self.opts.phosphore, id, valeur) {
+            self.enregistrer_reglages();
+        }
+    }
 }
 
 impl ClavierMachine for MachineApple1 {
@@ -1835,6 +1860,12 @@ impl DebogueurProcesseur for MachineApple1 {
         }
         Ok(())
     }
+    /// Contrat 1.1.0 : marge de l'Éditeur et rubrique du Débogueur.
+    fn points_arret(&mut self, points: &[rdk_pilotes::PointArret]) -> Resultat<()> {
+        self.arrets = contrat_1_1::Arrets::depuis(points);
+        self.appliquer_arrets();
+        Ok(())
+    }
 }
 
 impl DesassembleurMemoire for MachineApple1 {
@@ -1904,6 +1935,10 @@ impl EditeurMachine for MachineApple1 {
         // l'Apple 1 n'a pas de BREAK : RESET ramène au Woz Monitor
         self.machine_reset();
         Ok(())
+    }
+    /// Contrat 1.1.0 (issue 24 de l'interface) : routines de la ROM.
+    fn editeur_routines_rom(&self) -> Vec<rdk_pilotes::RoutineRom> {
+        contrat_1_1::routines_rom()
     }
 }
 

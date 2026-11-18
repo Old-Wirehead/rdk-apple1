@@ -2481,3 +2481,67 @@ ru  · запуск: {0}R
 es  · ejecutar: {0}R
 it  · avvio: {0}R
 pt  · executar: {0}R
+
+@ affiche le caractère ASCII de A (A conservé)
+en prints the ASCII character in A (A preserved)
+de gibt das ASCII-Zeichen in A aus (A bleibt erhalten)
+ru выводит ASCII-символ из A (A сохраняется)
+es muestra el carácter ASCII de A (A se conserva)
+it visualizza il carattere ASCII di A (A conservato)
+pt mostra o carácter ASCII de A (A mantido)
+
+@ affiche A en deux chiffres hexadécimaux (A modifié)
+en prints A as two hexadecimal digits (A changed)
+de gibt A als zwei Hexadezimalziffern aus (A wird verändert)
+ru выводит A двумя шестнадцатеричными цифрами (A изменяется)
+es muestra A en dos dígitos hexadecimales (A se modifica)
+it visualizza A in due cifre esadecimali (A modificato)
+pt mostra A em dois dígitos hexadecimais (A alterado)
+
+@ affiche le chiffre hexadécimal des 4 bits bas de A
+en prints the hexadecimal digit of the low 4 bits of A
+de gibt die Hexadezimalziffer der unteren 4 Bits von A aus
+ru выводит шестнадцатеричную цифру младших 4 битов A
+es muestra el dígito hexadecimal de los 4 bits bajos de A
+it visualizza la cifra esadecimale dei 4 bit bassi di A
+pt mostra o dígito hexadecimal dos 4 bits baixos de A
+
+@ retour au Woz Monitor : nouvelle ligne et attente d'une commande
+en back to the Woz Monitor: new line and wait for a command
+de zurück zum Woz Monitor: neue Zeile und Warten auf einen Befehl
+ru возврат в Woz Monitor: новая строка и ожидание команды
+es vuelta al Woz Monitor: nueva línea y espera de una orden
+it ritorno al Woz Monitor: nuova riga e attesa di un comando
+pt regresso ao Woz Monitor: nova linha e espera de um comando
+
+@ démarrage du Woz Monitor
+en Woz Monitor start
+de Start des Woz Monitors
+ru запуск Woz Monitor
+es arranque del Woz Monitor
+it avvio del Woz Monitor
+pt arranque do Woz Monitor
+
+@ moniteur de la carte cassette ACI
+en monitor of the ACI cassette card
+de Monitor der ACI-Kassettenkarte
+ru монитор кассетной платы ACI
+es monitor de la tarjeta de casete ACI
+it monitor della scheda cassetta ACI
+pt monitor da placa de cassete ACI
+
+@ démarrage à froid de l'Integer BASIC (programme effacé)
+en Integer BASIC cold start (program erased)
+de Kaltstart des Integer BASIC (Programm gelöscht)
+ru холодный запуск Integer BASIC (программа стирается)
+es arranque en frío del Integer BASIC (programa borrado)
+it avvio a freddo dell'Integer BASIC (programma cancellato)
+pt arranque a frio do Integer BASIC (programa apagado)
+
+@ démarrage à chaud de l'Integer BASIC (programme gardé)
+en Integer BASIC warm start (program kept)
+de Warmstart des Integer BASIC (Programm bleibt erhalten)
+ru горячий запуск Integer BASIC (программа сохраняется)
+es arranque en caliente del Integer BASIC (programa conservado)
+it avvio a caldo dell'Integer BASIC (programma conservato)
+pt arranque a quente do Integer BASIC (programa mantido)
