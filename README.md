@@ -12,7 +12,7 @@ les numéros 7.x désignaient les versions de test, quand le dépôt était priv
 
 ## Version 2.0 (en préparation, Linux) — sur l'interface commune
 
-La **2.0** reconstruit le kit sur **RDK-Interface-Commune 0.1.8**, comme le
+La **2.0** reconstruit le kit sur **RDK-Interface-Commune 0.1.9**, comme le
 ZX Spectrum 0.2 : programme `retro-dev-kit-apple1` (paquet
 `crates/apple1-rdk`), même machine que la v1.0 (`apple1-core`), branchée par
 les pilotes communs et décrite par [`manifest-apple1.md`](manifest-apple1.md).

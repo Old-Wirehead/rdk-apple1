@@ -1,6 +1,6 @@
 [package]
 name = "apple1-rdk"
-description = "Retro Dev Kit Apple 1 2.0 : l'Apple 1 (6502, PIA 6820, Woz Monitor, ACI) branché sur RDK-Interface-Commune 0.1.8 (pilotes), programme retro-dev-kit-apple1."
+description = "Retro Dev Kit Apple 1 2.0 : l'Apple 1 (6502, PIA 6820, Woz Monitor, ACI) branché sur RDK-Interface-Commune 0.1.9 (pilotes), programme retro-dev-kit-apple1."
 version = "2.0.0"
 rust-version = "1.95"
 edition = "2021"
@@ -22,19 +22,17 @@ path = "src/main.rs"
 
 # La machine vient du noyau de la v1.0 (apple1-core, dans ce dépôt) ;
 # l'interface vient de RDK-Interface-Commune, épinglée sur le commit de
-# fusion de la version 0.1.8 (PR n° 11 : zoom « Ajuster » corrigé, barre
+# fusion de la version 0.1.9 (étiquette v0.1.9, PR n° 21 : Dump, Désassemblage,
+# Bibliothèque, assistant et barre d'icônes au niveau de la v1.0, contrat des
+# pilotes 1.0.0 ; 0.1.8, PR n° 11 : zoom « Ajuster » corrigé, barre
 # d'icônes compacte quand elle déborde ; 0.1.7, PR n° 10 : 7 langues, zoom
 # « Ajuster », menu 📸 État relié à la machine ; 0.1.6 : phosphore du moniteur
 # monochrome ; 0.1.5 : bibliothèques, ROM, formats, configurations).
 # Changer de version de l'interface commune = changer ces deux révisions, ensemble.
 [dependencies]
 apple1-core = { path = "../apple1-core" }
-# Provisoire (rdk-apple1#17) : branche `claude/assistant-et-barre-v1`
-# de l'interface commune (PR 13 à 16 : Dump, Désassemblage, Bibliothèque,
-# clavier, assistant et barre d'icônes au niveau de la v1.0). À repointer sur la
-# version publiée (0.1.9) une fois ces PR fusionnées.
-rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "1d40aaaffc6503b97e96300a05241358a44e2ac8" }
-rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "1d40aaaffc6503b97e96300a05241358a44e2ac8" }
+rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "e098ff85bea5de4c39c3ac4dc3285b81cc55cdf1" }
+rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "e098ff85bea5de4c39c3ac4dc3285b81cc55cdf1" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
 # Comme la v1.0 (apple1-gui) : cassettes reconnues (SHA-256), photos → art ASCII.

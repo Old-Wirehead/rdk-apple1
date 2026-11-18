@@ -3,8 +3,8 @@
 //! Version **2.0** du Retro Dev Kit Apple 1 (Linux). Tout ce qui est commun
 //! (fenêtre principale, barre d'icônes, éditeur, moniteur, Dump, débogueur,
 //! désassemblage, bibliothèque, assistant, préférences, barre d'état…) vient
-//! de **RDK-Interface-Commune 0.1.8** (dépendance Git épinglée sur le commit
-//! de fusion de la 0.1.8 ; 7 langues, zoom « Ajuster » et menu État depuis la 0.1.7). Ce paquet ne contient que **la liaison** entre la machine de
+//! de **RDK-Interface-Commune 0.1.9** (dépendance Git épinglée sur le commit
+//! de fusion de la 0.1.9, étiquette v0.1.9 ; 7 langues, zoom « Ajuster » et menu État depuis la 0.1.7). Ce paquet ne contient que **la liaison** entre la machine de
 //! la v1.0 (`apple1-core` : 6502 NMOS, PIA 6820/6821, Woz Monitor, ACI,
 //! terminal 40 × 24) et l'interface : [`MachineApple1`] implémente le trait
 //! [`rdk_pilotes::Machine`] et ses pilotes, comme le demande

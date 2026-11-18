@@ -1,4 +1,4 @@
-//! Retro Dev Kit Apple 1 2.0 : RDK-Interface-Commune 0.1.8 avec l'Apple 1.
+//! Retro Dev Kit Apple 1 2.0 : RDK-Interface-Commune 0.1.9 avec l'Apple 1.
 //!
 //! Le dossier courant est le « dossier du kit » : préférences
 //! `./preferences.json`, exemples du paquet `./Biblio`. La bibliothèque de
