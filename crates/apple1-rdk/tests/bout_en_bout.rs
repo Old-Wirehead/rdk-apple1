@@ -634,6 +634,16 @@ fn exemples_de_la_v1_copies_dans_le_paquet() {
     assert!(m.double_clic_charge(&p));
     m.charger(&p).unwrap();
     assert_eq!(m.dump_lire(0x0C00), Some(0xAD));
+    // livré en .woz dans le paquet 2.0 (rdk-apple1#17) : même chargement
+    let woz = Programme {
+        nom: "gen2-barres.woz".into(),
+        chemin: Some(barres.with_extension("woz")),
+        octets: p.octets.clone(),
+    };
+    let mut m = machine();
+    assert!(m.double_clic_charge(&woz));
+    m.charger(&woz).unwrap();
+    assert_eq!(m.dump_lire(0x0C00), Some(0xAD));
 }
 
 #[test]

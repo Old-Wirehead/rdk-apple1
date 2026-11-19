@@ -43,7 +43,12 @@ cp "$EX/asm/apple1.inc" "$CIBLE/Biblio/Assembleur/"
 # cartes de la v1.0 : GEN2 (démos originales du kit) et P-LAB ; aucun
 # fichier d'Uncle Bernie (GEN2_TESTS_HOWTO, gen2-test*.apl) n'est repris
 cp "$EX/asm/gen2-lores.s" "$EX/asm/gen2-hires.s" "$EX/asm/gen2.inc" "$EX/asm/apple1.inc" \
-    "$EX/basic/puissance4-couleur.bas" samples/gen2-barres.txt "$CIBLE/Biblio/GEN2 COLOR/"
+    "$EX/basic/puissance4-couleur.bas" "$CIBLE/Biblio/GEN2 COLOR/"
+# gen2-barres est un vidage du Woz Monitor : livré en .woz, le format de la
+# 2.0 pour ces vidages (.txt n'est lu que pour les anciens fichiers ;
+# rdk-apple1#17, choix de Wirehead du 18/11/2026). samples/ reste en .txt
+# pour la v1.0.
+cp samples/gen2-barres.txt "$CIBLE/Biblio/GEN2 COLOR/gen2-barres.woz"
 cp "$EX/asm/plab-couleurs.s" "$EX/asm/apple1.inc" "$CIBLE/Biblio/P-LAB/"
 # art ASCII de la v1.0, avec ses licences (dessins originaux, portraits CC BY-SA 3.0)
 cp crates/apple1-gui/ascii/*.txt crates/apple1-gui/ascii/LICENCES.md "$CIBLE/Biblio/Art ASCII/"
