@@ -1,0 +1,113 @@
+# Intégration continue de l'Apple-1 2.0 (crates/apple1-rdk), go de Wirehead
+# du 19/11/2026 (rdk-apple1#24, remarque de Kimi Testeur et DS Testeur) :
+# windows.yml ne compile que la v1.0 (apple1-gui) et ne lance aucun test.
+#
+# À chaque PR et à chaque poussée sur main : compilation, clippy sans
+# avertissement, tests (dont tests/bout_en_bout.rs), paquet Linux 2.0 et
+# contrôle « aucune ROM ». L'interface commune vient de la révision épinglée
+# dans crates/apple1-rdk/Cargo.toml.
+#
+# RDK-Interface-Commune est PRIVÉ : il est lu avec une clé de déploiement en
+# lecture seule (choix de Wirehead du 19/11/2026). Clé publique : Deploy keys
+# de RDK-Interface-Commune ; clé privée : secret INTERFACE_DEPLOY_KEY de
+# rdk-apple1 (créés par Wirehead). Sans ce secret (PR d'un fork), le
+# workflow s'arrête avec un message clair.
+#
+# Ne crée ni étiquette ni release (décision réservée à Wirehead).
+name: Apple-1 2.0
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: apple1-2-0-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: never
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  apple1-rdk:
+    name: Apple-1 2.0 (Linux) — tests et paquet
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Clé de lecture de l'interface commune
+        env:
+          CLE: ${{ secrets.INTERFACE_DEPLOY_KEY }}
+        run: |
+          if [ -z "$CLE" ]; then
+            echo "::error::Secret INTERFACE_DEPLOY_KEY absent : l'interface commune (dépôt privé) ne peut pas être lue." >&2
+            exit 1
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$CLE" > ~/.ssh/interface && chmod 600 ~/.ssh/interface
+          ssh-keyscan -t ed25519,rsa github.com >> ~/.ssh/known_hosts 2>/dev/null
+          printf 'Host github.com\n  IdentityFile ~/.ssh/interface\n  IdentitiesOnly yes\n' > ~/.ssh/config
+          # Cargo passe par git (SSH) pour ce dépôt, sans toucher à Cargo.toml
+          git config --global url."ssh://git@github.com/Old-Wirehead/RDK-Interface-Commune".insteadOf "https://github.com/Old-Wirehead/RDK-Interface-Commune"
+          echo "CARGO_NET_GIT_FETCH_WITH_CLI=true" >> "$GITHUB_ENV"
+
+      # Rust 1.95 au minimum (rust-version de apple1-rdk)
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: crates/apple1-rdk -> target
+
+      # apple1-rdk est un espace de travail à part (exclu de celui de la
+      # v1.0) ; sans --locked : un changement de révision de l'interface
+      # dans Cargo.toml met Cargo.lock à jour dans la copie de la CI
+      - name: Compiler (release)
+        working-directory: crates/apple1-rdk
+        run: cargo build --release
+
+      - name: Clippy
+        working-directory: crates/apple1-rdk
+        run: cargo clippy --release --all-targets -- -D warnings
+
+      # le test du BASIC d'origine s'arrête de lui-même sans RDK_APPLE1_BASIC :
+      # aucune ROM sous droits n'est utilisée
+      - name: Tests
+        working-directory: crates/apple1-rdk
+        run: cargo test --release
+
+      - name: Paquet Linux 2.0
+        run: |
+          sh packaging/linux-2.0/construire-paquet.sh
+          ls -l dist
+
+      # règle de sécurité : ni ROM sous droits ni Integer BASIC d'origine
+      - name: Contrôle du paquet
+        working-directory: dist
+        run: |
+          for z in *.zip; do
+            unzip -l "$z" > contenu.txt
+            if grep -iE 'integer|\.rom$|\.bin$|codetank' contenu.txt; then
+              echo "Fichier interdit dans $z" >&2
+              exit 1
+            fi
+          done
+          echo "Aucun fichier interdit."
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: retro-dev-kit-apple1-2.0-linux-${{ github.sha }}
+          path: |
+            dist/*.zip
+            dist/*.sha256
+          if-no-files-found: error
+          retention-days: 14
