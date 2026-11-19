@@ -5,7 +5,13 @@
 # À chaque PR et à chaque poussée sur main : compilation, clippy sans
 # avertissement, tests (dont tests/bout_en_bout.rs), paquet Linux 2.0 et
 # contrôle « aucune ROM ». L'interface commune vient de la révision épinglée
-# dans crates/apple1-rdk/Cargo.toml (dépôt public) : aucun secret.
+# dans crates/apple1-rdk/Cargo.toml.
+#
+# RDK-Interface-Commune est PRIVÉ : il est lu avec une clé de déploiement en
+# lecture seule (choix de Wirehead du 19/11/2026). Clé publique : Deploy keys
+# de RDK-Interface-Commune ; clé privée : secret INTERFACE_DEPLOY_KEY de
+# rdk-apple1 (créés par Wirehead). Sans ce secret (PR d'un fork), le
+# workflow s'arrête avec un message clair.
 #
 # Ne crée ni étiquette ni release (décision réservée à Wirehead).
 name: Apple-1 2.0
@@ -36,6 +42,22 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+
+      - name: Clé de lecture de l'interface commune
+        env:
+          CLE: ${{ secrets.INTERFACE_DEPLOY_KEY }}
+        run: |
+          if [ -z "$CLE" ]; then
+            echo "::error::Secret INTERFACE_DEPLOY_KEY absent : l'interface commune (dépôt privé) ne peut pas être lue." >&2
+            exit 1
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$CLE" > ~/.ssh/interface && chmod 600 ~/.ssh/interface
+          ssh-keyscan -t ed25519,rsa github.com >> ~/.ssh/known_hosts 2>/dev/null
+          printf 'Host github.com\n  IdentityFile ~/.ssh/interface\n  IdentitiesOnly yes\n' > ~/.ssh/config
+          # Cargo passe par git (SSH) pour ce dépôt, sans toucher à Cargo.toml
+          git config --global url."ssh://git@github.com/Old-Wirehead/RDK-Interface-Commune".insteadOf "https://github.com/Old-Wirehead/RDK-Interface-Commune"
+          echo "CARGO_NET_GIT_FETCH_WITH_CLI=true" >> "$GITHUB_ENV"
 
       # Rust 1.95 au minimum (rust-version de apple1-rdk)
       - uses: dtolnay/rust-toolchain@stable
