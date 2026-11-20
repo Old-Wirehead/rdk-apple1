@@ -2545,3 +2545,21 @@ ru горячий запуск Integer BASIC (программа сохраня�
 es arranque en caliente del Integer BASIC (programa conservado)
 it avvio a caldo dell'Integer BASIC (programma conservato)
 pt arranque a quente do Integer BASIC (programa mantido)
+
+# ----- 2.0 : messages de la vérification en direct de l'assembleur (RDK-Interface-Commune#41)
+
+@ colonne {0} : {1}
+en column {0}: {1}
+de Spalte {0}: {1}
+ru столбец {0}: {1}
+es columna {0}: {1}
+it colonna {0}: {1}
+pt coluna {0}: {1}
+
+@ {0}, ligne {1} : {2}
+en {0}, line {1}: {2}
+de {0}, Zeile {1}: {2}
+ru {0}, строка {1}: {2}
+es {0}, línea {1}: {2}
+it {0}, riga {1}: {2}
+pt {0}, linha {1}: {2}

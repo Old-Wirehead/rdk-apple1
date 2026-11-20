@@ -157,7 +157,7 @@ pub fn routines_rom() -> Vec<RoutineRom> {
         (0xFF00, "RESET", tr("démarrage du Woz Monitor")),
         (0xC100, "ACI", tr("moniteur de la carte cassette ACI")),
         (0xE000, "BASIC", tr("démarrage à froid de l'Integer BASIC (programme effacé)")),
-        (0xE2B3, "BASIC-CHAUD", tr("démarrage à chaud de l'Integer BASIC (programme gardé)")),
+        (0xE2B3, "BASIC_CHAUD", tr("démarrage à chaud de l'Integer BASIC (programme gardé)")),
     ]
     .into_iter()
     .map(|(a, n, f)| RoutineRom { nom: n.into(), adresse: a, fonction: f.into() })

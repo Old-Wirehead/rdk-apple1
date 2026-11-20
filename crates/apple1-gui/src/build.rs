@@ -31,6 +31,15 @@ pub struct RepoConfig {
     pub defines: Option<Vec<String>>,
 }
 
+impl RepoConfig {
+    /// 2.0 (rdk-apple1#37) : the `defines` (default `APPLE1`) for the built-in
+    /// assembler, as ca65 `-D` (`NAME` = 1, `NAME=value`). Invalid ones are
+    /// skipped (ca65 reports them when it is used).
+    pub fn predefined(&self) -> Vec<(String, i64)> {
+        self.defines.clone().unwrap_or_else(|| vec!["APPLE1".into()]).iter().filter_map(|d| apple1_core::asm6502::parse_define(d)).collect()
+    }
+}
+
 pub const CONFIG_NAMES: [&str; 3] = ["apple1.toml", "apple1.cfg", ".apple1.toml"];
 
 fn parse_num(v: &str) -> Option<u16> {
@@ -150,7 +159,9 @@ pub fn assemble(src: &Path) -> Result<(Program, u16), String> {
     // built-in assembler
     let cc65 = if cfg.ld65.is_some() || !apple1_core::xa::is_xa(&text) { find_cc65() } else { None };
     let Some((ca65, ld65)) = cc65 else {
-        let a = apple1_core::asm6502::assemble_file(src, &[]).map_err(|e| {
+        // 2.0 (rdk-apple1#37) : the same -D symbols as ca65 (default APPLE1),
+        // so `.if .defined(APPLE1)` picks the Apple-1 branch here too
+        let a = apple1_core::asm6502::assemble_text_with(&text, Some(src), &[], &cfg.predefined()).map_err(|e| {
             let first: Vec<String> = e.iter().take(5).map(|e| e.to_string()).collect();
             tf("e_asm_failed", &[&"asm6502", &first.join("\n")])
         })?;
