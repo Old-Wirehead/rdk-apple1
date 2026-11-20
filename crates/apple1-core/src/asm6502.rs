@@ -25,7 +25,11 @@
 //!   ply stz trb tsb stp wai`, `(zp)`, `jmp (abs,x)`, `bit #`, `inc a`, and
 //!   the Rockwell `rmb smb bbr bbs`);
 //! * warnings (the assembly still succeeds): an operand that fits in the
-//!   zero page coded on 2 bytes because its symbol is defined further down.
+//!   zero page coded on 2 bytes because its symbol is defined further down;
+//! * `.error "text"` (an error), `.warning "text"` and `.out "text"` (a
+//!   warning that shows the text), as ca65, in the active branch of a `.if`;
+//! * predefined symbols (ca65 `-D NAME[=value]`, see [`assemble_text_with`]):
+//!   a constant known everywhere, that the source may define again.
 //!
 //! Without `.org` the program starts at `$0300` (the `apple1.cfg` of the
 //! ports). The result is the same bytes as `ca65` + `ld65` on the ports.
@@ -50,10 +54,10 @@ pub const MNEMONICS: [&str; 56] = [
 ];
 
 /// Directives understood (lower case, with their dot).
-pub const DIRECTIVES: [&str; 37] = [
+pub const DIRECTIVES: [&str; 40] = [
     ".org", ".byte", ".byt", ".word", ".addr", ".res", ".asciiz", ".include", ".segment", ".code", ".data", ".rodata", ".bss", ".macro", ".mac", ".endmacro", ".endmac", ".local",
     ".ifblank", ".ifnblank", ".else", ".endif", ".if", ".elseif", ".ifdef", ".ifndef", ".defined", ".repeat", ".endrep", ".endrepeat", ".define", ".undefine", ".undef",
-    ".setcpu", ".pc02", ".p02", ".feature",
+    ".setcpu", ".pc02", ".p02", ".feature", ".error", ".warning", ".out",
 ];
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -84,6 +88,10 @@ pub enum ErrKind {
     NotConst,
     /// Warning: zero page operand coded as absolute (symbol defined further down).
     ZpAbs,
+    /// `.error "text"` of the source.
+    User,
+    /// Warning: `.warning "text"` or `.out "text"` of the source.
+    Message,
 }
 
 impl ErrKind {
@@ -103,9 +111,11 @@ impl ErrKind {
             ErrKind::String => "string",
             ErrKind::NotConst => "not_const",
             ErrKind::ZpAbs => "zp_abs",
+            ErrKind::User => "user",
+            ErrKind::Message => "message",
         }
     }
-    pub const ALL: [ErrKind; 13] = [
+    pub const ALL: [ErrKind; 15] = [
         ErrKind::Syntax,
         ErrKind::Unknown,
         ErrKind::BadMode,
@@ -119,6 +129,8 @@ impl ErrKind {
         ErrKind::String,
         ErrKind::NotConst,
         ErrKind::ZpAbs,
+        ErrKind::User,
+        ErrKind::Message,
     ];
     fn fr(self) -> &'static str {
         match self {
@@ -135,6 +147,8 @@ impl ErrKind {
             ErrKind::String => "chaîne ou caractère sans guillemet fermant",
             ErrKind::NotConst => "valeur inconnue à cet endroit (.org, .res, .if, .repeat)",
             ErrKind::ZpAbs => "avertissement : adresse en page zéro codée sur 2 octets (symbole défini plus bas ; définissez-le avant, ou écrivez z: ou a:)",
+            ErrKind::User => "erreur demandée par le source (.error)",
+            ErrKind::Message => "message du source (.warning, .out)",
         }
     }
 }
@@ -919,12 +933,20 @@ pub fn file_loader(name: &str, dirs: &[PathBuf]) -> Option<(PathBuf, String)> {
     if p.file_name().is_some_and(|n| n == "apple1.inc") {
         return Some((PathBuf::from("apple1.inc"), APPLE1_INC.to_string()));
     }
+    // 2.0 (rdk-apple1#38) : gen2.inc too, the GEN2 examples include it
+    if p.file_name().is_some_and(|n| n == "gen2.inc") {
+        return Some((PathBuf::from("gen2.inc"), GEN2_INC.to_string()));
+    }
     None
 }
 
 /// `apple1.inc`: the Apple-1 addresses (KBD, DSP, ECHO, PRBYTE, …) used by the
 /// examples of the manual.
 pub const APPLE1_INC: &str = include_str!("../../../docs/exemples/en/asm/apple1.inc");
+
+/// `gen2.inc`: the soft switches of the GEN2 color card (SS_GR, SS_LORES…),
+/// built in like `apple1.inc` (2.0, rdk-apple1#38).
+pub const GEN2_INC: &str = include_str!("../../../docs/exemples/en/asm/gen2.inc");
 
 /// Assembles a file from the disk (includes found with [`default_include_dirs`] and `extra`).
 pub fn assemble_file(path: &Path, extra: &[PathBuf]) -> Result<Assembly, Vec<AsmError>> {
@@ -949,20 +971,61 @@ pub fn assemble_file(path: &Path, extra: &[PathBuf]) -> Result<Assembly, Vec<Asm
 /// An xa source (`#include`, `#define`: crate::xa) is translated first,
 /// with its included files.
 pub fn assemble_text(text: &str, main: Option<&Path>, extra: &[PathBuf]) -> Result<Assembly, Vec<AsmError>> {
+    assemble_text_with(text, main, extra, &[])
+}
+
+/// 2.0 (rdk-apple1#37) : [`assemble_text`] with predefined symbols, like
+/// `ca65 -D NAME[=value]` (see [`parse_define`]).
+pub fn assemble_text_with(text: &str, main: Option<&Path>, extra: &[PathBuf], predefined: &[(String, i64)]) -> Result<Assembly, Vec<AsmError>> {
     let mut dirs: Vec<PathBuf> = extra.to_vec();
     dirs.extend(default_include_dirs(main));
     let main = main.map(|p| p.to_path_buf()).unwrap_or_default();
     if crate::xa::is_xa(text) {
         let load = |n: &str, d: &[PathBuf]| file_loader(n, d).map(|(p, t)| (p, crate::xa::to_ca65(&t)));
-        return assemble(&crate::xa::to_ca65(text), main, &dirs, &load);
+        return assemble_with(&crate::xa::to_ca65(text), main, &dirs, &load, predefined);
     }
-    assemble(text, main, &dirs, &file_loader)
+    assemble_with(text, main, &dirs, &file_loader, predefined)
+}
+
+/// 2.0 : one `-D` symbol, `NAME` (value 1) or `NAME=value` (`12`, `$0C`,
+/// `0x0C`, `%1100`). `None` for an empty or invalid name or value.
+pub fn parse_define(d: &str) -> Option<(String, i64)> {
+    let (n, v) = match d.split_once('=') {
+        Some((n, v)) => (n.trim(), Some(v.trim())),
+        None => (d.trim(), None),
+    };
+    let valid = n.chars().next().is_some_and(|c| c.is_ascii_alphabetic() || c == '_') && n.chars().all(|c| c.is_ascii_alphanumeric() || c == '_');
+    if !valid {
+        return None;
+    }
+    let v = match v {
+        None => 1,
+        Some(v) => {
+            if let Some(h) = v.strip_prefix('$').or_else(|| v.strip_prefix("0x")).or_else(|| v.strip_prefix("0X")) {
+                i64::from_str_radix(h, 16).ok()?
+            } else if let Some(b) = v.strip_prefix('%') {
+                i64::from_str_radix(b, 2).ok()?
+            } else {
+                v.parse().ok()?
+            }
+        }
+    };
+    Some((n.to_string(), v))
 }
 
 /// Assembles `text`; `.include` files are found by `load` in `dirs`
 /// (the folder of the including file is tried first).
 pub fn assemble(text: &str, main: PathBuf, dirs: &[PathBuf], load: &Loader) -> Result<Assembly, Vec<AsmError>> {
+    assemble_with(text, main, dirs, load, &[])
+}
+
+/// [`assemble`] with predefined symbols (`-D`).
+pub fn assemble_with(text: &str, main: PathBuf, dirs: &[PathBuf], load: &Loader, predefined: &[(String, i64)]) -> Result<Assembly, Vec<AsmError>> {
     let mut a = Asm::new(main, dirs, load);
+    for (n, v) in predefined {
+        a.pre.insert(n.clone(), Some(*v));
+        a.predef.insert(n.clone(), *v);
+    }
     a.expand_text(0, text, 0);
     if let Some((name, loc)) = a.defining.take() {
         a.err(loc, 1, ErrKind::Block, format!(".macro {}", name));
@@ -999,6 +1062,7 @@ pub fn assemble(text: &str, main: PathBuf, dirs: &[PathBuf], load: &Loader) -> R
     }
     symbols.sort();
     let mut warnings = a.warnings;
+    warnings.extend(a.notes);
     warnings.sort_by_key(|x| (x.file, x.line, x.col));
     warnings.dedup();
     Ok(Assembly { origin: a.origin.unwrap_or(DEFAULT_ORG), bytes: a.out, listing: a.listing, files: a.files, parents: a.parents, symbols, warnings })
@@ -1041,6 +1105,12 @@ struct Asm<'a> {
     item_exp: Vec<Option<String>>,
     local_n: usize,
     syms: HashMap<String, Def>,
+    /// 2.0 : predefined symbols (`-D`), put back at each pass 1.
+    predef: HashMap<String, i64>,
+    /// 2.0 : predefined symbols already defined again by the source (pass 1).
+    redefined: std::collections::HashSet<String>,
+    /// 2.0 : `.warning` / `.out` messages (read once, not cleared by `run`).
+    notes: Vec<AsmError>,
     pc: i64,
     origin: Option<u16>,
     out: Vec<u8>,
@@ -1146,12 +1216,22 @@ impl<'a> Asm<'a> {
             item_exp: Vec::new(),
             local_n: 0,
             syms: HashMap::new(),
+            predef: HashMap::new(),
+            redefined: std::collections::HashSet::new(),
+            notes: Vec::new(),
             pc: DEFAULT_ORG as i64,
             origin: None,
             out: Vec::new(),
             listing: Vec::new(),
             item_locs: Vec::new(),
         }
+    }
+
+    /// 2.0 : the source defines a predefined symbol (`-D`) for the first
+    /// time: allowed, its definition wins (a second definition stays a
+    /// duplicate).
+    fn redefine_predef(&mut self, n: &str) -> bool {
+        self.predef.contains_key(n) && self.redefined.insert(n.to_string())
     }
 
     fn err(&mut self, loc: Loc, col: usize, kind: ErrKind, detail: String) {
@@ -1340,6 +1420,24 @@ impl<'a> Asm<'a> {
                         [Tok { t: T::Id(f), .. }, Tok { t: T::Op(o), .. }] if f.eq_ignore_ascii_case("string_escapes") && (*o == "+" || *o == "-") => self.esc = *o == "+",
                         _ => self.err(loc, p.first().map(|t| t.col).unwrap_or(col0), ErrKind::Unknown, ".feature".into()),
                     }
+                }
+                return;
+            }
+            // 2.0 (rdk-apple1#37) : .error / .warning / .out "text", as ca65
+            Some(d @ (".error" | ".warning" | ".out")) => {
+                let text = match line.toks.get(1) {
+                    Some(Tok { t: T::Str(s), .. }) if line.toks.len() == 2 => String::from_utf8_lossy(s).into_owned(),
+                    _ => {
+                        self.err(loc, col0, ErrKind::Syntax, d.to_string());
+                        return;
+                    }
+                };
+                if d == ".error" {
+                    self.err(loc, col0, ErrKind::User, text);
+                } else {
+                    let file_name = self.files.get(loc.file).and_then(|p| p.file_name()).map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
+                    let path = self.files.get(loc.file).cloned().unwrap_or_default();
+                    self.notes.push(AsmError { file: loc.file, file_name, path, line: loc.line, col: col0, kind: ErrKind::Message, detail: text });
                 }
                 return;
             }
@@ -1888,6 +1986,10 @@ impl<'a> Asm<'a> {
         self.warnings.clear();
         if !fin {
             self.syms.clear();
+            self.redefined.clear();
+            for (n, v) in &self.predef {
+                self.syms.insert(n.clone(), Def::Const(Expr::Num(*v)));
+            }
             self.origin = None;
         }
         #[allow(clippy::needless_range_loop)]
@@ -1940,7 +2042,7 @@ impl<'a> Asm<'a> {
         match it {
             Item::Label(n, col) => {
                 if !fin {
-                    if self.syms.contains_key(n) {
+                    if self.syms.contains_key(n) && !self.redefine_predef(n) {
                         return Err((ErrKind::Duplicate, *col, display_name(n)));
                     }
                     self.syms.insert(n.clone(), Def::Label(self.pc));
@@ -1952,7 +2054,7 @@ impl<'a> Asm<'a> {
             }
             Item::Const(n, e, col) => {
                 if !fin {
-                    if self.syms.contains_key(n) {
+                    if self.syms.contains_key(n) && !self.redefine_predef(n) {
                         return Err((ErrKind::Duplicate, *col, display_name(n)));
                     }
                     // `*` is frozen where the constant is defined
@@ -2227,6 +2329,42 @@ mod tests {
     }
     fn errs(src: &str) -> Vec<AsmError> {
         assemble(src, PathBuf::from("t.s"), &[], &|_: &str, _: &[PathBuf]| None).expect_err("error expected")
+    }
+
+    /// 2.0 (rdk-apple1#37) : -D symbols, as ca65, and .error/.warning/.out.
+    #[test]
+    fn predefined_symbols_and_user_messages() {
+        let src = ".if .defined(APPLE1)\n  .out \"Apple-1\"\n  LDA #APPLE1\n.elseif .defined(KIM1)\n  LDA #2\n.else\n  .error \"Platform not defined\"\n.endif\n";
+        let none = |_: &str, _: &[PathBuf]| None;
+        // without APPLE1: the .error of the source, at its line
+        let e = assemble(src, PathBuf::from("t.s"), &[], &none).expect_err(".error");
+        assert_eq!((e[0].kind, e[0].line, e[0].detail.as_str()), (ErrKind::User, 7, "Platform not defined"));
+        // with APPLE1: the Apple-1 branch (the .error of the .else is not
+        // read), and the .out text as a warning
+        let a = assemble_with(src, PathBuf::from("t.s"), &[], &none, &[("APPLE1".into(), 1)]).unwrap();
+        assert_eq!(a.bytes, vec![0xA9, 0x01]);
+        assert_eq!((a.warnings[0].kind, a.warnings[0].detail.as_str()), (ErrKind::Message, "Apple-1"));
+        // a value, and a source that defines the symbol itself (its value wins)
+        let a = assemble_with("  LDA #APPLE1\n", PathBuf::from("t.s"), &[], &none, &[("APPLE1".into(), 7)]).unwrap();
+        assert_eq!(a.bytes, vec![0xA9, 0x07]);
+        let a = assemble_with("APPLE1 = 3\n  LDA #APPLE1\n", PathBuf::from("t.s"), &[], &none, &[("APPLE1".into(), 1)]).unwrap();
+        assert_eq!(a.bytes, vec![0xA9, 0x03]);
+        // a second definition by the source stays a duplicate
+        assert!(assemble_with("APPLE1 = 3\nAPPLE1 = 4\n", PathBuf::from("t.s"), &[], &none, &[("APPLE1".into(), 1)]).is_err());
+        // .error without its text
+        assert!(errs("  .error\n").iter().any(|e| e.kind == ErrKind::Syntax));
+        assert_eq!(parse_define("APPLE1"), Some(("APPLE1".into(), 1)));
+        assert_eq!(parse_define("DEBUG=$0C"), Some(("DEBUG".into(), 12)));
+        assert_eq!(parse_define("X=%101"), Some(("X".into(), 5)));
+        assert_eq!(parse_define("1BAD"), None);
+        assert_eq!(parse_define("N=zz"), None);
+    }
+
+    /// 2.0 (rdk-apple1#38) : gen2.inc is built in, like apple1.inc.
+    #[test]
+    fn gen2_inc_built_in() {
+        let a = assemble_text("  .include \"gen2.inc\"\n  LDA SS_GR\n  LDA SS_LORES\n", None, &[]).unwrap();
+        assert_eq!(a.bytes, vec![0xAD, 0x50, 0xC2, 0xAD, 0x56, 0xC2]);
     }
 
     #[test]

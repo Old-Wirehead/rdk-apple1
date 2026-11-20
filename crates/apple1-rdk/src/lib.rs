@@ -198,6 +198,10 @@ pub fn touches_basic(listing: &str) -> String {
 const ACCELERATION: u64 = 20;
 
 /// Étiquettes du Woz Monitor et de l'ACI pour le désassembleur.
+///
+/// 2.0 (rdk-apple1#34) : des noms que l'assembleur sait relire (pas de
+/// tiret, lu comme une soustraction) ; ceux de la GEN2 sont ceux de
+/// `gen2.inc` (SS_GR, SS_LORES…).
 pub const ETIQUETTES: &[(u16, &str)] = &[
     (0xFF00, "RESET"),
     (0xFF0F, "NOTCR"),
@@ -208,24 +212,24 @@ pub const ETIQUETTES: &[(u16, &str)] = &[
     (0xFFE5, "PRHEX"),
     (0xFFEF, "ECHO"),
     (0xC100, "ACI"),
-    (0xC170, "ACI-WRITE"),
-    (0xC18D, "ACI-READ"),
+    (0xC170, "ACI_WRITE"),
+    (0xC18D, "ACI_READ"),
     (0xD010, "KBD"),
     (0xD011, "KBDCR"),
     (0xD012, "DSP"),
     (0xD013, "DSPCR"),
     (0xE000, "BASIC"),
-    (0xE2B3, "BASIC-CHAUD"),
-    (0xC250, "GEN2-GR"),
-    (0xC251, "GEN2-TEXT"),
-    (0xC252, "GEN2-FULL"),
-    (0xC253, "GEN2-MIXED"),
-    (0xC254, "GEN2-PAGE1"),
-    (0xC255, "GEN2-PAGE2"),
-    (0xC256, "GEN2-LORES"),
-    (0xC257, "GEN2-HIRES"),
-    (0xCC00, "VDP-DATA"),
-    (0xCC01, "VDP-CTRL"),
+    (0xE2B3, "BASIC_CHAUD"),
+    (0xC250, "SS_GR"),
+    (0xC251, "SS_TEXT"),
+    (0xC252, "SS_FULL"),
+    (0xC253, "SS_MIX"),
+    (0xC254, "SS_PAGE1"),
+    (0xC255, "SS_PAGE2"),
+    (0xC256, "SS_LORES"),
+    (0xC257, "SS_HIRES"),
+    (0xCC00, "VDP_DATA"),
+    (0xCC01, "VDP_CTRL"),
 ];
 
 fn symboles_de_base() -> Symbols {

@@ -6189,6 +6189,24 @@ es aviso: dirección de página cero codificada en 2 bytes (símbolo definido m�
 it avviso: indirizzo in pagina zero codificato su 2 byte (simbolo definito più in basso; definitelo prima, o scrivete z: o a:)
 pt aviso: endereço da página zero codificado em 2 bytes (símbolo definido mais abaixo; defina-o antes, ou escreva z: ou a:)
 
+@as_e_user
+fr erreur demandée par le source (.error)
+en error requested by the source (.error)
+de vom Quelltext verlangter Fehler (.error)
+ru ошибка, заданная в исходном тексте (.error)
+es error solicitado por el código fuente (.error)
+it errore richiesto dal sorgente (.error)
+pt erro pedido pelo código-fonte (.error)
+
+@as_e_message
+fr message du source (.warning, .out)
+en message from the source (.warning, .out)
+de Meldung des Quelltexts (.warning, .out)
+ru сообщение исходного текста (.warning, .out)
+es mensaje del código fuente (.warning, .out)
+it messaggio del sorgente (.warning, .out)
+pt mensagem do código-fonte (.warning, .out)
+
 @ed_n_warnings
 fr ⚠ {0} avertissement(s) (le programme est assemblé quand même)
 en ⚠ {0} warning(s) (the program is assembled anyway)
