@@ -1,5 +1,5 @@
 ; gen2-lores.s — barras de cor em LORES (40 x 48, 16 cores)
-; Precisa da placa GEN2 (Preferências ▸ Placa a cores). Qualquer tecla: regresso ao texto.
+; Precisa da placa GEN2 (botão 🌈 GEN2, ou a configuração «Apple 1 moniteur vert + couleur GEN2»). Qualquer tecla: regresso ao texto.
         .include "apple1.inc"
         .include "gen2.inc"
         .org $0C00      ; acima da página LORES 1 ($0400-$07FF)

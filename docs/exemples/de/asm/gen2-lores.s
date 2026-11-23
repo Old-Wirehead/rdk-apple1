@@ -1,5 +1,5 @@
 ; gen2-lores.s — Farbbalken in LORES (40 x 48, 16 Farben)
-; Braucht die GEN2-Karte (Einstellungen ▸ Farbkarte). Beliebige Taste: zurück zum Text.
+; Braucht die GEN2-Karte (Schaltfläche 🌈 GEN2 oder Konfiguration „Apple 1 moniteur vert + couleur GEN2“). Beliebige Taste: zurück zum Text.
         .include "apple1.inc"
         .include "gen2.inc"
         .org $0C00      ; oberhalb von LORES-Seite 1 ($0400-$07FF)

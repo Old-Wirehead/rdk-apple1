@@ -416,7 +416,15 @@ impl MachineApple1 {
                 }
             }
         }
+        // rdk-apple1#31 : une GEN2 qu'on branche démarre en texte, page 1
+        // (manuel § 5.2), et non dans l'état HIRES de la mise sous tension
+        // du noyau v1.0 (écran couleur noir) ; RESET ne touche pas aux
+        // commutateurs
+        let gen2_branchee = c.color_card && !self.m.board.config.color_card;
         self.m.board.apply_config(c);
+        if gen2_branchee {
+            texte_page_1(&mut self.m.board.gen2);
+        }
         self.m.board.vdp_changed_config();
     }
 
@@ -1380,12 +1388,10 @@ impl MachineApple1 {
         let ech = self.cassette_sortie();
         self.m.board.recording = None;
         let dossier = self.bibliotheque().join("Cassettes");
+        // rdk-apple1#35 : date lisible à l'heure locale, comme les états
         let fichier = dossier.join(format!(
             "sortie-aci-{}.wav",
-            std::time::SystemTime::now()
-                .duration_since(std::time::UNIX_EPOCH)
-                .map(|d| d.as_secs())
-                .unwrap_or(0)
+            rdk_interface::app::horodatage_local()
         ));
         let octets = apple1_core::wav::encode_wav(
             &ech,
@@ -2291,10 +2297,10 @@ impl Machine for MachineApple1 {
     fn machine_id(&self) -> String {
         "apple-1".to_string()
     }
-    /// Titre de la v1.0 (rdk-apple1 PR 60, « Original Sin » dans toutes
-    /// les langues).
+    /// Titre de la 2.0 (rdk-apple1#26) : « Original Sin » est le nom de la
+    /// v1.0, que l'utilisateur ne doit pas croire avoir lancée.
     fn machine_titre_fenetre(&self) -> String {
-        "Retro Dev Kit Apple 1 — Original Sin".to_string()
+        format!("Retro Dev Kit Apple 1 {VERSION}")
     }
     fn machine_version(&self) -> String {
         VERSION.to_string()
@@ -2617,6 +2623,9 @@ impl Machine for MachineApple1 {
     fn etat_charger(&mut self, octets: &[u8]) -> Resultat<String> {
         let (m, info) =
             Apple1::load_state(octets).map_err(|e| self.erreur(trf!("état illisible : {0}", e)))?;
+        // rdk-apple1#36 : cartes et RAM de la machine avant le chargement
+        // (celles de la configuration choisie), pour signaler un écart
+        let avant = cartes_et_ram(&self.m.board.config);
         self.m = m;
         self.dbg.cont();
         self.chargement = None;
@@ -2636,11 +2645,15 @@ impl Machine for MachineApple1 {
         }
         self.m.board.config.display_throttle = self.vitesse == Vitesse::Reelle;
         self.enregistrer_options();
-        let m = trf!(
+        let mut m = trf!(
             "état « {0} » chargé (PC ${1})",
             info.title,
             format!("{:04X}", info.pc)
         );
+        if cartes_et_ram(&self.m.board.config) != avant {
+            m.push_str(" — ");
+            m.push_str(tr("cartes ou RAM de l'état différentes de la configuration choisie : la machine ne correspond plus au nom affiché ; choisissez une configuration dans 🖥 pour y revenir"));
+        }
         self.noter(m.clone());
         Ok(m)
     }
@@ -2682,5 +2695,32 @@ impl Machine for MachineApple1 {
             Box::new(syntaxe::SyntaxeBasicApple1),
             Box::new(syntaxe::SyntaxeAsm6502),
         ]
+    }
+}
+
+/// rdk-apple1#31 : commutateurs de la GEN2 en texte, page 1, sans mélange.
+fn texte_page_1(g: &mut apple1_core::gen2::Gen2) {
+    g.flip(0b001); // SS_TEXT
+    g.flip(0b100); // SS_PAGE1
+    g.flip(0b010); // SS_FULL (pas de mélange)
+}
+
+/// rdk-apple1#36 : ce qui fait la configuration matérielle d'un état.
+fn cartes_et_ram(c: &Config) -> (bool, bool, bool, u32, bool) {
+    (c.color_card, c.plab_card, c.plab_nmi, c.ram_kb, c.ram_e000)
+}
+
+#[cfg(test)]
+mod tests_lot4 {
+    use super::*;
+
+    /// rdk-apple1#31 : après la mise sous tension (HIRES), texte page 1.
+    #[test]
+    fn gen2_branchee_en_texte_page_1() {
+        let mut g = apple1_core::gen2::Gen2::new(false);
+        assert!(!g.modes().text);
+        texte_page_1(&mut g);
+        let m = g.modes();
+        assert!(m.text && !m.page2 && !m.mixed, "{m:?}");
     }
 }

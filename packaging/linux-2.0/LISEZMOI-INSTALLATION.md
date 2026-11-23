@@ -2,8 +2,9 @@
 
 1. Décompressez l'archive où vous voulez.
 2. Lancez `./run.sh` (ou double-cliquez dessus).
-3. Bibliothèque : `~/Documents/RDK librairies/Apple 1` (le kit demande
-   avant de la créer). Le bouton 📥 **Exemples** y copie les exemples du
+3. Bibliothèque : `~/Documents/RDK librairies/Apple 1`, créée au premier
+   lancement avec ses dossiers et les exemples du paquet, comme en v1.0
+   (la barre d'état l'annonce). Le bouton 📥 **Exemples** y recopie les exemples du
    paquet (BASIC, assembleur, GEN2, P-LAB, art ASCII, cassette) sans rien
    remplacer ; le dossier `Biblio/` du paquet reste lu comme « ancienne
    bibliothèque ».

@@ -73,11 +73,8 @@ fn doc(langage: Langage, texte: &str) -> DocumentEditeur {
 fn identite_et_manifeste() {
     let m = machine();
     assert_eq!(m.machine_nom(), "Apple 1");
-    // titre de la v1.0 (rdk-apple1#17)
-    assert_eq!(
-        m.machine_titre_fenetre(),
-        "Retro Dev Kit Apple 1 — Original Sin"
-    );
+    // titre propre à la 2.0 (rdk-apple1#26)
+    assert_eq!(m.machine_titre_fenetre(), "Retro Dev Kit Apple 1 2.0.0");
     assert_eq!(m.machine_version(), "2.0.0");
     assert_eq!(
         m.manifeste_moniteurs(),
@@ -953,7 +950,7 @@ fn reprises_de_la_v1() {
     assert!(m.dump_signets().iter().any(|(n, a)| n == "ZP" && *a == 0));
     assert_eq!(m.desassembleur_symbole("reset"), Some(0xFF00));
     assert_eq!(m.machine_id(), "apple-1");
-    assert!(m.machine_titre_fenetre().contains("Original Sin"));
+    assert!(!m.machine_titre_fenetre().contains("Original Sin"));
     assert!(m.manifeste_configurations()[0].a(rdk_pilotes::configuration::ids::MONITEUR_COULEUR));
 }
 
