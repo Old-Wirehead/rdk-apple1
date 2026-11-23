@@ -83,8 +83,10 @@ fn tirette(id: &str, libelle: &str, bulle: &str, v: f32) -> ReglageEcran {
     ReglageEcran { id: id.into(), libelle: libelle.into(), info_bulle: bulle.into(), valeur: ValeurReglage::Curseur { valeur: v, min: 0.0, max: 1.0 } }
 }
 
-/// Réglages d'écran montrés dans la fenêtre de `moniteur`. Écran vintage
-/// éteint : seulement sa case (et le phosphore du moniteur monochrome).
+/// Réglages d'écran de `moniteur`, liste complète même quand l'écran
+/// vintage est éteint (RDK-Interface-Commune#49) : l'interface ne montre
+/// que la case `vintage` dans la fenêtre de l'écran, et tout le reste dans
+/// ⚙ Préférences → Écran.
 pub fn reglages(moniteur: Moniteur, r: &ReglagesEcran, phosphore: Phosphore) -> Vec<ReglageEcran> {
     let mut v = Vec::new();
     if moniteur == Moniteur::Monochrome {
@@ -101,7 +103,7 @@ pub fn reglages(moniteur: Moniteur, r: &ReglagesEcran, phosphore: Phosphore) -> 
     // RDK-Interface-Commune#49 : la case « vintage » est la seule montrée dans
     // la fenêtre de l'écran ; la liste reste complète même éteinte, pour
     // ⚙ Préférences → Écran
-    v.push(case(rdk_interface::outils::moniteur::REGLAGE_VINTAGE, tr("Écran vintage"), tr("Imitation d'un moniteur à tube des années 1970, comme la photo d'un vrai Apple 1."), r.actif));
+    v.push(case(rdk_interface::REGLAGE_VINTAGE, tr("Écran vintage"), tr("Imitation d'un moniteur à tube des années 1970, comme la photo d'un vrai Apple 1."), r.actif));
     v.push(case("lignes", tr("Séparation des lignes de balayage"), tr("Une fine ligne sombre sous chaque ligne de points (l'effet principal)."), r.lignes));
     v.push(case("adoucir", tr("Points adoucis (horizontalement)"), "", r.adoucir));
     v.push(case("halo", tr("Halo lumineux"), "", r.halo));
@@ -132,7 +134,7 @@ pub fn regler(r: &mut ReglagesEcran, phosphore: &mut Phosphore, id: &str, valeur
                 *phosphore = *p;
             }
         }
-        (rdk_interface::outils::moniteur::REGLAGE_VINTAGE | "actif", ValeurReglage::Case(b)) => r.actif = *b,
+        (rdk_interface::REGLAGE_VINTAGE | "actif", ValeurReglage::Case(b)) => r.actif = *b,
         ("lignes", ValeurReglage::Case(b)) => r.lignes = *b,
         ("adoucir", ValeurReglage::Case(b)) => r.adoucir = *b,
         ("halo", ValeurReglage::Case(b)) => r.halo = *b,
@@ -211,6 +213,11 @@ mod tests {
         assert!(eteint.iter().any(|x| x.id == "lignes") && eteint.iter().any(|x| x.id == "masque_rvb"));
         let (mut r2, mut p) = (r, Phosphore::Vert);
         assert!(regler(&mut r2, &mut p, "vintage", &ValeurReglage::Case(false)));
+        assert!(!r2.actif);
+        // ancien identifiant, toujours accepté
+        assert!(regler(&mut r2, &mut p, "actif", &ValeurReglage::Case(true)));
+        assert!(r2.actif);
+        assert!(regler(&mut r2, &mut p, "actif", &ValeurReglage::Case(false)));
         assert!(!r2.actif);
         assert!(regler(&mut r2, &mut p, "phosphore", &ValeurReglage::Choix { options: vec![], choisi: 2 }));
         assert_eq!(p, Phosphore::Ambre);

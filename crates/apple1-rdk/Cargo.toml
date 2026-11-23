@@ -30,14 +30,14 @@ path = "src/main.rs"
 # monochrome ; 0.1.5 : bibliothèques, ROM, formats, configurations).
 # 0.1.10 (main après RDK-Interface-Commune#26, 47a2645) : contrat des pilotes
 # 1.1.0 (points d'arrêt, réglages d'écran, routines de la ROM).
-# 0.1.11 (RDK-Interface-Commune#49) : lots 1 à 3 de la campagne de Claude
+# 0.1.11 (main après RDK-Interface-Commune#50, 9fa6da7) : lots 1 à 3 de la campagne de Claude
 # Testeur Apple 1, case unique « Écran vintage », onglet ⚙ Préférences → Écran,
 # image centrée ; contrat des pilotes inchangé (1.1.0).
 # Changer de version de l'interface commune = changer ces deux révisions, ensemble.
 [dependencies]
 apple1-core = { path = "../apple1-core" }
-rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "c50636186f347e4f2890f75245947f16f6a71037" }
-rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "c50636186f347e4f2890f75245947f16f6a71037" }
+rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "9fa6da7772999736bc1bbd13a4019f45df4bbc5f" }
+rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "9fa6da7772999736bc1bbd13a4019f45df4bbc5f" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
 # Comme la v1.0 (apple1-gui) : cassettes reconnues (SHA-256), photos → art ASCII.
