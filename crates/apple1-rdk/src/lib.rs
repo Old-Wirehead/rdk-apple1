@@ -2395,7 +2395,7 @@ impl Machine for MachineApple1 {
         if o.gen2 && o.plab {
             v.push(bouton(BOUTON_SOURCE, "🖵", tr("Écran P-LAB"), tr("Les deux cartes sont branchées : le moniteur couleur montre la P-LAB (allumé) ou la GEN2 (éteint)."), o.source == SourceCouleur::Plab));
         }
-        v.push(bouton(BOUTON_ECRAN_VINTAGE, "📺", tr("Vintage"), tr("Écran vintage : imitation d'un moniteur à tube des années 1970 (v1.0 « screening ») : lignes de balayage, rémanence, halo, tube bombé."), o.ecran.actif));
+        v.push(bouton(BOUTON_ECRAN_VINTAGE, "📺", tr("Vintage"), tr("Écran vintage : imitation d'un moniteur à tube des années 1970 : lignes de balayage, rémanence, halo, tube bombé."), o.ecran.actif));
         v.push(bouton(
             BOUTON_REGLAGES_ECRAN,
             "🎚",

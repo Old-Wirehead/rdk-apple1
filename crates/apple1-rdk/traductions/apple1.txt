@@ -360,13 +360,13 @@ es Fósforo del monitor:
 it Fosfori del monitor:
 pt Fósforo do monitor:
 
-@ Écran vintage (screening)
-en Vintage screen (screening)
-de Vintage-Bildschirm (Screening)
-ru Винтажный экран (screening)
-es Pantalla vintage (screening)
-it Schermo vintage (screening)
-pt Ecrã vintage (screening)
+@ Écran vintage
+en Vintage screen
+de Vintage-Bildschirm
+ru Винтажный экран
+es Pantalla vintage
+it Schermo vintage
+pt Ecrã vintage
 
 @ Imitation d'un moniteur à tube des années 1970, comme la photo d'un vrai Apple 1.
 en Imitation of a 1970s tube monitor, like a photo of a real Apple 1.
@@ -1508,13 +1508,13 @@ es Las dos tarjetas están conectadas: el monitor en color muestra la P-LAB (act
 it Le due schede sono collegate: il monitor a colori mostra la P-LAB (acceso) o la GEN2 (spento).
 pt As duas placas estão ligadas: o monitor a cores mostra a P-LAB (ligado) ou a GEN2 (desligado).
 
-@ Écran vintage : imitation d'un moniteur à tube des années 1970 (v1.0 « screening ») : lignes de balayage, rémanence, halo, tube bombé.
-en Vintage screen: imitation of a 1970s tube monitor (v1.0 “screening”): scan lines, persistence, glow, curved tube.
-de Vintage-Bildschirm: Nachahmung eines Röhrenmonitors der 1970er (v1.0 „Screening“): Abtastzeilen, Nachleuchten, Halo, gewölbte Röhre.
-ru Винтажный экран: имитация лампового монитора 1970-х (v1.0 «screening»): строки развёртки, послесвечение, ореол, выпуклый кинескоп.
-es Pantalla vintage: imitación de un monitor de tubo de los años 1970 (v1.0 «screening»): líneas de barrido, persistencia, halo, tubo curvado.
-it Schermo vintage: imitazione di un monitor a tubo degli anni '70 (v1.0 «screening»): linee di scansione, persistenza, alone, tubo curvo.
-pt Ecrã vintage: imitação de um monitor de tubo dos anos 1970 (v1.0 «screening»): linhas de varrimento, persistência, halo, tubo curvo.
+@ Écran vintage : imitation d'un moniteur à tube des années 1970 : lignes de balayage, rémanence, halo, tube bombé.
+en Vintage screen: imitation of a 1970s tube monitor: scan lines, persistence, glow, curved tube.
+de Vintage-Bildschirm: Nachahmung eines Röhrenmonitors der 1970er: Abtastzeilen, Nachleuchten, Halo, gewölbte Röhre.
+ru Винтажный экран: имитация лампового монитора 1970-х: строки развёртки, послесвечение, ореол, выпуклый кинескоп.
+es Pantalla vintage: imitación de un monitor de tubo de los años 1970: líneas de barrido, persistencia, halo, tubo curvado.
+it Schermo vintage: imitazione di un monitor a tubo degli anni '70: linee di scansione, persistenza, alone, tubo curvo.
+pt Ecrã vintage: imitação de um monitor de tubo dos anos 1970: linhas de varrimento, persistência, halo, tubo curvo.
 
 @ Phosphore du moniteur (vert, blanc, ambre) et réglages de l'écran vintage.
 en Monitor phosphor (green, white, amber) and vintage screen settings.

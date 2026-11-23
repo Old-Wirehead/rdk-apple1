@@ -63,7 +63,7 @@ fn fenetre_ecran(ctx: &egui::Context, m: &mut MachineApple1) -> bool {
         });
         ui.separator();
         let r = &mut o.ecran;
-        change |= ui.checkbox(&mut r.actif, tr("Écran vintage (screening)")).on_hover_text(tr("Imitation d'un moniteur à tube des années 1970, comme la photo d'un vrai Apple 1.")).changed();
+        change |= ui.checkbox(&mut r.actif, tr("Écran vintage")).on_hover_text(tr("Imitation d'un moniteur à tube des années 1970, comme la photo d'un vrai Apple 1.")).changed();
         ui.add_enabled_ui(r.actif, |ui| {
             change |= ui.add(egui::Slider::new(&mut r.intensite, 0.0..=1.0).text(tr("Intensité"))).changed();
             change |= ui.checkbox(&mut r.lignes, tr("Séparation des lignes de balayage")).on_hover_text(tr("Une fine ligne sombre sous chaque ligne de points (l'effet principal).")).changed();
