@@ -404,7 +404,18 @@ impl FenetreProm {
                             Err(e) => self.journal.push(trf!("Erreur : {0}", e)),
                         }
                     }
-                    let w = ui.add_enabled(!lecture_seule, egui::Button::new(RichText::new(tr("Écrire la puce")).strong()).fill(Color32::from_rgb(40, 100, 190))).on_hover_text(if lecture_seule { tr("Cette puce est une mémoire morte à masque : lecture seule.") } else { tr("Programmer la puce avec les données choisies (la puce doit être vide ou effaçable)") });
+                    // rdk-apple1#33 : bleu seulement quand le bouton agit vraiment
+                    // (programmateur prêt, puce inscriptible) ; sinon grisé
+                    // comme « Lire » et « Vérifier », avec la raison au survol
+                    let ecrire_actif = pret && !occupe && !lecture_seule;
+                    let mut bouton = egui::Button::new(RichText::new(tr("Écrire la puce")).strong());
+                    if ecrire_actif {
+                        bouton = bouton.fill(Color32::from_rgb(40, 100, 190));
+                    }
+                    let w = ui
+                        .add_enabled(!lecture_seule, bouton)
+                        .on_hover_text(tr("Programmer la puce avec les données choisies (la puce doit être vide ou effaçable)"))
+                        .on_disabled_hover_text(if lecture_seule { tr("Cette puce est une mémoire morte à masque : lecture seule.") } else if !pret { tr("Aucun programmateur prêt : installez « minipro », branchez le programmateur et appuyez sur « Détecter ».") } else { tr("Un travail est en cours sur la puce.") });
                     if w.clicked() {
                         match self.donnees(m) {
                             Ok(d) => self.lancer(ctx, Travail::Ecrire, Some(d)),

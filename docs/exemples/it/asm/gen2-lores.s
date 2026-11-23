@@ -1,5 +1,5 @@
 ; gen2-lores.s — barre di colore in LORES (40 x 48, 16 colori)
-; Richiede la scheda GEN2 (Preferenze ▸ Scheda a colori). Un tasto qualsiasi: ritorno al testo.
+; Richiede la scheda GEN2 (pulsante 🌈 GEN2, o la configurazione «Apple 1 moniteur vert + couleur GEN2»). Un tasto qualsiasi: ritorno al testo.
         .include "apple1.inc"
         .include "gen2.inc"
         .org $0C00      ; sopra la pagina LORES 1 ($0400-$07FF)

@@ -1,5 +1,5 @@
 ; gen2-lores.s — color bars in LORES (40 x 48, 16 colors)
-; Needs the GEN2 card (Settings ▸ Color card). Any key: back to text.
+; Needs the GEN2 card (🌈 GEN2 button, or the “Apple 1 moniteur vert + couleur GEN2” configuration). Any key: back to text.
         .include "apple1.inc"
         .include "gen2.inc"
         .org $0C00      ; above LORES page 1 ($0400-$07FF)
