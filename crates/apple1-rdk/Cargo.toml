@@ -36,8 +36,8 @@ path = "src/main.rs"
 # Changer de version de l'interface commune = changer ces deux révisions, ensemble.
 [dependencies]
 apple1-core = { path = "../apple1-core" }
-rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "580f2e50ebc2b0b3dff0badf3cadf54db5df6147" }
-rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "580f2e50ebc2b0b3dff0badf3cadf54db5df6147" }
+rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "d59eb941dfee46f9b055291a5ee3c87ed9901bc8" }
+rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "d59eb941dfee46f9b055291a5ee3c87ed9901bc8" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
 # Comme la v1.0 (apple1-gui) : cassettes reconnues (SHA-256), photos → art ASCII.
