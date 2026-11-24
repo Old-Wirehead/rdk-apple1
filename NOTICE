@@ -8,15 +8,19 @@ the terms of the GNU General Public License as published by the Free Software
 Foundation, version 3 of the License. It is distributed WITHOUT ANY WARRANTY;
 see the file LICENSE for the full text.
 
+Bundled part under the same license
+-----------------------------------
+
+RDK G2 Basic (crates/apple1-core/assets/rdk-g2basic.bin, repository
+Old-Wirehead/rdk-gen2basic-apple1): a clean-room Integer BASIC clone, GNU GPL
+version 3 only (GPL-3.0-only), Copyright (c) 2026 Wirehead and the Retro Dev
+Kit contributors. Its source, LICENSE and NOTICE are in its own repository;
+this kit only bundles the assembled binary.
+
 Third-party parts that keep their own (MIT) license
 ---------------------------------------------------
 
-1. RDK G2 Basic (crates/apple1-core/assets/rdk-g2basic.bin and its source,
-   repository Old-Wirehead/rdk-gen2basic-apple1): a clean-room Integer BASIC
-   clone, MIT license, Copyright (c) 2026 Wirehead. It stays MIT in its own
-   repository; this kit only bundles the assembled binary.
-
-2. The GEN2 colour card test programs TEST1-TEST4 (samples/gen2-test*.apl,
+1. The GEN2 colour card test programs TEST1-TEST4 (samples/gen2-test*.apl,
    gen2-barres.txt) and the GEN2 character glyph data used by the GEN2 screen
    emulation, written by Uncle Bernie (Applefritter), who released them under
    the MIT license:
@@ -37,7 +41,7 @@ Third-party parts that keep their own (MIT) license
      OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
      USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-3. third_party/egui-file-dialog: MIT / Apache-2.0, Copyright 2024-2026
+2. third_party/egui-file-dialog: MIT / Apache-2.0, Copyright 2024-2026
    Jannis Teipel (see third_party/egui-file-dialog/LICENSE). The other Rust
    dependencies (egui, eframe, egui_dock, ...) are MIT and/or Apache-2.0
    (see `cargo tree` and each crate); all are compatible with the GPL-3.0.
