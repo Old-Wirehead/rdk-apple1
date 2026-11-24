@@ -34,8 +34,11 @@ fn hook_is_the_end_of_setline() {
     let at = |h: u16| (h - apple1_core::g2basic::ADDRESS) as usize;
     // LDA PTR+1 ; STA CUR+1
     assert_eq!(&img[at(G2_LINE_HOOKS[0]) - 2..at(G2_LINE_HOOKS[0]) + 2], &[0xA5, 0x09, 0x85, 0x07]);
-    // ADC #0 ; STA IP+1 ; JMP EXEC
-    assert_eq!(&img[at(G2_LINE_HOOKS[1]) - 2..at(G2_LINE_HOOKS[1]) + 3], &[0x69, 0x00, 0x85, 0x05, 0x4C]);
+    // JSR NXLINE ; JMP EXEC, NXLINE ending with STA IP+1 ; RTS
+    let h = at(G2_LINE_HOOKS[1]);
+    assert_eq!((img[h - 3], img[h]), (0x20, 0x4C));
+    let nxline = at(img[h - 2] as u16 | (img[h - 1] as u16) << 8);
+    assert_eq!(&img[nxline..nxline + 2], &[0xA5, 0x37]); // LDA DIRF
 }
 
 const LOOP: &str = "10 S=0\n20 FOR I=1 TO 500\n30 S=S+1\n40 NEXT I\n50 END\n";

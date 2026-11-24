@@ -1,5 +1,5 @@
 //! RDK G2 Basic: the clean-room Integer BASIC clone of the kit (MIT, repository
-//! rdk-gen2basic-apple1), built in. 7.9 KB at $E000-$FEFC, with LOMEM=, HIMEM= and KEY.
+//! rdk-gen2basic-apple1), built in. 7.9 KB at $E000-$FEE7, with LOMEM=, HIMEM= and KEY.
 
 use crate::program::Program;
 

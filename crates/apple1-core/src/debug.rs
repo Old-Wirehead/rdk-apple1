@@ -163,9 +163,11 @@ pub enum Mission {
 pub const BASIC_LINE_HOOK: u16 = 0xE86D;
 
 /// G2 Basic: the two places where a new BASIC line starts, after which `CUR` ($06) points
-/// to it: the `STA CUR+1` ending SETLINE (RUN, GOTO, GOSUB) and the `STA IP+1` of the step
-/// to the next line (ENDST). Checked against the image by a test.
-pub const G2_LINE_HOOKS: [u16; 2] = [0xEE7C, 0xF1B6];
+/// to it: the `STA CUR+1` ending SETLINE (RUN, GOTO, GOSUB) and the `JMP EXEC` that follows
+/// `JSR NXLINE` in ENDST (the step to the next line). Not NXLINE itself: a `FOR` that does
+/// not run its body (The-Retro-Dev-Kit#3) walks the lines with it, without running them.
+/// Checked against the image by a test.
+pub const G2_LINE_HOOKS: [u16; 2] = [0xEE51, 0xF163];
 
 /// Where the line pointer is set: the hook, and the pointer (G2 Basic: `CUR` at `$06`;
 /// Integer BASIC: `$DC`).
