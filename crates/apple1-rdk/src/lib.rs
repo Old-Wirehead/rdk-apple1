@@ -68,6 +68,7 @@ pub mod crt;
 pub mod ecran;
 pub mod fenetres;
 pub mod i18n;
+pub mod miniature;
 pub mod options;
 pub mod programmes;
 pub mod projets_github;
@@ -2576,6 +2577,20 @@ impl Machine for MachineApple1 {
                 ],
             ),
         ]
+    }
+    /// Contrat 1.2.0 : miniature de la configuration pour l'assistant de
+    /// démarrage (dessin du kit, `miniature.rs`), d'après ses périphériques.
+    fn manifeste_illustration(
+        &self,
+        configuration: &ConfigurationMachine,
+    ) -> Option<rdk_pilotes::ImageVideo> {
+        Some(miniature::dessiner(miniature::Contenu {
+            moniteur_vert: configuration.a(ids::MONITEUR_MONOCHROME),
+            moniteur_couleur: configuration.a(ids::MONITEUR_COULEUR),
+            cassette: configuration.a(ids::CASSETTE),
+            gen2: configuration.a(BOUTON_GEN2),
+            plab: configuration.a(BOUTON_PLAB),
+        }))
     }
     fn configuration_appliquer(&mut self, configuration: &ConfigurationMachine) {
         // les cartes suivent déjà la configuration (boutons du manifeste) ;

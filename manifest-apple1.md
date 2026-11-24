@@ -139,6 +139,8 @@ PC, RAM, BASIC (en mémoire / absent), Moniteur, Cassette (nom, position), Messa
 | 1 | Bienvenue dans le Retro Dev Kit Apple 1 | la machine, le Woz Monitor, l'éditeur |
 | 2 | Avant de commencer | ROM fournies, BASIC de l'utilisateur, cassette, clavier |
 
+Écran 3 « Votre configuration » (commun, contrat 1.2.0) : miniature de chaque configuration, **dessin du kit** en attendant une meilleure illustration (choix de Wirehead du 24/11/2026), calculé par `crates/apple1-rdk/src/miniature.rs` d'après les périphériques : carte Apple 1, moniteur vert, carte cassette ACI, carte couleur GEN2 ou graphique P-LAB, moniteur couleur. Aucune image ni marque.
+
 ## 16. À propos
 
 « Retro Dev Kit Apple 1 », version 2.0.0, GPL-3.0 ; ROM Woz Monitor, ACI et 2513 ; BASIC non fourni.
