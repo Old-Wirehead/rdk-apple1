@@ -2159,7 +2159,7 @@ checksum = "20675572f6f24e9e76ef639bc5552774ed45f1c30e2951e1e99c59888861c539"
 [[package]]
 name = "rdk-interface"
 version = "0.1.10"
-source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=0bb6764dbaec423af04784adbd3591478ef58649#0bb6764dbaec423af04784adbd3591478ef58649"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=534b3626be27a77af811a06f543a97b55ed2fcf7#534b3626be27a77af811a06f543a97b55ed2fcf7"
 dependencies = [
  "chrono",
  "dirs",
@@ -2174,7 +2174,7 @@ dependencies = [
 [[package]]
 name = "rdk-machine-factice"
 version = "0.1.10"
-source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=0bb6764dbaec423af04784adbd3591478ef58649#0bb6764dbaec423af04784adbd3591478ef58649"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=534b3626be27a77af811a06f543a97b55ed2fcf7#534b3626be27a77af811a06f543a97b55ed2fcf7"
 dependencies = [
  "rdk-pilotes",
 ]
@@ -2182,7 +2182,7 @@ dependencies = [
 [[package]]
 name = "rdk-pilotes"
 version = "0.1.10"
-source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=0bb6764dbaec423af04784adbd3591478ef58649#0bb6764dbaec423af04784adbd3591478ef58649"
+source = "git+https://github.com/Old-Wirehead/RDK-Interface-Commune?rev=534b3626be27a77af811a06f543a97b55ed2fcf7#534b3626be27a77af811a06f543a97b55ed2fcf7"
 
 [[package]]
 name = "read-fonts"
