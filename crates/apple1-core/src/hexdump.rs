@@ -82,10 +82,10 @@ pub fn parse(text: &str) -> Result<HexDump, String> {
         } else if upper.find(':').is_some() || addr.is_some() {
             // continuation line ": AA BB" or bare bytes after an address
             if hd.blocks.is_empty() {
-                return Err(format!("ligne {}: donnees sans adresse", ln + 1));
+                return Err(format!("ligne {}: données sans adresse", ln + 1));
             }
         } else {
-            return Err(format!("ligne {}: donnees sans adresse", ln + 1));
+            return Err(format!("ligne {}: données sans adresse", ln + 1));
         }
         for tok in rest.split_whitespace() {
             if !is_hex(tok) || tok.len() > 2 {

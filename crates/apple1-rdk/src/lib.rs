@@ -2022,6 +2022,20 @@ pub fn description_programme(programme: &Programme) -> Option<String> {
         }
         _ => {}
     }
+    if ext == "inc" {
+        let n = texte().lines().filter(|l| !l.trim().is_empty()).count();
+        return Some(trf!(
+            "Fichier d'inclusion assembleur · {0} lignes · s'ouvre dans l'éditeur",
+            n
+        ));
+    }
+    if MachineApple1::est_art(programme, &chemin) {
+        let n = texte().lines().filter(|l| !l.trim().is_empty()).count();
+        return Some(trf!(
+            "Art ASCII · {0} lignes · ▶ l'affiche (300R) · 🎨 ASCII pour le modifier",
+            n
+        ));
+    }
     let kind = program::kind_of(&chemin, Some(&programme.octets));
     if kind == program::Kind::Wav {
         let duree = apple1_core::wav::parse_audio(&programme.octets)
@@ -2469,6 +2483,11 @@ impl Machine for MachineApple1 {
                 GenreFormat::Memoire,
             )
             .lecture_seule(),
+            FormatFichier::new(
+                "inc",
+                tr("Fichier d'inclusion assembleur (.include)"),
+                GenreFormat::Texte,
+            ),
             FormatFichier::new("mon", tr("Ancien dump Woz (v1.0)"), GenreFormat::Memoire)
                 .lecture_seule(),
             FormatFichier::new(
@@ -2737,5 +2756,62 @@ mod tests_lot4 {
         texte_page_1(&mut g);
         let m = g.modes();
         assert!(m.text && !m.page2 && !m.mixed, "{m:?}");
+    }
+}
+
+#[cfg(test)]
+mod tests_bibliotheque {
+    use super::*;
+
+    fn programme(relatif: &str) -> Programme {
+        let racine = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let chemin = racine.join(relatif);
+        Programme {
+            nom: chemin.file_name().unwrap().to_string_lossy().into_owned(),
+            octets: std::fs::read(&chemin).unwrap(),
+            chemin: Some(chemin),
+        }
+    }
+
+    /// rdk-apple1#29 : un .inc est un texte (éditeur), pas un binaire à lancer.
+    #[test]
+    fn inc_ouvert_dans_l_editeur() {
+        let f = MachineApple1::new(std::env::temp_dir()).manifeste_formats();
+        let inc = f.iter().find(|x| x.extension == "inc").expect("inc déclaré");
+        assert!(matches!(inc.genre, GenreFormat::Texte));
+        for nom in ["docs/exemples/asm/apple1.inc", "docs/exemples/asm/gen2.inc"] {
+            let d = description_programme(&programme(nom)).unwrap();
+            assert!(d.starts_with("Fichier d'inclusion"), "{nom} : {d}");
+        }
+    }
+
+    /// rdk-apple1#30 : les 11 dessins du dossier Art ASCII sont reconnus.
+    #[test]
+    fn dessins_reconnus_comme_art() {
+        let dossier = Path::new(env!("CARGO_MANIFEST_DIR")).join("../apple1-gui/ascii");
+        let mut n = 0;
+        for e in std::fs::read_dir(&dossier).unwrap() {
+            let p = e.unwrap().path();
+            if p.extension().is_none_or(|x| x != "txt") {
+                continue;
+            }
+            // tel qu'installé : Biblio/Art ASCII/<nom>.txt
+            let chemin = PathBuf::from("Biblio").join(art::DOSSIER).join(p.file_name().unwrap());
+            let prog = Programme {
+                nom: p.file_name().unwrap().to_string_lossy().into_owned(),
+                octets: std::fs::read(&p).unwrap(),
+                chemin: Some(chemin),
+            };
+            let d = description_programme(&prog).unwrap();
+            assert!(d.starts_with("Art ASCII"), "{} : {d}", prog.nom);
+            n += 1;
+        }
+        assert_eq!(n, 11);
+    }
+
+    #[test]
+    fn vidage_sans_adresse_accentue() {
+        let e = program::load_bytes(b"A9 01", program::Kind::Hex, None).unwrap_err();
+        assert!(e.contains("données sans adresse"), "{e}");
     }
 }
