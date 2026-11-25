@@ -167,7 +167,7 @@ pub const BASIC_LINE_HOOK: u16 = 0xE86D;
 /// `JSR NXLINE` in ENDST (the step to the next line). Not NXLINE itself: a `FOR` that does
 /// not run its body (The-Retro-Dev-Kit#3) walks the lines with it, without running them.
 /// Checked against the image by a test.
-pub const G2_LINE_HOOKS: [u16; 2] = [0xEE51, 0xF163];
+pub const G2_LINE_HOOKS: [u16; 2] = [0xEE5B, 0xF16D];
 
 /// Where the line pointer is set: the hook, and the pointer (G2 Basic: `CUR` at `$06`;
 /// Integer BASIC: `$DC`).

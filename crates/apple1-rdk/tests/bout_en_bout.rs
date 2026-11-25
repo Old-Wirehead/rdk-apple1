@@ -967,3 +967,26 @@ fn basic_mal_nomme_signale() {
         Some("apple1basic.bin")
     );
 }
+
+/// rdk-apple1#32 : Ctrl+D (clavier du PC) puis RETURN sort d'AUTO.
+#[test]
+fn basic_g2_ctrl_d_sort_d_auto() {
+    let mut m = machine();
+    m.injecter(&doc(Langage::Basic, "10 PRINT \"OK\"\n"))
+        .expect("injecter");
+    assert!(m.jusqua_attente(30_000_000));
+    m.taper("AUTO 100\nPRINT 1\n");
+    assert!(m.jusqua_attente(30_000_000));
+    let ctrl_d = ToucheHote {
+        nom: "D".into(),
+        caractere: Some('d'),
+        ctrl: true,
+        ..ToucheHote::default()
+    };
+    m.touche_machine(&ctrl_d, true);
+    m.touche_machine(&ctrl_d, false);
+    m.taper("\nLIST\n");
+    assert!(m.jusqua_attente(30_000_000));
+    let t = m.texte_ecran();
+    assert!(t.contains("100 PRINT 1") && !t.contains("SYNTAX ERR"), "{t}");
+}
