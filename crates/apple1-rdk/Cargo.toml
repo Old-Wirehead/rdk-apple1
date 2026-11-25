@@ -35,11 +35,13 @@ path = "src/main.rs"
 # image centrée ; contrat des pilotes inchangé (1.1.0).
 # Puis RDK-Interface-Commune#55 (7f6c5f2) : contrat des pilotes 1.2.0, écran
 # « Votre configuration » de l'assistant (miniature de chaque configuration).
+# Puis RDK-Interface-Commune#56 (3223864) : flèches « → » affichées (Fira Code
+# en dernier secours de la police proportionnelle) ; contrat inchangé.
 # Changer de version de l'interface commune = changer ces deux révisions, ensemble.
 [dependencies]
 apple1-core = { path = "../apple1-core" }
-rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "7f6c5f204283517841feb3fb0b71a9bcd6d0f766" }
-rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "7f6c5f204283517841feb3fb0b71a9bcd6d0f766" }
+rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "32238648e5052365b25edec3bd56e986569be7a2" }
+rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "32238648e5052365b25edec3bd56e986569be7a2" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
 # Comme la v1.0 (apple1-gui) : cassettes reconnues (SHA-256), photos → art ASCII.
