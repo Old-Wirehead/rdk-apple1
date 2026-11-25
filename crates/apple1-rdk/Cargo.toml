@@ -39,11 +39,13 @@ path = "src/main.rs"
 # en dernier secours de la police proportionnelle) ; contrat inchangé.
 # Puis RDK-Interface-Commune#57 (18274df) : ? Aide avec les pages communes
 # intégrées, F1 annoncé, assistant lisible en thème Clair ; contrat inchangé.
+# Puis RDK-Interface-Commune#58 (9f4333a) : Dump, Bibliothèque (rubrique
+# « Mémoire »), éditeur (barre d’état redimensionnable, sans ligatures) ; contrat inchangé.
 # Changer de version de l'interface commune = changer ces deux révisions, ensemble.
 [dependencies]
 apple1-core = { path = "../apple1-core" }
-rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "18274df0098b7c69c675b3b40c3eec2b66e536fe" }
-rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "18274df0098b7c69c675b3b40c3eec2b66e536fe" }
+rdk-pilotes = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "9f4333abbcc759fe8f78d88996a3ead3bfdc77be" }
+rdk-interface = { git = "https://github.com/Old-Wirehead/RDK-Interface-Commune", rev = "9f4333abbcc759fe8f78d88996a3ead3bfdc77be" }
 # Même version que celle utilisée par rdk-interface (type de retour de `main`).
 eframe = { version = "0.36", default-features = false, features = ["glow", "x11", "wayland", "default_fonts"] }
 # Comme la v1.0 (apple1-gui) : cassettes reconnues (SHA-256), photos → art ASCII.

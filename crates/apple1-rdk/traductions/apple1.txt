@@ -2591,3 +2591,29 @@ ru платы или ОЗУ состояния отличаются от выб�
 es las tarjetas o la RAM del estado difieren de la configuración elegida: la máquina ya no corresponde al nombre mostrado; elija una configuración en 🖥 para volver a ella
 it schede o RAM dello stato diverse dalla configurazione scelta: la macchina non corrisponde più al nome mostrato; scegliete una configurazione in 🖥 per tornarvi
 pt placas ou RAM do estado diferentes da configuração escolhida: a máquina já não corresponde ao nome mostrado; escolha uma configuração em 🖥 para voltar a ela
+
+# ----- Bibliothèque : fichiers d'inclusion et art ASCII (rdk-apple1#29, #30)
+
+@ Fichier d'inclusion assembleur (.include)
+en Assembler include file (.include)
+de Assembler-Include-Datei (.include)
+ru Включаемый файл ассемблера (.include)
+es Archivo de inclusión de ensamblador (.include)
+it File di inclusione assembler (.include)
+pt Arquivo de inclusão do assembler (.include)
+
+@ Fichier d'inclusion assembleur · {0} lignes · s'ouvre dans l'éditeur
+en Assembler include file · {0} lines · opens in the editor
+de Assembler-Include-Datei · {0} Zeilen · öffnet sich im Editor
+ru Включаемый файл ассемблера · строк: {0} · открывается в редакторе
+es Archivo de inclusión de ensamblador · {0} líneas · se abre en el editor
+it File di inclusione assembler · {0} righe · si apre nell'editor
+pt Arquivo de inclusão do assembler · {0} linhas · abre no editor
+
+@ Art ASCII · {0} lignes · ▶ l'affiche (300R) · 🎨 ASCII pour le modifier
+en ASCII art · {0} lines · ▶ shows it (300R) · 🎨 ASCII to edit it
+de ASCII-Art · {0} Zeilen · ▶ zeigt es an (300R) · 🎨 ASCII zum Bearbeiten
+ru ASCII-арт · строк: {0} · ▶ показывает его (300R) · 🎨 ASCII — изменить
+es Arte ASCII · {0} líneas · ▶ lo muestra (300R) · 🎨 ASCII para modificarlo
+it Arte ASCII · {0} righe · ▶ lo mostra (300R) · 🎨 ASCII per modificarlo
+pt Arte ASCII · {0} linhas · ▶ exibe (300R) · 🎨 ASCII para modificar
