@@ -56,7 +56,7 @@ Défaut commun (tous les caractères passent). Le BASIC et l'assembleur sont mis
 | Couleur | `video-couleur` | carte GEN2 (280 × 192, LORES/HIRES/TEXTE/MIXED) ou P-LAB (256 × 192), agrandie 3 fois ; pas d'image sans carte |
 
 - Phosphore (0.1.6, `phosphore_monochrome`) : vert (défaut), blanc ou ambre, couleurs de la v1.0 ; la partie commune teinte le moniteur monochrome.
-- Écran vintage (effets CRT de la v1.0, **oui**) : lignes de balayage, rémanence (selon le phosphore), halo, points adoucis, tube bombé et coins assombris, scintillement, masque RVB (moniteur couleur). Bouton 📺 et fenêtre 🎚 Écran ; calculé par la machine.
+- Écran vintage (effets CRT de la v1.0, **oui**) : lignes de balayage, rémanence (selon le phosphore), halo, points adoucis, tube bombé et coins assombris, scintillement, masque RVB (moniteur couleur). Bouton 📺 et fenêtre 🔆 Écran ; calculé par la machine.
 
 ## 5. Mémoire
 
@@ -79,7 +79,7 @@ Désassemblage : départ `$FF00`, puis l'adresse du dernier programme assemblé 
 | `gen2` (+ `gen2-50hz`, `accolades`) | 🌈 | GEN2 | carte couleur d'Uncle Bernie ; suit la configuration |
 | `plab` (+ `plab-nmi`, `codetank`, `source-couleur`) | 🎮 | P-LAB | TMS9918A, NMI, CodeTank (`P-LAB/` de la bibliothèque) ; suit la configuration |
 | `ecran-vintage` | 📺 | Écran vintage | effets CRT |
-| `reglages-ecran` | 🎚 | Écran | fenêtre : phosphore et réglages CRT |
+| `reglages-ecran` | 🔆 | Écran | fenêtre : phosphore et réglages CRT |
 | `photo-ascii` | 🎨 | Photo → ASCII | fenêtre de la v1.0 : photo ou `.txt` → art ASCII → BASIC / 6502, cassette, `.txt` |
 | `exemples` | 📥 | Exemples | copie les exemples du paquet et l'art ASCII de la v1.0 dans la bibliothèque (sans rien remplacer) |
 | `son-cassette` | 🔊 | Son | son de la cassette (lecture 📼 et écriture ⏺, vitesse réelle) par ALSA, comme la v1.0 ; volume dans l'oscilloscope |

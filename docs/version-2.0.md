@@ -23,7 +23,7 @@ La 2.0 reconstruit le kit Apple 1 sur **RDK-Interface-Commune 0.1.9**, comme le 
 ## Repris de la v1.0
 
 - **Carte couleur GEN2** (LORES, HIRES, TEXTE, MIXED, 50/60 Hz, accolades) et **carte P-LAB** (TMS9918A, NMI, CodeTank) sur le **moniteur couleur** ; le terminal reste sur le moniteur vert.
-- **Moniteur vert, blanc ou ambre** et **écran vintage** (lignes de balayage, rémanence, halo, points adoucis, tube bombé, scintillement, masque RVB) : boutons 📺 Vintage et 🎚 Écran.
+- **Moniteur vert, blanc ou ambre** et **écran vintage** (lignes de balayage, rémanence, halo, points adoucis, tube bombé, scintillement, masque RVB) : boutons 📺 Vintage et 🔆 Écran.
 - **Programmateur d'EPROM** (bouton PROM) : minipro (XGecu TL866II+, T48, T56), lire, écrire, vérifier, puce, plage de mémoire ou fichier ; fichiers en **Intel HEX** dans `PROM/`.
 - **🎨 Photo → ASCII** : photo ou dessin `.txt` → art de 40 × 24 caractères → programme BASIC ou 6502 lancé, enregistré, mis en cassette ou copié ; dossier `Art ASCII` et ses exemples.
 - **Programmes reconnus** (empreinte SHA-256 des cassettes de la v1.0) : adresse de lancement et notes.

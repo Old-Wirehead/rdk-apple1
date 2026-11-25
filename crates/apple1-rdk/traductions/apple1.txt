@@ -1806,13 +1806,13 @@ es Casete: la biblioteca lee los archivos WAV del ACI (⚡ rápido o 📼 en tie
 it Cassetta: la libreria legge i file WAV dell'ACI (⚡ rapido o 📼 in tempo reale); il pulsante ⏺ Uscita ACI registra ciò che la macchina scrive (C100R poi inizio.fineW).
 pt Cassete: a biblioteca lê os ficheiros WAV do ACI (⚡ rápido ou 📼 em tempo real); o botão ⏺ Saída ACI grava o que a máquina escreve (C100R e depois início.fimW).
 
-@ Comme en v1.0 : 🎚 Écran (phosphore vert, blanc ou ambre ; 📺 écran vintage), 🎨 Photo → ASCII, 💾 Sauver (.woz, .wav, Intel .hex…), programmateur d'EPROM (PROM), 📥 Exemples pour remplir votre bibliothèque.
-en As in v1.0: 🎚 Screen (green, white or amber phosphor; 📺 vintage screen), 🎨 Photo → ASCII, 💾 Save (.woz, .wav, Intel .hex…), EPROM programmer (PROM), 📥 Examples to fill your library.
-de Wie in v1.0: 🎚 Bildschirm (Leuchtstoff grün, weiß oder bernstein; 📺 Vintage-Bildschirm), 🎨 Foto → ASCII, 💾 Sichern (.woz, .wav, Intel .hex…), EPROM-Programmiergerät (PROM), 📥 Beispiele für Ihre Bibliothek.
-ru Как в версии 1.0: 🎚 Экран (зелёный, белый или янтарный люминофор; 📺 винтажный экран), 🎨 Фото → ASCII, 💾 Сохранить (.woz, .wav, Intel .hex…), программатор EPROM (PROM), 📥 Примеры для вашей библиотеки.
-es Como en la v1.0: 🎚 Pantalla (fósforo verde, blanco o ámbar; 📺 pantalla vintage), 🎨 Foto → ASCII, 💾 Guardar (.woz, .wav, Intel .hex…), programador de EPROM (PROM), 📥 Ejemplos para llenar su biblioteca.
-it Come nella v1.0: 🎚 Schermo (fosfori verdi, bianchi o ambra; 📺 schermo vintage), 🎨 Foto → ASCII, 💾 Salva (.woz, .wav, Intel .hex…), programmatore di EPROM (PROM), 📥 Esempi per riempire la tua libreria.
-pt Como na v1.0: 🎚 Ecrã (fósforo verde, branco ou âmbar; 📺 ecrã vintage), 🎨 Foto → ASCII, 💾 Guardar (.woz, .wav, Intel .hex…), programador de EPROM (PROM), 📥 Exemplos para encher a sua biblioteca.
+@ Comme en v1.0 : 🔆 Écran (phosphore vert, blanc ou ambre ; 📺 écran vintage), 🎨 Photo → ASCII, 💾 Sauver (.woz, .wav, Intel .hex…), programmateur d'EPROM (PROM), 📥 Exemples pour remplir votre bibliothèque.
+en As in v1.0: 🔆 Screen (green, white or amber phosphor; 📺 vintage screen), 🎨 Photo → ASCII, 💾 Save (.woz, .wav, Intel .hex…), EPROM programmer (PROM), 📥 Examples to fill your library.
+de Wie in v1.0: 🔆 Bildschirm (Leuchtstoff grün, weiß oder bernstein; 📺 Vintage-Bildschirm), 🎨 Foto → ASCII, 💾 Sichern (.woz, .wav, Intel .hex…), EPROM-Programmiergerät (PROM), 📥 Beispiele für Ihre Bibliothek.
+ru Как в версии 1.0: 🔆 Экран (зелёный, белый или янтарный люминофор; 📺 винтажный экран), 🎨 Фото → ASCII, 💾 Сохранить (.woz, .wav, Intel .hex…), программатор EPROM (PROM), 📥 Примеры для вашей библиотеки.
+es Como en la v1.0: 🔆 Pantalla (fósforo verde, blanco o ámbar; 📺 pantalla vintage), 🎨 Foto → ASCII, 💾 Guardar (.woz, .wav, Intel .hex…), programador de EPROM (PROM), 📥 Ejemplos para llenar su biblioteca.
+it Come nella v1.0: 🔆 Schermo (fosfori verdi, bianchi o ambra; 📺 schermo vintage), 🎨 Foto → ASCII, 💾 Salva (.woz, .wav, Intel .hex…), programmatore di EPROM (PROM), 📥 Esempi per riempire la tua libreria.
+pt Como na v1.0: 🔆 Ecrã (fósforo verde, branco ou âmbar; 📺 ecrã vintage), 🎨 Foto → ASCII, 💾 Guardar (.woz, .wav, Intel .hex…), programador de EPROM (PROM), 📥 Exemplos para encher a sua biblioteca.
 
 @ Cliquez sur l'écran pour envoyer le clavier de l'ordinateur à la machine, ou utilisez la fenêtre Clavier (QWERTY).
 en Click the screen to send the computer's keyboard to the machine, or use the Keyboard window (QWERTY).
