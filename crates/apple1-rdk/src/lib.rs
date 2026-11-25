@@ -2405,7 +2405,7 @@ impl Machine for MachineApple1 {
         v.push(bouton(BOUTON_ECRAN_VINTAGE, "📺", tr("Vintage"), tr("Écran vintage : imitation d'un moniteur à tube des années 1970 : lignes de balayage, rémanence, halo, tube bombé."), o.ecran.actif));
         v.push(bouton(
             BOUTON_REGLAGES_ECRAN,
-            "🎚",
+            "🔆",
             tr("Écran"),
             tr("Phosphore du moniteur (vert, blanc, ambre) et réglages de l'écran vintage."),
             self.fenetres.ecran,
@@ -2622,7 +2622,7 @@ impl Machine for MachineApple1 {
                     tr("BASIC : RDK G2 Basic, le clone de l'Integer BASIC du kit, est intégré et chargé en $E000 au premier lancement d'un programme BASIC (mode « Émulation »). Pour le BASIC d'origine (non fourni), copiez votre integer_basic.bin dans RDK librairies/Apple 1/ROM/ : reconnu, il libère le bouton « ROM réelle ».").to_string(),
                     tr("Configurations : « Apple 1 moniteur vert » (défaut), « Apple 1 moniteur vert + couleur GEN2 » (carte couleur d'Uncle Bernie) et « Apple 1 + P-LAB » (TMS9918A, NMI, CodeTank), dans la liste des configurations. Leur image va au moniteur couleur ; le terminal reste sur le moniteur vert.").to_string(),
                     tr("Cassette : la bibliothèque lit les fichiers WAV de l'ACI (⚡ rapide ou 📼 en temps réel) ; le bouton ⏺ Sortie ACI enregistre ce que la machine écrit (C100R puis début.finW).").to_string(),
-                    tr("Comme en v1.0 : 🎚 Écran (phosphore vert, blanc ou ambre ; 📺 écran vintage), 🎨 Photo → ASCII, 💾 Sauver (.woz, .wav, Intel .hex…), programmateur d'EPROM (PROM), 📥 Exemples pour remplir votre bibliothèque.").to_string(),
+                    tr("Comme en v1.0 : 🔆 Écran (phosphore vert, blanc ou ambre ; 📺 écran vintage), 🎨 Photo → ASCII, 💾 Sauver (.woz, .wav, Intel .hex…), programmateur d'EPROM (PROM), 📥 Exemples pour remplir votre bibliothèque.").to_string(),
                     tr("Cliquez sur l'écran pour envoyer le clavier de l'ordinateur à la machine, ou utilisez la fenêtre Clavier (QWERTY).").to_string(),
                 ],
             },
